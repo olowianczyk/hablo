@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="flex:none;display:flex;justify-content:space-around;align-items:center;padding:9px 6px 30px;background:var(--surface,#fff);border-top:1px solid var(--border,#ECEAE4)">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ cHome }}">
+    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>
+    <div style="font-size:10px;font-weight:700">Home</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ cVocab }}">
+    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M12 4v16"></path></svg>
+    <div style="font-size:10px;font-weight:700">Learn</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ cBuild }}">
+    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>
+    <div style="font-size:10px;font-weight:700">Build</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ cMic }}">
+    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg>
+    <div style="font-size:10px;font-weight:700">Speak</div>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:{{ cSrs }}">
+    <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113.7-5.6L20 8"></path><path d="M20 4v4h-4"></path><path d="M20 12a8 8 0 01-13.7 5.6L4 16"></path><path d="M4 20v-4h4"></path></svg>
+    <div style="font-size:10px;font-weight:700">Review</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;402px&quot;,&quot;height&quot;:&quot;84px&quot;},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;vocab&quot;,&quot;build&quot;,&quot;mic&quot;,&quot;srs&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals(){
+    const a=this.props.active||'home';
+    const on='var(--accent,#DE5B3B)', off='var(--faint,#A7A399)';
+    return { cHome:a==='home'?on:off, cVocab:a==='vocab'?on:off, cBuild:a==='build'?on:off, cMic:a==='mic'?on:off, cSrs:a==='srs'?on:off };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#DE5B3B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Hablo">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:#1C1B19;background:#F3F1EC;-webkit-font-smoothing:antialiased}
+a{color:#C4472B;text-decoration:none}
+a:hover{color:#A93A22}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#DAD6CD;border-radius:8px;border:3px solid #F3F1EC}
+@keyframes hb-pulse{0%{box-shadow:0 0 0 0 rgba(222,91,59,.45)}70%{box-shadow:0 0 0 22px rgba(222,91,59,0)}100%{box-shadow:0 0 0 0 rgba(222,91,59,0)}}
+@keyframes hb-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes hb-eq{0%,100%{transform:scaleY(.28)}50%{transform:scaleY(1)}}
+</style>
+</helmet>
+
+<div style="{{ rootStyle }}">
+
+  <aside style="flex:none;width:252px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 14px;overflow-y:auto">
+    <div style="display:flex;align-items:center;gap:11px;padding:6px 8px 20px">
+      <div style="position:relative;width:36px;height:36px;border-radius:12px;background:linear-gradient(145deg,var(--accent),#E0A030);flex:none;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(222,91,59,.28)">
+        <div style="position:absolute;top:11px;left:9px;width:6px;height:6px;border-radius:50%;background:var(--surface)"></div>
+        <div style="position:absolute;top:11px;right:9px;width:6px;height:6px;border-radius:50%;background:var(--surface)"></div>
+        <div style="position:absolute;bottom:9px;width:12px;height:6px;border-bottom:2.5px solid #fff;border-radius:0 0 10px 10px"></div>
+      </div>
+      <div style="font-weight:800;font-size:20px;letter-spacing:-.02em">hablo<span style="color:var(--accent)">.</span></div>
+    </div>
+
+    <nav style="display:flex;flex-direction:column;gap:3px">
+      <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navHome.bg }};color:{{ navHome.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path></svg>{{ t.home }}
+      </div>
+      <div onClick="{{ goLevels }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navLevels.bg }};color:{{ navLevels.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5 9-5z"></path><path d="M3 13l9 5 9-5"></path></svg>{{ t.levels }}
+      </div>
+      <div onClick="{{ goVocab }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navVocab.bg }};color:{{ navVocab.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M12 4v16"></path></svg>{{ t.vocab }}
+      </div>
+      <div onClick="{{ goPhrases }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navPhrases.bg }};color:{{ navPhrases.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4V5z"></path></svg>{{ t.phrases }}
+      </div>
+      <div onClick="{{ goListen }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navListen.bg }};color:{{ navListen.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-1a8 8 0 0116 0v1"></path><rect x="3" y="13" width="4.5" height="7" rx="2"></rect><rect x="16.5" y="13" width="4.5" height="7" rx="2"></rect></svg>{{ t.dictNav }}
+      </div>
+      <div onClick="{{ goBuilder }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navBuilder.bg }};color:{{ navBuilder.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>{{ t.builder }}
+      </div>
+      <div onClick="{{ goPron }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navPron.bg }};color:{{ navPron.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg>{{ t.pronounce }}
+      </div>
+      <div onClick="{{ goReview }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navReview.bg }};color:{{ navReview.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113.7-5.6L20 8"></path><path d="M20 4v4h-4"></path><path d="M20 12a8 8 0 01-13.7 5.6L4 16"></path><path d="M4 20v-4h4"></path></svg>{{ t.review }}
+      </div>
+      <div onClick="{{ goStats }}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font-size:14.5px;font-weight:600;cursor:pointer;background:{{ navStats.bg }};color:{{ navStats.fg }}" style-hover="background:var(--panel-soft)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M4 20h16"></path></svg>{{ t.statsNav }}
+      </div>
+    </nav>
+
+    <div style="margin-top:auto;background:var(--invert-bg);color:#fff;border-radius:16px;padding:16px">
+      <div style="font-size:12px;color:var(--faint);font-weight:600">{{ t.league }}</div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-top:6px">
+        <div style="font-size:26px;font-weight:800;color:#E0A030">{{ rankLabel }}</div>
+        <div style="font-size:12px;color:var(--faint)">/ 30</div>
+      </div>
+      <div style="margin-top:12px;height:6px;background:#33312D;border-radius:6px;overflow:hidden"><div style="width:72%;height:100%;background:linear-gradient(90deg,#E0A030,var(--accent))"></div></div>
+      <div style="font-size:11.5px;color:var(--faint);margin-top:8px">{{ t.keepGoing }}</div>
+    </div>
+  </aside>
+
+  <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+    <header style="flex:none;display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:14px 24px;background:var(--bg-blur);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)">
+      <div style="font-size:19px;font-weight:800;letter-spacing:-.01em;flex-shrink:0;margin-right:auto">{{ pageTitle }}</div>
+      <div style="display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:6px 12px;font-weight:700;font-size:13.5px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></div>{{ streak }} <span style="color:var(--muted);font-weight:600">{{ t.streak }}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:5px 12px 5px 8px">
+        <svg width="34" height="34" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--panel)" stroke-width="5"></circle><circle cx="20" cy="20" r="16" fill="none" style="stroke:var(--accent)" stroke-width="5" stroke-linecap="round" stroke-dasharray="{{ goalDash }}" transform="rotate(-90 20 20)"></circle></svg>
+        <div><div style="font-size:13px;font-weight:800">{{ dailyDone }}/{{ dailyTotal }}</div><div style="font-size:11px;color:var(--muted);font-weight:600">{{ t.dailyGoal }}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;background:var(--panel);border-radius:10px;padding:3px" title="Audio speed">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--faint);margin:0 4px 0 5px" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg>
+        <sc-for list="{{ speedOptions }}" as="sp" hint-placeholder-count="4"><div onClick="{{ sp.onClick }}" style="padding:5px 9px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ sp.bg }};color:{{ sp.fg }}">{{ sp.label }}</div></sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;background:var(--panel);border-radius:10px;padding:5px 10px" title="Course direction">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"></path><path d="M14 5l7 7-7 7"></path></svg>
+        <select value="{{ dirValue }}" onChange="{{ onDirChange }}" style="border:none;background:transparent;font-family:inherit;font-weight:700;font-size:12.5px;color:var(--ink);cursor:pointer;outline:none">
+          <option value="es>en">Learn Spanish · from English</option>
+          <option value="es>pl">Ucz się hiszpańskiego · po polsku</option>
+          <option value="en>es">Aprende inglés · desde español</option>
+          <option value="en>pl">Ucz się angielskiego · po polsku</option>
+          <option value="pl>es">Aprende polaco · desde español</option>
+          <option value="pl>en">Learn Polish · from English</option>
+        </select>
+      </div>
+      <sc-if value="{{ voiceOptions.has }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;align-items:center;gap:6px;background:var(--panel);border-radius:10px;padding:5px 10px" title="{{ voiceLabel }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--faint)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a3 3 0 013 3v6a3 3 0 01-6 0V6a3 3 0 013-3z"></path><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg>
+          <select value="{{ voiceOptions.value }}" onChange="{{ onVoiceChange }}" style="border:none;background:transparent;font-family:inherit;font-weight:700;font-size:12.5px;color:var(--ink);cursor:pointer;outline:none;max-width:150px">
+            <option value="">{{ voiceLabel }}: auto</option>
+            <sc-for list="{{ voiceOptions.items }}" as="v" hint-placeholder-count="0"><option value="{{ v.uri }}">{{ v.label }}</option></sc-for>
+          </select>
+        </div>
+      </sc-if>
+      <div style="display:flex;align-items:center;gap:5px"><sc-for list="{{ accentSwatches }}" as="sw" hint-placeholder-count="6"><div onClick="{{ sw.onClick }}" style="width:18px;height:18px;border-radius:50%;background:{{ sw.hex }};cursor:pointer;border:{{ sw.ring }}"></div></sc-for></div><div onClick="{{ onToggleDark }}" style="width:38px;height:38px;border-radius:10px;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer"><sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="stroke:var(--ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.4 1.4M17.6 17.6L19 19M19 5l-1.4 1.4M6.4 17.6L5 19"></path></svg></sc-if><sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" style="fill:var(--ink)"><path d="M20 14a8 8 0 01-9.9-9.9A8 8 0 1020 14z"></path></svg></sc-if></div><div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(145deg,#E0A030,var(--accent));flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px">A</div>
+    </header>
+
+    <main style="flex:1;overflow:auto;padding:32px 40px">
+     <div style="max-width:960px;margin:0 auto;animation:hb-rise .3s ease">
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div style="display:flex;gap:20px;align-items:stretch;flex-wrap:wrap">
+            <div style="flex:1;min-width:340px;background:linear-gradient(135deg,var(--accent),var(--accent-strong));border-radius:22px;padding:28px 30px;color:#fff;position:relative;overflow:hidden">
+              <div style="position:absolute;right:-30px;bottom:-30px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+              <div style="position:relative">
+                <div style="font-size:13px;font-weight:600;opacity:.85">{{ t.continueSub }}</div>
+                <div style="font-size:26px;font-weight:800;margin-top:6px;letter-spacing:-.02em">{{ t.greet }}</div>
+                <div style="font-size:14.5px;opacity:.9;margin-top:8px;max-width:360px;line-height:1.5">{{ t.greetSub }}</div>
+                <div onClick="{{ goVocab }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:var(--surface);color:var(--accent-strong);font-weight:800;font-size:14.5px;padding:12px 20px;border-radius:12px;cursor:pointer" style-hover="transform:translateY(-1px)">{{ t.start }}
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>
+                </div>
+              </div>
+            </div>
+            <div style="flex:none;width:230px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:14px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:44px;height:44px;border-radius:13px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;position:relative">
+                  <div style="width:14px;height:14px;border-radius:50%;background:var(--accent)"></div>
+                  <sc-if value="{{ streakFreezeActive }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;top:-4px;right:-4px;font-size:13px">🧊</div></sc-if>
+                </div>
+                <div style="flex:1"><div style="font-size:24px;font-weight:800;line-height:1">{{ streak }}</div><div style="font-size:12.5px;color:var(--muted);font-weight:600">{{ t.streak }}</div></div>
+                <div onClick="{{ onUseFreeze }}" style="font-size:11px;font-weight:800;padding:5px 8px;border-radius:9px;background:{{ freezeBg }};color:{{ freezeFg }};cursor:pointer;white-space:nowrap">🧊 {{ streakFreezesLeft }}</div>
+              </div>
+              <div style="height:1px;background:var(--border)"></div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:44px;height:44px;border-radius:13px;background:var(--warn-soft);display:flex;align-items:center;justify-content:center"><div style="width:14px;height:14px;border-radius:4px;background:#E0A030"></div></div>
+                <div style="flex:1"><div style="font-size:24px;font-weight:800;line-height:1">{{ xpToday }}</div><div style="font-size:12.5px;color:var(--muted);font-weight:600">{{ t.xpToday }}</div></div>
+                <div onClick="{{ onToggleBoost }}" style="font-size:11px;font-weight:800;padding:5px 8px;border-radius:9px;background:{{ boostBg }};color:{{ boostFg }};cursor:pointer;white-space:nowrap">⚡ 2X</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px 20px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-size:13px;font-weight:800">{{ dailyChallenges }}</div>
+              <div style="font-size:12px;font-weight:700;color:var(--muted)">{{ challengesDoneLabel }}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px;margin-top:10px">
+              <sc-for list="{{ challengeList }}" as="ch" hint-placeholder-count="3">
+                <div onClick="{{ ch.onToggle }}" style="display:flex;align-items:center;gap:12px;padding:9px 2px;cursor:pointer">
+                  <div style="width:22px;height:22px;border-radius:7px;flex:none;display:flex;align-items:center;justify-content:center;background:{{ ch.checkBg }};border:1.5px solid {{ ch.checkBorder }}">
+                    <sc-if value="{{ ch.done }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"></path></svg></sc-if>
+                  </div>
+                  <div style="flex:1;font-size:14px;font-weight:600;color:{{ ch.textColor }};text-decoration:{{ ch.strike }}">{{ ch.label }}</div>
+                  <div style="font-size:12px;font-weight:800;color:#E0A030">+{{ ch.xp }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div onClick="{{ goReview }}" style="margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:18px 22px;display:flex;align-items:center;gap:16px;cursor:pointer" style-hover="border-color:var(--accent)">
+            <div style="width:46px;height:46px;border-radius:13px;background:var(--good-soft);display:flex;align-items:center;justify-content:center;flex:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="stroke:var(--good)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113.7-5.6L20 8"></path><path d="M20 4v4h-4"></path></svg></div>
+            <div style="flex:1"><div style="font-weight:800;font-size:15.5px"><span style="color:var(--accent)">{{ dueCount }}</span> {{ t.dueToday }}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">{{ t.reviewNow }}</div></div>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="stroke:var(--faint)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+          </div>
+
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:26px 0 14px">{{ t.quick }}</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+            <div onClick="{{ goVocab }}" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;cursor:pointer" style-hover="border-color:var(--accent);transform:translateY(-2px)">
+              <div style="width:42px;height:42px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent)" stroke-width="1.9"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M12 4v16"></path></svg></div>
+              <div style="font-weight:800;font-size:15px;margin-top:14px">{{ t.vocab }}</div>
+              <div style="font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4">A1 · Basics · 8 cards</div>
+            </div>
+            <div onClick="{{ goBuilder }}" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;cursor:pointer" style-hover="border-color:var(--accent);transform:translateY(-2px)">
+              <div style="width:42px;height:42px;border-radius:12px;background:var(--good-soft);display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" style="stroke:var(--good)" stroke-width="1.9"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg></div>
+              <div style="font-weight:800;font-size:15px;margin-top:14px">{{ t.builder }}</div>
+              <div style="font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4">A1 · Word order</div>
+            </div>
+            <div onClick="{{ goPron }}" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;cursor:pointer" style-hover="border-color:var(--accent);transform:translateY(-2px)">
+              <div style="width:42px;height:42px;border-radius:12px;background:var(--warn-soft);display:flex;align-items:center;justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#E0A030" stroke-width="1.9"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg></div>
+              <div style="font-weight:800;font-size:15px;margin-top:14px">{{ t.pronounce }}</div>
+              <div style="font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.4">Speech recognition</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isLevels }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.levelsTitle }}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:4px">{{ t.levelsSub }}</div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:22px">
+            <sc-for list="{{ levelsList }}" as="lv" hint-placeholder-count="6">
+              <div onClick="{{ lv.onClick }}" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px 22px;display:flex;align-items:center;gap:20px;cursor:{{ lv.cursor }}" style-hover="border-color:var(--border-2)">
+                <div style="width:56px;height:56px;border-radius:16px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;background:{{ lv.codeBg }};color:{{ lv.codeFg }};position:relative">
+                  {{ lv.code }}
+                  <sc-if value="{{ lv.locked }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;bottom:-5px;right:-5px;width:22px;height:22px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="stroke:var(--faint)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 018 0v3"></path></svg></div>
+                  </sc-if>
+
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <div style="font-weight:800;font-size:16px">{{ lv.code }} · {{ lv.name }}</div>
+                    <div style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:{{ lv.badgeBg }};color:{{ lv.badgeFg }}">{{ lv.statusLabel }}</div>
+                  </div>
+                  <div style="font-size:13px;color:var(--muted);margin-top:5px;line-height:1.45">{{ lv.desc }}</div>
+                  <sc-if value="{{ lv.unlocked }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+                      <div style="flex:1;height:7px;background:var(--panel);border-radius:7px;overflow:hidden"><div style="height:100%;background:var(--accent);width:{{ lv.progressPct }}"></div></div>
+                      <div style="font-size:12px;font-weight:700;color:var(--muted)">{{ lv.progress }}%</div>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isVocab }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:560px;margin:0 auto">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="display:flex;background:var(--panel);border-radius:9px;padding:3px">
+                <div onClick="{{ setA1 }}" style="padding:4px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a1Bg }};color:{{ a1Fg }}">A1</div>
+                <div onClick="{{ setA2 }}" style="padding:4px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a2Bg }};color:{{ a2Fg }}">A2</div>
+                <div onClick="{{ setB1 }}" style="padding:4px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b1Bg }};color:{{ b1Fg }}">B1</div>
+                <div onClick="{{ setB2 }}" style="padding:4px 12px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b2Bg }};color:{{ b2Fg }}">B2</div>
+              </div>
+              <div style="font-size:13px;font-weight:700;color:var(--muted)">{{ deckTopic }}</div>
+            </div>
+            <div style="font-size:13px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace">{{ t.card }} {{ cardPos }}</div>
+          </div>
+          <div onClick="{{ onFlip }}" style="margin-top:14px;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:44px 32px;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.05)" style-hover="border-color:var(--border-2)">
+            <sc-if value="{{ vFront }}" hint-placeholder-val="{{ true }}">
+              <div>
+                <div style="font-size:42px;font-weight:800;letter-spacing:-.02em">{{ cardEs }}</div>
+                <div onClick="{{ onListenCard }}" style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--accent-soft);color:var(--accent-strong);font-weight:700;font-size:14px;padding:10px 18px;border-radius:12px" style-hover="background:var(--accent-soft2)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path><path d="M19 5a9 9 0 010 14"></path></svg>{{ t.listen }}
+                </div>
+                <div style="font-size:12.5px;color:var(--faint);margin-top:26px;font-weight:600">{{ t.flipHint }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ vFlip }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="font-size:32px;font-weight:800;color:var(--accent)">{{ cardTr }}</div>
+                <sc-if value="{{ hasEx }}" hint-placeholder-val="{{ true }}">
+                  <div style="height:1px;background:var(--border);margin:22px auto;width:60px"></div>
+                  <div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.08em">{{ t.example }}</div>
+                  <div style="font-size:19px;font-weight:700;margin-top:8px">{{ cardExEs }}</div>
+                  <div style="font-size:14px;color:var(--muted);margin-top:5px">{{ cardExTr }}</div>
+                </sc-if>
+              </div>
+            </sc-if>
+          </div>
+          <div style="margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px">
+            <div style="display:flex;align-items:center;gap:13px">
+              <div onClick="{{ onCheckWord }}" style="width:48px;height:48px;border-radius:50%;background:{{ pwMicBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;animation:{{ pwMicAnim }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg></div>
+              <div style="flex:1"><div style="font-weight:700;font-size:14.5px">{{ t.checkPron }}</div><div style="font-size:12.5px;color:var(--faint)">{{ pwHint }}</div></div>
+            </div>
+            <sc-if value="{{ showVocabResult }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;border-top:1px solid var(--panel);padding-top:14px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="font-size:30px;font-weight:800;color:{{ pwScoreColor }}">{{ pwScore }}</div>
+                  <div style="font-size:12px;color:var(--faint);font-weight:600">{{ t.yourScore }}</div>
+                  <div style="flex:1"></div>
+                  <div style="font-size:12px;color:var(--muted)">{{ t.weHeard }}: <span style="font-weight:700;color:var(--ink)">{{ pwHeard }}</span></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                  <sc-for list="{{ pwTokens }}" as="k" hint-placeholder-count="3">
+                    <div style="text-align:center"><div style="height:40px;width:48px;background:var(--panel);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden"><div style="width:100%;background:{{ k.color }};height:{{ k.width }};border-radius:8px 8px 0 0"></div></div><div style="font-size:11px;font-weight:700;margin-top:4px">{{ k.t }}</div><div style="font-size:10px;font-weight:700;color:{{ k.color }}">{{ k.pct }}</div></div>
+                  </sc-for>
+                </div>
+                <div style="margin-top:12px;background:var(--warn-soft);border-radius:11px;padding:10px 13px;font-size:12.5px;color:var(--warn);line-height:1.45">{{ pwTip }}</div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px">
+            <div onClick="{{ onRateAgain }}" style="text-align:center;padding:12px 6px;border-radius:13px;background:var(--surface);border:1px solid var(--border);font-weight:700;font-size:13.5px;cursor:pointer;color:var(--accent-strong)" style-hover="background:var(--accent-soft)">{{ t.again }}</div>
+            <div onClick="{{ onRateHard }}" style="text-align:center;padding:12px 6px;border-radius:13px;background:var(--surface);border:1px solid var(--border);font-weight:700;font-size:13.5px;cursor:pointer;color:var(--warn)" style-hover="background:var(--warn-soft)">{{ t.hard }}</div>
+            <div onClick="{{ onRateGood }}" style="text-align:center;padding:12px 6px;border-radius:13px;background:var(--surface);border:1px solid var(--border);font-weight:700;font-size:13.5px;cursor:pointer;color:var(--good)" style-hover="background:var(--good-soft)">{{ t.good }}</div>
+            <div onClick="{{ onRateEasy }}" style="text-align:center;padding:12px 6px;border-radius:13px;background:var(--invert-bg);color:#fff;font-weight:700;font-size:13.5px;cursor:pointer" style-hover="background:#000">{{ t.easy }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPhrasebook }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.phrasesTitle }}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:4px">{{ t.phrasesSub }}</div>
+          <div style="display:flex;background:var(--panel);border-radius:9px;padding:3px;width:fit-content;margin-top:12px">
+            <div onClick="{{ setA1 }}" style="padding:5px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a1Bg }};color:{{ a1Fg }}">A1</div>
+            <div onClick="{{ setA2 }}" style="padding:5px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a2Bg }};color:{{ a2Fg }}">A2</div>
+            <div onClick="{{ setB1 }}" style="padding:5px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b1Bg }};color:{{ b1Fg }}">B1</div>
+            <div onClick="{{ setB2 }}" style="padding:5px 14px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b2Bg }};color:{{ b2Fg }}">B2</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:22px;margin-top:22px">
+            <sc-for list="{{ phraseCats }}" as="cat" hint-placeholder-count="3">
+              <div>
+                <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                  <div style="font-size:15px;font-weight:800">{{ cat.title }}</div>
+                  <div style="font-size:11px;font-weight:700;color:var(--faint);background:var(--panel);padding:2px 8px;border-radius:20px">{{ cat.count }}</div>
+                </div>
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;overflow:hidden">
+                  <sc-for list="{{ cat.phrases }}" as="p" hint-placeholder-count="3">
+                    <div style="display:flex;align-items:center;gap:14px;padding:15px 18px;border-top:1px solid var(--panel)" style-hover="background:var(--panel-soft)">
+                      <div onClick="{{ p.onSpeak }}" style="width:38px;height:38px;border-radius:11px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer" style-hover="background:var(--accent-soft2)">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg>
+                      </div>
+                      <div style="flex:1"><div style="font-weight:700;font-size:15.5px">{{ p.es }}</div><div style="font-size:13px;color:var(--muted);margin-top:2px">{{ p.tr }}</div></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isListen }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:600px;margin:0 auto">
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.dictTitle }}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:4px">{{ t.dictSub }}</div>
+          <div style="display:flex;background:var(--panel);border-radius:9px;padding:3px;width:fit-content;margin-top:12px">
+            <div onClick="{{ setA1 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a1Bg }};color:{{ a1Fg }}">A1</div>
+            <div onClick="{{ setA2 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a2Bg }};color:{{ a2Fg }}">A2</div>
+            <div onClick="{{ setB1 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b1Bg }};color:{{ b1Fg }}">B1</div>
+            <div onClick="{{ setB2 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b2Bg }};color:{{ b2Fg }}">B2</div>
+          </div>
+
+          <div style="margin-top:18px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:28px">
+            <div style="text-align:center;font-size:13px;font-weight:700;color:var(--muted);font-family:'JetBrains Mono',monospace">{{ t.card }} {{ dictPos }}</div>
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:16px">
+              <div onClick="{{ onDictReplay }}" style="display:flex;align-items:center;gap:9px;background:var(--accent);color:#fff;font-weight:800;font-size:15px;padding:14px 24px;border-radius:14px;cursor:pointer" style-hover="background:var(--accent-strong)"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"></path></svg>{{ t.dictReplay }}</div>
+              <div onClick="{{ onDictSlow }}" style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border-2);color:var(--ink);font-weight:700;font-size:14px;padding:14px 18px;border-radius:14px;cursor:pointer" style-hover="background:var(--panel-soft)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg>{{ t.dictSlow }}</div>
+            </div>
+            <div style="font-size:12.5px;color:var(--faint);margin-top:18px;text-align:center">{{ t.dictType }}</div>
+            <input value="{{ dInput }}" onChange="{{ onDictType }}" placeholder="{{ t.dictPlaceholder }}" style="width:100%;margin-top:10px;padding:14px 16px;border:1px solid var(--border-2);border-radius:13px;font-size:16px;font-family:inherit;color:var(--ink);outline:none;box-sizing:border-box" style-focus="border-color:var(--accent)" />
+            <div style="display:flex;gap:10px;margin-top:14px">
+              <div onClick="{{ onDictCheck }}" style="flex:1;text-align:center;background:var(--invert-bg);color:#fff;font-weight:800;font-size:15px;padding:14px;border-radius:14px;cursor:pointer" style-hover="background:#000">{{ t.dictCheck }}</div>
+              <div onClick="{{ onDictReveal }}" style="text-align:center;background:var(--surface);border:1px solid var(--border-2);color:var(--muted);font-weight:700;font-size:14px;padding:14px 20px;border-radius:14px;cursor:pointer" style-hover="background:var(--panel-soft)">{{ t.dictReveal }}</div>
+            </div>
+
+            <sc-if value="{{ dictChecked }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:18px">
+                <sc-if value="{{ dictCorrect }}" hint-placeholder-val="{{ false }}"><div style="background:var(--good-soft);color:var(--good-strong);font-weight:700;font-size:14.5px;padding:13px 16px;border-radius:13px">{{ t.dictCorrect }}</div></sc-if>
+                <sc-if value="{{ dictWrong }}" hint-placeholder-val="{{ false }}"><div style="background:var(--accent-soft);color:var(--accent-strong);font-weight:700;font-size:14.5px;padding:13px 16px;border-radius:13px">{{ t.dictWrong }}</div></sc-if>
+                <div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 6px">{{ t.dictAnswer }}</div>
+                <div style="font-size:22px;font-weight:800;display:flex;flex-wrap:wrap;gap:8px;letter-spacing:-.01em">
+                  <sc-for list="{{ dictWords }}" as="w" hint-placeholder-count="4"><span style="color:{{ w.color }}">{{ w.w }}</span></sc-for>
+                </div>
+                <div style="font-size:14px;color:var(--muted);margin-top:8px">{{ dictTr }}</div>
+                <div onClick="{{ onDictNext }}" style="text-align:center;background:var(--accent);color:#fff;font-weight:800;font-size:15px;padding:14px;border-radius:14px;cursor:pointer;margin-top:18px" style-hover="background:var(--accent-strong)">{{ t.dictNext }} →</div>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBuilder }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:640px;margin:0 auto">
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.builderTitle }}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:4px">{{ t.builderSub }}</div>
+          <div style="display:flex;background:var(--panel);border-radius:9px;padding:3px;width:fit-content;margin-top:12px">
+            <div onClick="{{ setA1 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a1Bg }};color:{{ a1Fg }}">A1</div>
+            <div onClick="{{ setA2 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a2Bg }};color:{{ a2Fg }}">A2</div>
+            <div onClick="{{ setB1 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b1Bg }};color:{{ b1Fg }}">B1</div>
+            <div onClick="{{ setB2 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b2Bg }};color:{{ b2Fg }}">B2</div>
+          </div>
+
+          <div style="margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;display:flex;align-items:center;gap:14px">
+            <div style="flex:1"><span style="font-size:12px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em">{{ t.build }}</span><div style="font-size:17px;font-weight:700;margin-top:3px">{{ builderPrompt }}</div></div>
+            <div onClick="{{ onListenSentence }}" style="width:40px;height:40px;border-radius:12px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none" style-hover="background:var(--accent-soft2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path><path d="M19 5a9 9 0 010 14"></path></svg></div>
+          </div>
+
+          <div style="margin-top:16px;min-height:72px;background:var(--panel-soft);border:2px dashed var(--border-2);border-radius:16px;padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;align-content:center">
+            <sc-if value="{{ hasSlots }}" hint-placeholder-val="{{ false }}">
+              <sc-for list="{{ slots }}" as="w" hint-placeholder-count="0">
+                <div onClick="{{ w.onClick }}" style="background:var(--invert-bg);color:#fff;font-weight:700;font-size:15px;padding:11px 16px;border-radius:12px;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.15)" style-hover="background:#000">{{ w.es }}</div>
+              </sc-for>
+            </sc-if>
+            <sc-if value="{{ hasSlots }}" hint-placeholder-val="{{ true }}">
+              <div style="display:none"></div>
+            </sc-if>
+          </div>
+
+          <div style="margin-top:16px;display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ bank }}" as="w" hint-placeholder-count="6">
+              <div onClick="{{ w.onClick }}" style="background:var(--surface);border:1px solid var(--border-2);color:var(--ink);font-weight:700;font-size:15px;padding:11px 16px;border-radius:12px;cursor:pointer" style-hover="border-color:var(--accent);background:var(--accent-soft)">{{ w.es }}</div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-top:20px">
+            <div onClick="{{ onCheck }}" style="flex:1;text-align:center;background:var(--accent);color:#fff;font-weight:800;font-size:15px;padding:14px;border-radius:14px;cursor:pointer" style-hover="background:var(--accent-strong)">{{ t.check }}</div>
+            <div onClick="{{ onClear }}" style="text-align:center;background:var(--surface);border:1px solid var(--border-2);color:var(--muted);font-weight:700;font-size:15px;padding:14px 22px;border-radius:14px;cursor:pointer" style-hover="background:var(--panel-soft)">{{ t.clear }}</div>
+          </div>
+
+          <sc-if value="{{ showResult }}" hint-placeholder-val="{{ false }}">
+            <sc-if value="{{ isCorrect }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px;background:var(--good-soft);color:var(--good-strong);font-weight:700;font-size:14.5px;padding:14px 18px;border-radius:14px">{{ t.correct }}</div>
+            </sc-if>
+            <sc-if value="{{ isWrong }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:16px;background:var(--accent-soft);color:var(--accent-strong);font-weight:700;font-size:14.5px;padding:14px 18px;border-radius:14px">{{ t.wrong }}</div>
+            </sc-if>
+          </sc-if>
+
+          <div style="margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px">
+            <div style="display:flex;align-items:center;gap:13px">
+              <div onClick="{{ onCheckSentence }}" style="width:48px;height:48px;border-radius:50%;background:{{ pwMicBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;animation:{{ pwMicAnim }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg></div>
+              <div style="flex:1"><div style="font-weight:700;font-size:14.5px">{{ t.checkSentencePron }}</div><div style="font-size:12.5px;color:var(--faint)">{{ pwHint }}</div></div>
+            </div>
+            <sc-if value="{{ showBuilderResult }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px;border-top:1px solid var(--panel);padding-top:14px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="font-size:30px;font-weight:800;color:{{ pwScoreColor }}">{{ pwScore }}</div>
+                  <div style="font-size:12px;color:var(--faint);font-weight:600">{{ t.yourScore }}</div>
+                  <div style="flex:1"></div>
+                  <div style="font-size:12px;color:var(--muted)">{{ t.weHeard }}: <span style="font-weight:700;color:var(--ink)">{{ pwHeard }}</span></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+                  <sc-for list="{{ pwTokens }}" as="k" hint-placeholder-count="6">
+                    <div style="text-align:center"><div style="height:40px;width:52px;background:var(--panel);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden"><div style="width:100%;background:{{ k.color }};height:{{ k.width }};border-radius:8px 8px 0 0"></div></div><div style="font-size:11px;font-weight:700;margin-top:4px">{{ k.t }}</div><div style="font-size:10px;font-weight:700;color:{{ k.color }}">{{ k.pct }}</div></div>
+                  </sc-for>
+                </div>
+                <div style="margin-top:12px;background:var(--warn-soft);border-radius:11px;padding:10px 13px;font-size:12.5px;color:var(--warn);line-height:1.45">{{ pwTip }}</div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px">
+            <div style="font-size:13px;font-weight:800;letter-spacing:.01em">{{ t.glossary }}</div>
+            <div style="font-size:12px;color:var(--faint);margin-top:2px">{{ t.glossaryHint }}</div>
+            <div style="display:flex;flex-direction:column;gap:2px;margin-top:12px">
+              <sc-for list="{{ glossary }}" as="g" hint-placeholder-count="6">
+                <div style="display:flex;align-items:center;gap:14px;padding:9px 4px;border-top:1px solid var(--border)" style-hover="background:var(--panel-soft)">
+                  <div onClick="{{ g.onSpeak }}" style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer" style-hover="background:var(--accent-soft2)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg></div>
+                  <div style="font-weight:700;font-size:15px;min-width:80px">{{ g.es }}</div>
+                  <div style="font-size:14px;color:var(--muted)">{{ g.tr }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPronounce }}" hint-placeholder-val="{{ false }}">
+        <div style="max-width:600px;margin:0 auto">
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.pronTitle }}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:4px">{{ t.pronSub }}</div>
+          <div style="display:flex;background:var(--panel);border-radius:9px;padding:3px;width:fit-content;margin-top:12px">
+            <div onClick="{{ setA1 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a1Bg }};color:{{ a1Fg }}">A1</div>
+            <div onClick="{{ setA2 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ a2Bg }};color:{{ a2Fg }}">A2</div>
+            <div onClick="{{ setB1 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b1Bg }};color:{{ b1Fg }}">B1</div>
+            <div onClick="{{ setB2 }}" style="padding:5px 15px;border-radius:7px;font-size:12.5px;font-weight:700;cursor:pointer;background:{{ b2Bg }};color:{{ b2Fg }}">B2</div>
+          </div>
+
+          <div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin:20px 0 10px">{{ t.practiceWords }}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ pronWords }}" as="w" hint-placeholder-count="3">
+              <div onClick="{{ w.onClick }}" style="font-weight:700;font-size:14px;padding:9px 15px;border-radius:11px;cursor:pointer;background:{{ w.bg }};color:{{ w.fg }};border:1px solid {{ w.bd }}">{{ w.es }}</div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top:18px;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:32px 28px;text-align:center">
+            <div style="font-size:40px;font-weight:800;letter-spacing:-.02em">{{ pTarget }}</div>
+            <div style="font-size:15px;color:var(--muted);margin-top:6px">{{ pTr }}</div>
+            <div onClick="{{ onListenTarget }}" style="display:inline-flex;align-items:center;gap:7px;margin-top:14px;color:var(--accent-strong);font-weight:700;font-size:13.5px;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path><path d="M19 5a9 9 0 010 14"></path></svg>{{ t.listen }}</div>
+
+            <div style="height:56px;display:flex;align-items:flex-end;justify-content:center;gap:3px;margin:22px 0 4px">
+              <sc-for list="{{ wfBars }}" as="b" hint-placeholder-count="24">
+                <div style="width:5px;height:{{ b.h }};background:{{ b.color }};border-radius:3px;transform-origin:bottom;animation:{{ b.anim }}"></div>
+              </sc-for>
+            </div>
+
+            <div style="margin-top:14px;display:flex;justify-content:center">
+              <div onClick="{{ onRecord }}" style="width:84px;height:84px;border-radius:50%;background:{{ micBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;animation:{{ micAnim }}" style-hover="transform:scale(1.04)">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg>
+              </div>
+            </div>
+            <sc-if value="{{ recIdle }}" hint-placeholder-val="{{ true }}"><div style="font-size:13.5px;color:var(--faint);font-weight:600;margin-top:16px">{{ t.record }}</div></sc-if>
+            <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}"><div style="font-size:13.5px;color:var(--accent);font-weight:700;margin-top:16px">{{ t.listening }}</div></sc-if>
+          </div>
+
+          <sc-if value="{{ recDone }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:16px;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:26px 28px;animation:hb-rise .3s ease">
+              <div style="display:flex;align-items:center;gap:22px">
+                <div style="text-align:center;flex:none">
+                  <div style="font-size:52px;font-weight:800;line-height:1;color:{{ scoreColor }}">{{ scoreLabel }}</div>
+                  <div style="font-size:12px;color:var(--faint);font-weight:600;margin-top:4px">{{ t.yourScore }}</div>
+                </div>
+                <div style="flex:1">
+                  <div style="font-size:15px;font-weight:800;color:{{ scoreVerdictColor }}">{{ scoreVerdict }}</div>
+                  <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+                    <sc-for list="{{ metricsList }}" as="m" hint-placeholder-count="4">
+                      <div style="display:flex;align-items:center;gap:12px">
+                        <div style="width:108px;font-size:12.5px;font-weight:600;color:var(--ink-2)">{{ m.label }}</div>
+                        <div style="flex:1;height:7px;background:var(--panel);border-radius:7px;overflow:hidden"><div style="height:100%;width:{{ m.width }};background:{{ m.color }}"></div></div>
+                        <div style="width:38px;text-align:right;font-size:12px;font-weight:700;color:{{ m.color }}">{{ m.pct }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:12px;margin-top:20px">
+                <div style="flex:1;background:var(--panel-soft);border-radius:13px;padding:13px 15px"><div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.05em">{{ t.targetLabel }}</div><div style="font-size:16px;font-weight:700;margin-top:3px">{{ pTarget }}</div></div>
+                <div style="flex:1;background:var(--good-soft);border-radius:13px;padding:13px 15px"><div style="font-size:11px;font-weight:700;color:var(--good);text-transform:uppercase;letter-spacing:.05em">{{ t.weHeard }}</div><div style="font-size:16px;font-weight:700;margin-top:3px">{{ heardText }}</div></div>
+              </div>
+
+              <div style="font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin:20px 0 10px">{{ t.syllableBreakdown }}</div>
+              <div style="display:flex;gap:10px">
+                <sc-for list="{{ syllables }}" as="s" hint-placeholder-count="4">
+                  <div style="flex:1;max-width:96px">
+                    <div style="height:56px;background:var(--panel);border-radius:10px;display:flex;align-items:flex-end;overflow:hidden"><div style="width:100%;background:{{ s.color }};height:{{ s.width }};border-radius:10px 10px 0 0"></div></div>
+                    <div style="font-weight:700;font-size:14px;margin-top:8px;text-align:center">{{ s.text }}</div>
+                    <div style="font-size:12px;font-weight:700;color:{{ s.color }};text-align:center">{{ s.pct }}</div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="margin-top:18px;background:var(--warn-soft);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start">
+                <div style="width:26px;height:26px;border-radius:8px;background:#E0A030;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px">!</div>
+                <div><div style="font-size:12px;font-weight:800;color:var(--warn)">{{ t.tipLabel }}</div><div style="font-size:13.5px;color:var(--warn);margin-top:2px;line-height:1.45">{{ tipText }}</div></div>
+              </div>
+
+              <div style="display:flex;gap:10px;margin-top:20px">
+                <div onClick="{{ onRecord }}" style="flex:1;text-align:center;background:var(--accent);color:#fff;font-weight:800;font-size:14.5px;padding:13px;border-radius:13px;cursor:pointer" style-hover="background:var(--accent-strong)">{{ t.tryAgain }} ↺</div>
+                <div onClick="{{ goReview }}" style="flex:1;text-align:center;background:var(--surface);border:1px solid var(--border-2);color:var(--ink);font-weight:700;font-size:14.5px;padding:13px;border-radius:13px;cursor:pointer" style-hover="background:var(--panel-soft)">{{ t.saveReview }}</div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isStats }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.statsTitle }}</div>
+          <div style="font-size:14px;color:var(--muted);margin-top:4px">{{ t.statsSub }}</div>
+
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px"><div style="font-size:30px;font-weight:800;color:var(--accent-strong)">{{ statLearned }}</div><div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px">{{ t.wordsLearned }}</div></div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px"><div style="font-size:30px;font-weight:800;color:var(--good)">{{ statAccuracy }}</div><div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px">{{ t.accuracy2 }}</div></div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px"><div style="font-size:30px;font-weight:800">{{ statMinutes }}</div><div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px">{{ t.minutes }}</div></div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px"><div style="font-size:30px;font-weight:800">{{ statLessons }}</div><div style="font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px">{{ t.lessonsDone }}</div></div>
+          </div>
+
+          <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
+            <div style="flex:1;min-width:320px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px">
+              <div style="font-size:13px;font-weight:800">{{ t.weeklyXP }}</div>
+              <div style="display:flex;align-items:flex-end;gap:12px;height:150px;margin-top:18px">
+                <sc-for list="{{ weekBars }}" as="b" hint-placeholder-count="7">
+                  <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+                    <div style="font-size:10.5px;font-weight:700;color:var(--faint)">{{ b.xp }}</div>
+                    <div style="width:100%;height:{{ b.h }};background:{{ b.barColor }};border-radius:8px 8px 0 0;min-height:6px"></div>
+                    <div style="font-size:11.5px;font-weight:700;color:var(--muted)">{{ b.day }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1;min-width:280px;background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px">
+              <div style="font-size:13px;font-weight:800">{{ t.activity }}</div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:18px">
+                <sc-for list="{{ calDays }}" as="d" hint-placeholder-count="28"><div style="aspect-ratio:1;border-radius:7px;background:{{ d.bg }}"></div></sc-for>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;margin-top:16px">
+                <div style="font-size:12.5px;color:var(--muted)"><span style="font-weight:800;color:var(--ink)">{{ statBestStreak }}</span> {{ t.days }} · {{ t.bestStreak }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;margin-top:16px">
+            <div style="font-size:13px;font-weight:800;margin-bottom:14px">{{ t.levelProgress }}</div>
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+              <div style="width:40px;font-weight:800;color:var(--accent-strong)">A1</div>
+              <div style="flex:1;height:10px;background:var(--panel);border-radius:8px;overflow:hidden"><div style="height:100%;width:{{ statA1pct }};background:var(--accent)"></div></div>
+              <div style="width:56px;text-align:right;font-size:12.5px;font-weight:700;color:var(--muted)">{{ statA1pct }}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px">
+              <div style="width:40px;font-weight:800;color:var(--good)">A2</div>
+              <div style="flex:1;height:10px;background:var(--panel);border-radius:8px;overflow:hidden"><div style="height:100%;width:{{ statA2pct }};background:var(--good)"></div></div>
+              <div style="width:56px;text-align:right;font-size:12.5px;font-weight:700;color:var(--muted)">{{ statA2pct }}</div>
+            </div>
+          </div>
+
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:20px;margin-top:16px">
+            <div style="font-size:13px;font-weight:800;margin-bottom:14px">{{ t.achievements }}</div>
+            <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px">
+              <sc-for list="{{ badges }}" as="b" hint-placeholder-count="6">
+                <div style="text-align:center;background:{{ b.bg }};border-radius:14px;padding:16px 8px;opacity:{{ b.op }}">
+                  <div style="font-size:28px">{{ b.ic }}</div>
+                  <div style="font-size:11px;font-weight:700;color:var(--ink-2);margin-top:6px;line-height:1.3">{{ b.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          <div onClick="{{ onStartReview }}" style="margin-top:16px;background:var(--invert-bg);color:#fff;border-radius:18px;padding:20px;cursor:pointer;display:flex;align-items:center;gap:16px" style-hover="opacity:.92">
+            <div style="width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E0A030" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113.7-5.6L20 8"></path><path d="M20 4v4h-4"></path></svg></div>
+            <div style="flex:1"><div style="font-weight:800;font-size:15.5px">{{ t.reviewTitle }}</div><div style="font-size:13px;color:var(--faint);margin-top:2px">{{ srsBreakdown }}</div></div>
+            <div style="font-size:26px;font-weight:800;color:#E0A030">{{ dueCount }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isSrs }}" hint-placeholder-val="{{ false }}">
+        <div>
+          <div style="display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap">
+            <div style="flex:1;min-width:280px">
+              <div style="font-size:24px;font-weight:800;letter-spacing:-.02em">{{ t.reviewTitle }}</div>
+              <div style="font-size:14px;color:var(--muted);margin-top:4px;line-height:1.5;max-width:440px">{{ t.reviewSub }}</div>
+            </div>
+            <div style="background:var(--invert-bg);color:#fff;border-radius:18px;padding:18px 22px;min-width:200px">
+              <sc-if value="{{ reviewDone }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:15px;font-weight:800;color:var(--good)">{{ reviewDoneLabel }}</div>
+              </sc-if>
+              <sc-if value="{{ notReviewDone }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size:34px;font-weight:800;color:#E0A030">{{ dueCount }}</div>
+              <div style="font-size:12.5px;color:var(--faint);font-weight:600">{{ t.itemsDue }}</div>
+              </sc-if>
+              <div onClick="{{ onStartReview }}" style="margin-top:14px;text-align:center;background:var(--accent);color:#fff;font-weight:800;font-size:13.5px;padding:11px;border-radius:11px;cursor:pointer" style-hover="background:var(--accent-strong)">{{ t.startReview }}</div>
+            </div>
+          </div>
+
+          <div style="margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;padding:12px 20px;font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--panel)">
+              <div>{{ t.vocab }}</div><div>{{ t.memory }}</div><div>{{ t.due }}</div><div></div>
+            </div>
+            <sc-for list="{{ srsList }}" as="s" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center;padding:14px 20px;border-top:1px solid var(--border)" style-hover="background:var(--panel-soft)">
+                <div><div style="font-weight:700;font-size:15px">{{ s.es }}</div><div style="font-size:12.5px;color:var(--muted)">{{ s.tr }}</div></div>
+                <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;max-width:80px;height:6px;background:var(--panel);border-radius:6px;overflow:hidden"><div style="height:100%;width:{{ s.strengthPct }};background:{{ s.barColor }}"></div></div><span style="font-size:12px;font-weight:700;color:var(--muted)">{{ s.strength }}</span></div>
+                <div><span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ s.dueBg }};color:{{ s.dueFg }}">{{ s.due }}</span></div>
+                <div onClick="{{ s.onSpeak }}" style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:var(--accent-soft2)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg></div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px">{{ t.phrases }}</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;padding:12px 20px;font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--panel)">
+              <div>{{ t.phrases }}</div><div>{{ t.memory }}</div><div>{{ t.due }}</div><div></div>
+            </div>
+            <sc-for list="{{ srsPhraseList }}" as="s" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center;padding:14px 20px;border-top:1px solid var(--border)" style-hover="background:var(--panel-soft)">
+                <div><div style="font-weight:700;font-size:15px">{{ s.es }}</div><div style="font-size:12.5px;color:var(--muted)">{{ s.tr }}</div></div>
+                <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;max-width:80px;height:6px;background:var(--panel);border-radius:6px;overflow:hidden"><div style="height:100%;width:{{ s.strengthPct }};background:{{ s.barColor }}"></div></div><span style="font-size:12px;font-weight:700;color:var(--muted)">{{ s.strength }}</span></div>
+                <div><span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ s.dueBg }};color:{{ s.dueFg }}">{{ s.due }}</span></div>
+                <div onClick="{{ s.onSpeak }}" style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="background:var(--accent-soft2)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg></div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px">{{ t.pronounce }}</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;padding:12px 20px;font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--panel)">
+              <div>{{ t.pronounce }}</div><div>{{ t.memory }}</div><div>{{ t.due }}</div><div></div>
+            </div>
+            <sc-for list="{{ srsPronList }}" as="s" hint-placeholder-count="5">
+              <div onClick="{{ s.onPractice }}" style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center;padding:14px 20px;border-top:1px solid var(--border);cursor:pointer" style-hover="background:var(--panel-soft)">
+                <div><div style="font-weight:700;font-size:15px">{{ s.es }}</div><div style="font-size:12.5px;color:var(--muted)">{{ s.tr }}</div></div>
+                <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;max-width:80px;height:6px;background:var(--panel);border-radius:6px;overflow:hidden"><div style="height:100%;width:{{ s.strengthPct }};background:{{ s.barColor }}"></div></div><span style="font-size:12px;font-weight:700;color:var(--muted)">{{ s.strength }}</span></div>
+                <div><span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ s.dueBg }};color:{{ s.dueFg }}">{{ s.due }}</span></div>
+                <div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0014 0"></path><path d="M12 18v3"></path></svg></div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px">{{ t.dictTitle }}</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;padding:12px 20px;font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--panel)">
+              <div>{{ t.dictTitle }}</div><div>{{ t.memory }}</div><div>{{ t.due }}</div><div></div>
+            </div>
+            <sc-for list="{{ srsDictList }}" as="s" hint-placeholder-count="4">
+              <div onClick="{{ s.onPractice }}" style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center;padding:14px 20px;border-top:1px solid var(--border);cursor:pointer" style-hover="background:var(--panel-soft)">
+                <div><div style="font-weight:700;font-size:15px">{{ s.es }}</div><div style="font-size:12.5px;color:var(--muted)">{{ s.tr }}</div></div>
+                <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;max-width:80px;height:6px;background:var(--panel);border-radius:6px;overflow:hidden"><div style="height:100%;width:{{ s.strengthPct }};background:{{ s.barColor }}"></div></div><span style="font-size:12px;font-weight:700;color:var(--muted)">{{ s.strength }}</span></div>
+                <div><span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ s.dueBg }};color:{{ s.dueFg }}">{{ s.due }}</span></div>
+                <div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.5 8.5a5 5 0 010 7"></path></svg></div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 10px">{{ t.builder }}</div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:18px;overflow:hidden">
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;padding:12px 20px;font-size:11px;font-weight:700;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--panel)">
+              <div>{{ t.builder }}</div><div>{{ t.memory }}</div><div>{{ t.due }}</div><div></div>
+            </div>
+            <sc-for list="{{ srsBuilderList }}" as="s" hint-placeholder-count="2">
+              <div onClick="{{ s.onPractice }}" style="display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:12px;align-items:center;padding:14px 20px;border-top:1px solid var(--border);cursor:pointer" style-hover="background:var(--panel-soft)">
+                <div><div style="font-weight:700;font-size:15px">{{ s.es }}</div><div style="font-size:12.5px;color:var(--muted)">{{ s.tr }}</div></div>
+                <div style="display:flex;align-items:center;gap:8px"><div style="flex:1;max-width:80px;height:6px;background:var(--panel);border-radius:6px;overflow:hidden"><div style="height:100%;width:{{ s.strengthPct }};background:{{ s.barColor }}"></div></div><span style="font-size:12px;font-weight:700;color:var(--muted)">{{ s.strength }}</span></div>
+                <div><span style="font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px;background:{{ s.dueBg }};color:{{ s.dueFg }}">{{ s.due }}</span></div>
+                <div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="stroke:var(--accent-strong)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+     </div>
+    </main>
+  </div>
+
+  <sc-if value="{{ reviewActive }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:90;background:var(--invert-bg);color:#fff;border-radius:16px;padding:14px 18px;display:flex;align-items:center;gap:16px;box-shadow:0 16px 40px rgba(0,0,0,.3)">
+      <div style="font-size:13px;font-weight:700">{{ reviewingLabel }} · {{ reviewPosLabel }}/{{ reviewLenLabel }}</div>
+      <div onClick="{{ onReviewNext }}" style="background:var(--accent);color:#fff;font-weight:800;font-size:13px;padding:9px 16px;border-radius:10px;cursor:pointer" style-hover="background:var(--accent-strong)">{{ reviewNextLabel }} →</div>
+      <div onClick="{{ onExitReview }}" style="color:var(--faint);font-weight:700;font-size:13px;cursor:pointer;padding:4px">✕</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showInstall }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ onDismissInstall }}" style="position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:24px">
+      <div onClick="{{ stop }}" style="background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:30px;max-width:400px;width:100%;text-align:center;box-shadow:0 30px 70px rgba(0,0,0,.35)">
+        <div style="width:76px;height:76px;border-radius:20px;margin:0 auto;background:linear-gradient(145deg,var(--accent),#E0A030);position:relative;box-shadow:0 10px 24px rgba(0,0,0,.2)">
+          <div style="position:absolute;top:27px;left:22px;width:11px;height:11px;border-radius:50%;background:#fff"></div>
+          <div style="position:absolute;top:27px;right:22px;width:11px;height:11px;border-radius:50%;background:#fff"></div>
+          <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);width:24px;height:12px;border-bottom:3px solid #fff;border-radius:0 0 18px 18px"></div>
+        </div>
+        <div style="font-size:20px;font-weight:800;margin-top:18px;color:var(--ink)">{{ t.installTitle }}</div>
+        <div style="font-size:14px;color:var(--muted);margin-top:8px;line-height:1.5">{{ t.installBody }}</div>
+        <sc-if value="{{ installShowHelp }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:var(--ink-2);background:var(--panel);border-radius:12px;padding:12px;margin-top:14px;line-height:1.45">{{ t.installHelp }}</div></sc-if>
+        <div onClick="{{ onInstall }}" style="margin-top:20px;background:var(--accent);color:#fff;font-weight:800;font-size:15px;padding:14px;border-radius:14px;cursor:pointer" style-hover="background:var(--accent-strong)">{{ t.installBtn }}</div>
+        <div onClick="{{ onDismissInstall }}" style="margin-top:10px;color:var(--muted);font-weight:700;font-size:13.5px;cursor:pointer" style-hover="color:var(--ink)">{{ t.installLater }}</div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = {
+      lang:'en', level:'A1', screen:'home',
+      accent:'#DE5B3B', dark:false, showInstall:false, installReady:false, installShowHelp:false, speakRate:1, dir:'es>en', voiceSel:{}, reviewQueue:[], reviewPos:0, reviewDone:false,
+      xp:240, xpBoost:false, streakFreezes:2, streakFreezeActive:false,
+      challenges:[{id:'c1',en:'Review 5 words',pl:'Powtórz 5 słówek',es:'Repasa 5 palabras',xp:15,done:false},{id:'c2',en:'Build 1 sentence',pl:'Ułóż 1 zdanie',es:'Forma 1 frase',xp:10,done:true},{id:'c3',en:'Practice pronunciation',pl:'Poćwicz wymowę',es:'Practica pronunciación',xp:20,done:false},{id:'c4',en:'Learn 3 new phrases',pl:'Naucz się 3 nowych zwrotów',es:'Aprende 3 frases nuevas',xp:12,done:false},{id:'c5',en:'Complete a dictation drill',pl:'Ukończ dyktando',es:'Completa un dictado',xp:18,done:false},{id:'c6',en:'Perfect score on 3 cards',pl:'Perfekcyjny wynik na 3 kartach',es:'Puntuación perfecta en 3 tarjetas',xp:25,done:false}],
+      vIdx:0, vFlip:false,
+      slots:[], builderChecked:false,
+      dIdx:0, dInput:'', dChecked:false,
+      pWord:0, recording:false, recDone:false, recScore:0, syllables:[], transcript:'', heard:'', metrics:[], tip:'', rec2:null
+    };
+    this.strings = {
+      es:{ home:'Inicio', levels:'Niveles', vocab:'Vocabulario', phrases:'Conversación', builder:'Formar frases', pronounce:'Pronunciación', review:'Repaso',
+        greet:'Buenos días, Alex', greetSub:'Tienes 3 palabras para repasar hoy. ¿Empezamos?',
+        continue:'Continuar lección', continueSub:'A1 · Básico · Saludos', start:'Continuar',
+        streak:'días seguidos', dailyGoal:'Meta diaria', lessons:'lecciones', league:'Liga Oro', rank:'Puesto', xpToday:'XP hoy',
+        quick:'Retomar', dueToday:'para repasar', reviewNow:'Repasar ahora', keepGoing:'Mantén tu racha',
+        flipHint:'Toca la tarjeta para girarla', again:'Otra vez', hard:'Difícil', good:'Bien', easy:'Fácil', example:'Ejemplo', listen:'Escuchar', card:'Tarjeta',
+        levelsTitle:'Tu camino de aprendizaje', levelsSub:'La escala MCER, de tus primeras palabras a la fluidez', locked:'Bloqueado', inProgress:'En curso', available:'Disponible', done:'Completado', continueBtn:'Continuar', open:'Abrir', complete:'completado',
+        phrasesTitle:'Conversación', phrasesSub:'Frases reales que sí usarás — toca una línea para oírla',
+        builderTitle:'Forma la frase', builderSub:'Toca los bloques en el orden correcto', build:'Forma:', check:'Comprobar', clear:'Borrar', correct:'¡Perfecto! Correcto.', wrong:'Casi — prueba a reordenar.', listenSentence:'Oír la frase completa', glossary:'Glosario — cada palabra de la frase', glossaryHint:'Toca una palabra para oírla',
+        pronTitle:'Análisis de pronunciación', pronSub:'Dilo en voz alta — analizamos cada sílaba', record:'Toca para hablar', listening:'Escuchando…', yourScore:'Tu puntuación', tryAgain:'Intentar de nuevo', great:'¡Excelente pronunciación!', goodJob:'Bien — ¡casi lo tienes!', keepPracticing:'Sigue practicando', syllableBreakdown:'Sílaba por sílaba', accuracy:'Precisión', fluency:'Fluidez', completeness:'Integridad', intonation:'Entonación', weHeard:'Oímos', targetLabel:'Objetivo', tipLabel:'Consejo', practiceWords:'Palabras de práctica', saveReview:'Guardar para repasar', checkPron:'Comprobar mi pronunciación', checkPronSub:'Toca el micro y dilo en voz alta', checkSentencePron:'Comprobar pronunciación de la frase', dictNav:'Dictado', dictTitle:'Escucha y escribe', dictSub:'Reproduce la frase y escribe lo que oigas', dictType:'Escribe lo que oyes', dictPlaceholder:'Escribe aquí…', dictCheck:'Comprobar', dictReveal:'Ver respuesta', dictReplay:'Reproducir', dictSlow:'Lento 0.5×', dictNext:'Siguiente', dictCorrect:'¡Correcto! Perfecto.', dictWrong:'Casi — compara abajo.', dictAnswer:'Respuesta', installTitle:'Instalar Hablo', installBody:'Añade Hablo a tu escritorio para acceso rápido, lecciones sin conexión y pantalla completa.', installBtn:'Instalar app', installLater:'Ahora no', installHelp:'Para instalar: abre el menú del navegador y elige «Instalar Hablo» o «Añadir a la pantalla de inicio».',
+        reviewTitle:'Repaso inteligente (SRS)', reviewSub:'La repetición espaciada trae cada palabra justo antes de olvidarla', memory:'Memoria', due:'Toca', startReview:'Empezar sesión de repaso', itemsDue:'para repasar hoy', mastered:'dominadas', learning:'aprendiendo', statsNav:'Progreso', statsTitle:'Tu progreso', statsSub:'Sigue tu avance semana a semana', wordsLearned:'Palabras aprendidas', ofTotal:'de', accuracy2:'Precisión', minutes:'Minutos estudiados', bestStreak:'Mejor racha', lessonsDone:'Lecciones hechas', weeklyXP:'XP semanal', activity:'Actividad — últimas 4 semanas', levelProgress:'Progreso por nivel', achievements:'Logros', days:'días' },
+      en:{ home:'Home', levels:'Levels', vocab:'Vocabulary', phrases:'Phrasebook', builder:'Sentence Builder', pronounce:'Pronunciation', review:'Review',
+        greet:'Buenos días, Alex', greetSub:'You have 3 words due today. Ready for Spanish?',
+        continue:'Continue lesson', continueSub:'A1 · Basics · Greetings', start:'Continue',
+        streak:'day streak', dailyGoal:'Daily goal', lessons:'lessons', league:'Gold League', rank:'Rank', xpToday:'XP today',
+        quick:'Jump back in', dueToday:'due for review', reviewNow:'Review now', keepGoing:'Keep your streak alive',
+        flipHint:'Tap the card to flip', again:'Again', hard:'Hard', good:'Good', easy:'Easy', example:'Example', listen:'Listen', card:'Card',
+        levelsTitle:'Your learning path', levelsSub:'The CEFR scale, from your first words to fluency', locked:'Locked', inProgress:'In progress', available:'Available', done:'Completed', continueBtn:'Continue', open:'Open', complete:'complete',
+        phrasesTitle:'Phrasebook', phrasesSub:'Real phrases you’ll actually use — tap any line to hear it',
+        builderTitle:'Build the sentence', builderSub:'Tap the blocks in the right order', build:'Build:', check:'Check', clear:'Clear', correct:'¡Perfecto! That’s right.', wrong:'Not quite — try reordering.', listenSentence:'Hear full sentence', glossary:'Glossary — every word in this sentence', glossaryHint:'Tap a word to hear it',
+        pronTitle:'Pronunciation check', pronSub:'Say it out loud — we analyze every syllable', record:'Tap to speak', listening:'Listening…', yourScore:'Your score', tryAgain:'Try again', great:'Great pronunciation!', goodJob:'Good — almost there!', keepPracticing:'Keep practicing', syllableBreakdown:'Syllable by syllable', accuracy:'Accuracy', fluency:'Fluency', completeness:'Completeness', intonation:'Intonation', weHeard:'We heard', targetLabel:'Target', tipLabel:'Coaching tip', practiceWords:'Practice words', saveReview:'Save to review', checkPron:'Check my pronunciation', checkPronSub:'Tap the mic and say it aloud', checkSentencePron:'Check sentence pronunciation', dictNav:'Dictation', dictTitle:'Listen & type', dictSub:'Play the phrase and type what you hear', dictType:'Type what you hear', dictPlaceholder:'Type in Spanish…', dictCheck:'Check', dictReveal:'Show answer', dictReplay:'Play', dictSlow:'Slow 0.5×', dictNext:'Next phrase', dictCorrect:'¡Correcto! Perfect.', dictWrong:'Not quite — compare below.', dictAnswer:'Answer', installTitle:'Install Hablo', installBody:'Add Hablo to your desktop for one-tap access, offline lessons and a full-screen experience.', installBtn:'Install app', installLater:'Not now', installHelp:'To install: open your browser menu and choose “Install Hablo” or “Add to Home screen”.',
+        reviewTitle:'Smart Review (SRS)', reviewSub:'Spaced repetition brings each word back right before you’d forget it', memory:'Memory', due:'Due', startReview:'Start review session', itemsDue:'items due today', mastered:'mastered', learning:'learning', statsNav:'Progress', statsTitle:'Your progress', statsSub:'Track your Spanish journey week by week', wordsLearned:'Words learned', ofTotal:'of', accuracy2:'Accuracy', minutes:'Minutes studied', bestStreak:'Best streak', lessonsDone:'Lessons done', weeklyXP:'Weekly XP', activity:'Activity — last 4 weeks', levelProgress:'Level progress', achievements:'Achievements', days:'days' },
+      pl:{ home:'Start', levels:'Poziomy', vocab:'Słówka', phrases:'Rozmówki', builder:'Budowanie zdań', pronounce:'Wymowa', review:'Powtórki',
+        greet:'Buenos días, Alex', greetSub:'Masz dziś 3 słówka do powtórki. Zaczynamy?',
+        continue:'Kontynuuj lekcję', continueSub:'A1 · Podstawy · Powitania', start:'Kontynuuj',
+        streak:'dni z rzędu', dailyGoal:'Cel dzienny', lessons:'lekcje', league:'Liga Złota', rank:'Miejsce', xpToday:'XP dziś',
+        quick:'Wróć do nauki', dueToday:'do powtórki', reviewNow:'Powtórz teraz', keepGoing:'Utrzymaj serię',
+        flipHint:'Dotknij kartę, aby obrócić', again:'Jeszcze raz', hard:'Trudne', good:'Dobre', easy:'Łatwe', example:'Przykład', listen:'Odsłuchaj', card:'Karta',
+        levelsTitle:'Twoja ścieżka nauki', levelsSub:'Skala CEFR — od pierwszych słów do biegłości', locked:'Zablokowane', inProgress:'W trakcie', available:'Dostępne', done:'Ukończone', continueBtn:'Kontynuuj', open:'Otwórz', complete:'ukończono',
+        phrasesTitle:'Rozmówki', phrasesSub:'Zwroty, których naprawdę użyjesz — dotknij, aby odsłuchać',
+        builderTitle:'Ułóż zdanie', builderSub:'Dotykaj klocki we właściwej kolejności', build:'Ułóż:', check:'Sprawdź', clear:'Wyczyść', correct:'¡Perfecto! Zgadza się.', wrong:'Prawie — zmień kolejność.', listenSentence:'Odsłuchaj całe zdanie', glossary:'Słowniczek — każde słowo w tym zdaniu', glossaryHint:'Dotknij słowo, aby je usłyszeć',
+        pronTitle:'Analiza wymowy', pronSub:'Powiedz na głos — analizujemy każdą sylabę', record:'Dotknij, aby mówić', listening:'Słucham…', yourScore:'Twój wynik', tryAgain:'Spróbuj ponownie', great:'Świetna wymowa!', goodJob:'Dobrze — już blisko!', keepPracticing:'Ćwicz dalej', syllableBreakdown:'Sylaba po sylabie', accuracy:'Dokładność', fluency:'Płynność', completeness:'Kompletność', intonation:'Intonacja', weHeard:'Usłyszeliśmy', targetLabel:'Cel', tipLabel:'Wskazówka', practiceWords:'Słowa do ćwiczeń', saveReview:'Zapisz do powtórek', checkPron:'Sprawdź swoją wymowę', checkPronSub:'Dotknij mikrofonu i powiedz na głos', checkSentencePron:'Sprawdź wymowę zdania', dictNav:'Dyktando', dictTitle:'Słuchaj i pisz', dictSub:'Odtwórz zdanie i zapisz, co słyszysz', dictType:'Zapisz, co słyszysz', dictPlaceholder:'Pisz po hiszpańsku…', dictCheck:'Sprawdź', dictReveal:'Pokaż odpowiedź', dictReplay:'Odtwórz', dictSlow:'Wolno 0.5×', dictNext:'Następne', dictCorrect:'¡Correcto! Idealnie.', dictWrong:'Prawie — porównaj poniżej.', dictAnswer:'Odpowiedź', installTitle:'Zainstaluj Hablo', installBody:'Dodaj Hablo na pulpit — szybki dostęp jednym kliknięciem, lekcje offline i tryb pełnoekranowy.', installBtn:'Zainstaluj aplikację', installLater:'Nie teraz', installHelp:'Aby zainstalować: otwórz menu przeglądarki i wybierz „Zainstaluj Hablo" lub „Dodaj do ekranu głównego".',
+        reviewTitle:'Inteligentne powtórki (SRS)', reviewSub:'System przypomina słowo tuż zanim je zapomnisz', memory:'Pamięć', due:'Termin', startReview:'Rozpocznij sesję', itemsDue:'do powtórki dziś', mastered:'opanowane', learning:'w nauce', statsNav:'Postępy', statsTitle:'Twoje postępy', statsSub:'Śledź naukę hiszpańskiego tydzień po tygodniu', wordsLearned:'Nauczone słowa', ofTotal:'z', accuracy2:'Dokładność', minutes:'Minuty nauki', bestStreak:'Najlepsza seria', lessonsDone:'Ukończone lekcje', weeklyXP:'XP w tygodniu', activity:'Aktywność — ostatnie 4 tygodnie', levelProgress:'Postęp poziomów', achievements:'Osiągnięcia', days:'dni' }
+    };
+    this.deck = [
+      {es:'hola', en:'hello', pl:'cześć', exEs:'¡Hola! ¿Cómo estás?', exEn:'Hi! How are you?', exPl:'Cześć! Jak się masz?'},
+      {es:'gracias', en:'thank you', pl:'dziękuję', exEs:'Muchas gracias por todo.', exEn:'Thank you very much for everything.', exPl:'Bardzo dziękuję za wszystko.'},
+      {es:'agua', en:'water', pl:'woda', exEs:'Un vaso de agua, por favor.', exEn:'A glass of water, please.', exPl:'Szklankę wody, proszę.'},
+      {es:'casa', en:'house / home', pl:'dom', exEs:'Mi casa es tu casa.', exEn:'My house is your house.', exPl:'Mój dom jest twoim domem.'},
+      {es:'comer', en:'to eat', pl:'jeść', exEs:'Quiero comer algo rico.', exEn:'I want to eat something tasty.', exPl:'Chcę zjeść coś dobrego.'},
+      {es:'amigo', en:'friend', pl:'przyjaciel', exEs:'Él es mi mejor amigo.', exEn:'He is my best friend.', exPl:'On jest moim najlepszym przyjacielem.'},
+      {es:'hoy', en:'today', pl:'dzisiaj', exEs:'Hoy hace mucho sol.', exEn:'It’s very sunny today.', exPl:'Dzisiaj jest bardzo słonecznie.'},
+      {es:'bien', en:'well / good', pl:'dobrze', exEs:'Estoy muy bien, gracias.', exEn:'I’m very well, thank you.', exPl:'Czuję się bardzo dobrze, dziękuję.'}
+    ];
+    this.phrasebook = [
+      {titleEn:'Greetings', titlePl:'Powitania', phrases:[
+        {es:'Buenos días', en:'Good morning', pl:'Dzień dobry'},
+        {es:'¿Cómo estás?', en:'How are you?', pl:'Jak się masz?'},
+        {es:'Mucho gusto', en:'Nice to meet you', pl:'Miło mi'}
+      ]},
+      {titleEn:'At the restaurant', titlePl:'W restauracji', phrases:[
+        {es:'La cuenta, por favor', en:'The check, please', pl:'Poproszę rachunek'},
+        {es:'¿Qué me recomienda?', en:'What do you recommend?', pl:'Co pan poleca?'},
+        {es:'Para mí, un café', en:'For me, a coffee', pl:'Dla mnie kawa'}
+      ]},
+      {titleEn:'Getting around', titlePl:'W mieście', phrases:[
+        {es:'¿Dónde está el baño?', en:'Where is the bathroom?', pl:'Gdzie jest toaleta?'},
+        {es:'¿Cuánto cuesta?', en:'How much is it?', pl:'Ile to kosztuje?'},
+        {es:'Estoy perdido', en:'I’m lost', pl:'Zgubiłem się'}
+      ]},
+      {titleEn:'At the hotel', titlePl:'W hotelu', phrases:[
+        {es:'Tengo una reserva', en:'I have a reservation', pl:'Mam rezerwację'},
+        {es:'¿Tienen habitaciones libres?', en:'Do you have any rooms free?', pl:'Czy są wolne pokoje?'},
+        {es:'¿A qué hora es el desayuno?', en:'What time is breakfast?', pl:'O której jest śniadanie?'},
+        {es:'La llave, por favor', en:'The key, please', pl:'Poproszę klucz'}
+      ]},
+      {titleEn:'Emergencies', titlePl:'Nagłe sytuacje', phrases:[
+        {es:'¡Ayuda!', en:'Help!', pl:'Pomocy!'},
+        {es:'Llame a una ambulancia', en:'Call an ambulance', pl:'Proszę wezwać karetkę'},
+        {es:'Necesito un médico', en:'I need a doctor', pl:'Potrzebuję lekarza'},
+        {es:'He perdido mi pasaporte', en:'I’ve lost my passport', pl:'Zgubiłem paszport'}
+      ]},
+      {titleEn:'Making friends', titlePl:'Poznawanie ludzi', phrases:[
+        {es:'¿De dónde eres?', en:'Where are you from?', pl:'Skąd jesteś?'},
+        {es:'¿A qué te dedicas?', en:'What do you do?', pl:'Czym się zajmujesz?'},
+        {es:'¿Tienes Instagram?', en:'Do you have Instagram?', pl:'Masz Instagrama?'},
+        {es:'Ha sido un placer', en:'It’s been a pleasure', pl:'Było mi bardzo miło'}
+      ]},
+      {titleEn:'On the phone', titlePl:'Przez telefon', phrases:[
+        {es:'¿Diga?', en:'Hello? (answering)', pl:'Halo?'},
+        {es:'¿Puedo hablar con Ana?', en:'Can I speak with Ana?', pl:'Czy mogę rozmawiać z Aną?'},
+        {es:'Un momento, por favor', en:'One moment, please', pl:'Chwileczkę, proszę'},
+        {es:'Le llamo más tarde', en:'I’ll call you later', pl:'Zadzwonię później'}
+      ]},
+      {titleEn:'Time & dates', titlePl:'Czas i daty', phrases:[
+        {es:'¿Qué hora es?', en:'What time is it?', pl:'Która godzina?'},
+        {es:'Son las tres', en:'It’s three o’clock', pl:'Jest trzecia'},
+        {es:'¿Qué día es hoy?', en:'What day is it today?', pl:'Jaki dziś dzień?'},
+        {es:'Nos vemos el lunes', en:'See you on Monday', pl:'Do zobaczenia w poniedziałek'}
+      ]},
+      {titleEn:'Feelings & small talk', titlePl:'Uczucia i pogawędki', phrases:[
+        {es:'Estoy muy cansado', en:'I’m very tired', pl:'Jestem bardzo zmęczony'},
+        {es:'¡Qué buen tiempo hace!', en:'What nice weather!', pl:'Jaka ładna pogoda!'},
+        {es:'Estoy de acuerdo', en:'I agree', pl:'Zgadzam się'},
+        {es:'No pasa nada', en:'It’s no problem', pl:'Nic się nie stało'}
+      ]}
+    ];
+    this.builder = {
+      target:['Yo','quiero','un','café','con','leche'], en:'I want a coffee with milk', pl:'Chcę kawę z mlekiem',
+      glossary:[
+        {es:'Yo', en:'I', pl:'ja'},
+        {es:'quiero', en:'I want', pl:'chcę'},
+        {es:'un', en:'a / one', pl:'jeden'},
+        {es:'café', en:'coffee', pl:'kawa'},
+        {es:'con', en:'with', pl:'z'},
+        {es:'leche', en:'milk', pl:'mleko'}
+      ]
+    };
+    this.bank = [2,4,0,5,1,3].map((id)=>({id, es:this.builder.target[id]}));
+    this.srs = [
+      {es:'gracias', en:'thank you', pl:'dziękuję', strength:82, dueEn:'in 3 days', duePl:'za 3 dni', today:false},
+      {es:'comer', en:'to eat', pl:'jeść', strength:45, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'casa', en:'house', pl:'dom', strength:68, dueEn:'Tomorrow', duePl:'Jutro', today:false},
+      {es:'amigo', en:'friend', pl:'przyjaciel', strength:31, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'hoy', en:'today', pl:'dzisiaj', strength:91, dueEn:'in 6 days', duePl:'za 6 dni', today:false},
+      {es:'agua', en:'water', pl:'woda', strength:54, dueEn:'Today', duePl:'Dzisiaj', today:true}
+    ];
+    this.srsPhrases = [
+      {es:'¿Dónde está el baño?', en:'Where is the bathroom?', pl:'Gdzie jest toaleta?', strength:76, dueEn:'in 2 days', duePl:'za 2 dni', today:false},
+      {es:'La cuenta, por favor', en:'The check, please', pl:'Poproszę rachunek', strength:38, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'¿Cuánto cuesta?', en:'How much is it?', pl:'Ile to kosztuje?', strength:63, dueEn:'Tomorrow', duePl:'Jutro', today:false},
+      {es:'Necesito ayuda urgente', en:'I need urgent help', pl:'Potrzebuję pilnej pomocy', strength:29, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'Mucho gusto', en:'Nice to meet you', pl:'Miło mi', strength:88, dueEn:'in 5 days', duePl:'za 5 dni', today:false}
+    ];
+    this.srsPron = [
+      {es:'Buenos días', en:'Good morning', pl:'Dzień dobry', strength:80, dueEn:'in 3 days', duePl:'za 3 dni', today:false},
+      {es:'gracias', en:'thank you', pl:'dziękuję', strength:42, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'la izquierda', en:'the left', pl:'w lewo', strength:57, dueEn:'Tomorrow', duePl:'Jutro', today:false},
+      {es:'sin embargo', en:'however', pl:'jednak', strength:33, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'a todas luces', en:'clearly', pl:'ewidentnie', strength:71, dueEn:'in 4 days', duePl:'za 4 dni', today:false}
+    ];
+    this.levels = [
+      {code:'A1', en:'Beginner', pl:'Początkujący', dEn:'Greetings, numbers, everyday words and the simple present tense.', dPl:'Powitania, liczby, codzienne słówka i czas teraźniejszy.', status:'active', progress:62},
+      {code:'A2', en:'Elementary', pl:'Podstawowy', dEn:'Past tenses, shopping, directions and describing routines.', dPl:'Czasy przeszłe, zakupy, wskazówki i opis rutyny.', status:'available', progress:8},
+      {code:'B1', en:'Intermediate', pl:'Średnio zaawansowany', dEn:'Opinions, future plans and handling most travel situations.', dPl:'Opinie, plany na przyszłość i typowe sytuacje w podróży.', status:'available', progress:0},
+      {code:'B2', en:'Upper intermediate', pl:'Ponad średni', dEn:'Abstract topics, nuanced arguments and fluent conversation.', dPl:'Tematy abstrakcyjne, niuanse i płynna rozmowa.', status:'available', progress:0},
+      {code:'C1', en:'Advanced', pl:'Zaawansowany', dEn:'Complex texts, idioms and precise, spontaneous expression.', dPl:'Złożone teksty, idiomy i precyzyjna, swobodna wypowiedź.', status:'locked', progress:0},
+      {code:'C2', en:'Mastery', pl:'Biegłość', dEn:'Near-native command across any subject or register.', dPl:'Biegłość bliska rodzimej w każdym temacie i rejestrze.', status:'locked', progress:0}
+    ];
+    this.pron = [
+      {es:'Buenos días', en:'Good morning', pl:'Dzień dobry', syl:['Bue','nos','dí','as'], scores:[94,88,96,91], tipEn:'Keep the “d” in “días” soft — almost like the “th” in “this”.', tipPl:'Wymawiaj „d" w „días" miękko — prawie jak „th" w „this".'},
+      {es:'gracias', en:'thank you', pl:'dziękuję', syl:['gra','cias'], scores:[90,83], tipEn:'“ci” is a soft “s” in Latin America (“th” in Spain).', tipPl:'„ci" to miękkie „s" (Ameryka) lub „th" (Hiszpania).'},
+      {es:'por favor', en:'please', pl:'proszę', syl:['por','fa','vor'], scores:[92,89,86], tipEn:'Tap the “r” once — a light flap, not a full roll.', tipPl:'„r" trąć raz — lekko, bez zwijania.'}
+    ];
+
+    // ── A2 content ──
+    this.deckA2 = [
+      {es:'ayer', en:'yesterday', pl:'wczoraj', exEs:'Ayer fui al mercado.', exEn:'Yesterday I went to the market.', exPl:'Wczoraj poszedłem na targ.'},
+      {es:'compré', en:'I bought', pl:'kupiłem', exEs:'Compré pan y fruta.', exEn:'I bought bread and fruit.', exPl:'Kupiłem chleb i owoce.'},
+      {es:'barato', en:'cheap', pl:'tani', exEs:'Todo es muy barato aquí.', exEn:'Everything is very cheap here.', exPl:'Wszystko jest tu bardzo tanie.'},
+      {es:'izquierda', en:'left', pl:'lewo', exEs:'Gira a la izquierda.', exEn:'Turn to the left.', exPl:'Skręć w lewo.'},
+      {es:'derecha', en:'right', pl:'prawo', exEs:'Sigue todo a la derecha.', exEn:'Keep going to the right.', exPl:'Idź prosto, potem w prawo.'},
+      {es:'siempre', en:'always', pl:'zawsze', exEs:'Siempre me levanto temprano.', exEn:'I always get up early.', exPl:'Zawsze wstaję wcześnie.'},
+      {es:'probar', en:'to try / try on', pl:'przymierzyć', exEs:'¿Puedo probarlo?', exEn:'Can I try it on?', exPl:'Czy mogę to przymierzyć?'},
+      {es:'rebajas', en:'sales', pl:'wyprzedaże', exEs:'Hay rebajas en la tienda.', exEn:'There are sales at the store.', exPl:'W sklepie są wyprzedaże.'}
+    ];
+    this.phrasebookA2 = [
+      {titleEn:'Shopping', titlePl:'Zakupy', phrases:[
+        {es:'¿Tiene otra talla?', en:'Do you have another size?', pl:'Czy jest inny rozmiar?'},
+        {es:'¿Puedo pagar con tarjeta?', en:'Can I pay by card?', pl:'Czy mogę zapłacić kartą?'},
+        {es:'Me lo llevo', en:'I’ll take it', pl:'Biorę to'}
+      ]},
+      {titleEn:'Directions', titlePl:'Wskazówki', phrases:[
+        {es:'¿Cómo llego al centro?', en:'How do I get downtown?', pl:'Jak dojść do centrum?'},
+        {es:'Está a dos calles', en:'It’s two blocks away', pl:'To dwie przecznice stąd'},
+        {es:'Gire a la derecha', en:'Turn right', pl:'Proszę skręcić w prawo'}
+      ]},
+      {titleEn:'Daily routine', titlePl:'Codzienność', phrases:[
+        {es:'Me despierto a las siete', en:'I wake up at seven', pl:'Budzę się o siódmej'},
+        {es:'Trabajo por la mañana', en:'I work in the morning', pl:'Pracuję rano'},
+        {es:'Ceno con mi familia', en:'I have dinner with my family', pl:'Jem kolację z rodziną'}
+      ]},
+      {titleEn:'At the doctor', titlePl:'U lekarza', phrases:[
+        {es:'Me duele la cabeza', en:'I have a headache', pl:'Boli mnie głowa'},
+        {es:'Tengo fiebre desde ayer', en:'I’ve had a fever since yesterday', pl:'Mam gorączkę od wczoraj'},
+        {es:'¿Necesito receta?', en:'Do I need a prescription?', pl:'Czy potrzebuję recepty?'},
+        {es:'Soy alérgico a la penicilina', en:'I’m allergic to penicillin', pl:'Mam alergię na penicylinę'}
+      ]},
+      {titleEn:'At the bank & post', titlePl:'W banku i na poczcie', phrases:[
+        {es:'Quiero abrir una cuenta', en:'I’d like to open an account', pl:'Chcę otworzyć konto'},
+        {es:'¿Dónde puedo cambiar dinero?', en:'Where can I change money?', pl:'Gdzie mogę wymienić pieniądze?'},
+        {es:'Quiero enviar este paquete', en:'I want to send this package', pl:'Chcę wysłać tę paczkę'},
+        {es:'¿Cuánto es el franqueo?', en:'How much is the postage?', pl:'Ile kosztuje przesyłka?'}
+      ]},
+      {titleEn:'Job & work', titlePl:'Praca', phrases:[
+        {es:'Tengo una entrevista mañana', en:'I have an interview tomorrow', pl:'Mam jutro rozmowę kwalifikacyjną'},
+        {es:'¿Cuál es el horario?', en:'What are the hours?', pl:'Jakie są godziny pracy?'},
+        {es:'Trabajo en equipo muy bien', en:'I work well in a team', pl:'Dobrze pracuję w zespole'},
+        {es:'¿Cuándo puedo empezar?', en:'When can I start?', pl:'Kiedy mogę zacząć?'}
+      ]},
+      {titleEn:'Opinions & agreeing', titlePl:'Opinie i zgadzanie się', phrases:[
+        {es:'En mi opinión…', en:'In my opinion…', pl:'Moim zdaniem…'},
+        {es:'Tienes toda la razón', en:'You’re completely right', pl:'Masz całkowitą rację'},
+        {es:'No estoy de acuerdo', en:'I don’t agree', pl:'Nie zgadzam się'},
+        {es:'Depende de la situación', en:'It depends on the situation', pl:'To zależy od sytuacji'}
+      ]},
+      {titleEn:'Complaints & problems', titlePl:'Reklamacje i problemy', phrases:[
+        {es:'Esto no funciona', en:'This doesn’t work', pl:'To nie działa'},
+        {es:'Quiero hablar con el encargado', en:'I want to speak to the manager', pl:'Chcę rozmawiać z kierownikiem'},
+        {es:'¿Puedo cambiarlo?', en:'Can I exchange it?', pl:'Czy mogę to wymienić?'},
+        {es:'Quiero un reembolso', en:'I’d like a refund', pl:'Chcę zwrot pieniędzy'}
+      ]},
+      {titleEn:'Making plans', titlePl:'Umawianie się', phrases:[
+        {es:'¿Quedamos el sábado?', en:'Shall we meet on Saturday?', pl:'Umówimy się w sobotę?'},
+        {es:'¿Te apetece un café?', en:'Do you fancy a coffee?', pl:'Masz ochotę na kawę?'},
+        {es:'Te recojo a las ocho', en:'I’ll pick you up at eight', pl:'Odbiorę cię o ósmej'},
+        {es:'Quizás la próxima vez', en:'Maybe next time', pl:'Może następnym razem'}
+      ]}
+    ];
+    this.builderA2 = {
+      target:['Ayer','compré','pan','en','el','mercado'], en:'Yesterday I bought bread at the market', pl:'Wczoraj kupiłem chleb na targu',
+      glossary:[
+        {es:'Ayer', en:'yesterday', pl:'wczoraj'},
+        {es:'compré', en:'I bought', pl:'kupiłem'},
+        {es:'pan', en:'bread', pl:'chleb'},
+        {es:'en', en:'at / in', pl:'na / w'},
+        {es:'el', en:'the', pl:'ten (rodzajnik)'},
+        {es:'mercado', en:'market', pl:'targ'}
+      ]
+    };
+    this.bankA2 = [3,0,5,1,4,2].map((id)=>({id, es:this.builderA2.target[id]}));
+    this.builderB1 = {
+      target:['Aunque','llueva','saldré','de','todas','formas'], en:'Even if it rains I\'ll go out anyway', pl:'Nawet jeśli będzie padać, i tak wyjdę',
+      glossary:[{es:'Aunque', en:'even though / even if', pl:'chociaż / nawet jeśli'},{es:'llueva', en:'it rains (subjunctive)', pl:'będzie padać'},{es:'saldré', en:'I will go out', pl:'wyjdę'},{es:'de', en:'of', pl:'z'},{es:'todas', en:'all', pl:'wszystkie'},{es:'formas', en:'ways', pl:'sposoby'}]
+    };
+    this.bankB1 = [3,5,0,4,1,2].map((id)=>({id, es:this.builderB1.target[id]}));
+    this.builderB2 = {
+      target:['Cabría','matizar','que','no','todos','están','de','acuerdo'], en:'It would be worth noting that not everyone agrees', pl:'Warto by doprecyzować, że nie wszyscy się zgadzają',
+      glossary:[{es:'Cabría', en:'it would be fitting to', pl:'warto by'},{es:'matizar', en:'to qualify / clarify', pl:'doprecyzować'},{es:'que', en:'that', pl:'że'},{es:'no', en:'not', pl:'nie'},{es:'todos', en:'everyone', pl:'wszyscy'},{es:'están', en:'are', pl:'są'},{es:'de', en:'of', pl:'z'},{es:'acuerdo', en:'agreement', pl:'zgoda'}]
+    };
+    this.bankB2 = [4,0,6,2,1,7,5,3].map((id)=>({id, es:this.builderB2.target[id]}));
+    this.pronA2 = [
+      {es:'la izquierda', en:'the left', pl:'w lewo', syl:['la','iz','quier','da'], scores:[96,84,90,93], tipEn:'“qu” is a hard “k” — say “kier”, never “kwier”.', tipPl:'„qu" to twarde „k" — mów „kier", nigdy „kwier".'},
+      {es:'derecha', en:'right', pl:'w prawo', syl:['de','re','cha'], scores:[91,88,85], tipEn:'“ch” sounds like the “ch” in “church”.', tipPl:'„ch" brzmi jak „ch" w „church".'},
+      {es:'rebajas', en:'sales', pl:'wyprzedaże', syl:['re','ba','jas'], scores:[89,90,82], tipEn:'The “j” is a throaty “h”, like clearing your throat.', tipPl:'„j" to gardłowe „h", jak chrząknięcie.'}
+    ];
+    this.pronB1 = [
+      {es:'sin embargo', en:'however', pl:'jednak', syl:['sin','em','bar','go'], scores:[88,85,79,90], tipEn:'Link “sin” and “embargo” smoothly — Spanish doesn’t pause between words like English does.', tipPl:'Połącz „sin" i „embargo" płynnie — hiszpański nie robi przerw między słowami jak polski."'},
+      {es:'me arrepiento', en:'I regret it', pl:'żałuję tego', syl:['me','a','rre','pien','to'], scores:[82,91,76,85,88], tipEn:'The double “rr” is a strong rolled trill — vibrate your tongue tip.', tipPl:'Podwójne „rr" to mocno zwibrowane „r" — porusz czubkiem języka.'},
+      {es:'a largo plazo', en:'in the long run', pl:'na dłuższą metę', syl:['a','lar','go','pla','zo'], scores:[90,84,92,79,87], tipEn:'“pla” is one crisp syllable — don’t insert a vowel between “p” and “l”.', tipPl:'„pla" to jedna zwarta sylaba — nie wstawiaj samogłoski między „p" i „l".'},
+      {es:'me acostumbré','en':'I got used to it','pl':'przyzwyczaiłem się','syl':['me','a','cos','tum','bré'],'scores':[86,83,80,88,77],'tipEn':'Stress falls on the final “bré” — keep it sharp and short.','tipPl':'Akcent pada na ostatnie „bré" — wymów je krótko i wyraźnie.'},
+      {es:'cabe destacar', en:'it’s worth noting', pl:'warto zaznaczyć', syl:['ca','be','des','ta','car'], scores:[91,89,84,90,86], tipEn:'Keep every vowel pure and short — Spanish vowels never glide like English ones.', tipPl:'Każda samogłoska krótka i czysta — hiszpańskie samogłoski się nie ślizgają jak angielskie.'}
+    ];
+    this.pronB2 = [
+      {es:'sin lugar a dudas', en:'without a doubt', pl:'bez wątpienia', syl:['sin','lu','gar','a','du','das'], scores:[87,90,83,95,81,88], tipEn:'Six syllables, one breath — practice it slowly first, then speed up.', tipPl:'Sześć sylab, jeden oddech — najpierw powoli, potem szybciej.'},
+      {es:'a raíz de eso', en:'as a result of that', pl:'w wyniku tego', syl:['a','ra','íz','de','e','so'], scores:[92,80,86,90,84,89], tipEn:'“raíz” has a written accent — stress lands hard on the “í”.', tipPl:'„raíz" ma akcent graficzny — mocny nacisk na „í".'},
+      {es:'cabría matizar', en:'it would be worth qualifying', pl:'warto by doprecyzować', syl:['ca','brí','a','ma','ti','zar'], scores:[79,85,91,88,83,86], tipEn:'“cabría” is conditional — soften the “b” between vowels almost to a “v”.', tipPl:'„cabría" to tryb warunkowy — „b" między samogłoskami zmiękcz niemal do „v".'},
+      {es:'no obstante ello', en:'nevertheless', pl:'niemniej jednak', syl:['no','obs','tan','te','e','llo'], scores:[90,82,87,92,79,85], tipEn:'“ll” sounds like the “y” in “yes” in most dialects.', tipPl:'„ll" brzmi jak „j" w „jajko" w większości dialektów.'},
+      {es:'a todas luces', en:'clearly', pl:'ewidentnie', syl:['a','to','das','lu','ces'], scores:[93,88,85,90,81], tipEn:'“ces” ends soft — a light “s”, never a hard “z”.', tipPl:'„ces" kończy się miękko — lekkie „s", nigdy twarde „z".'}
+    ];
+    this.dictA1 = [
+      {es:'Hola, ¿cómo estás?', en:'Hello, how are you?', pl:'Cześć, jak się masz?'},
+      {es:'Me llamo Ana', en:'My name is Ana', pl:'Nazywam się Ana'},
+      {es:'Tengo dos hermanos', en:'I have two brothers', pl:'Mam dwóch braci'},
+      {es:'La casa es muy grande', en:'The house is very big', pl:'Dom jest bardzo duży'}
+    ];
+    this.srsDict = [
+      {es:'Hola, ¿cómo estás?', en:'Hello, how are you?', pl:'Cześć, jak się masz?', strength:69, dueEn:'in 2 days', duePl:'za 2 dni', today:false},
+      {es:'Me llamo Ana', en:'My name is Ana', pl:'Nazywam się Ana', strength:35, dueEn:'Today', duePl:'Dzisiaj', today:true},
+      {es:'Tengo dos hermanos', en:'I have two brothers', pl:'Mam dwóch braci', strength:48, dueEn:'Tomorrow', duePl:'Jutro', today:false},
+      {es:'La casa es muy grande', en:'The house is very big', pl:'Dom jest bardzo duży', strength:27, dueEn:'Today', duePl:'Dzisiaj', today:true}
+    ];
+    this.srsBuilder = [
+      {es:'Yo quiero un café con leche', en:'I want a coffee with milk', pl:'Chcę kawę z mlekiem', strength:73, dueEn:'in 3 days', duePl:'za 3 dni', today:false},
+      {es:'Ayer compré pan en el mercado', en:'Yesterday I bought bread at the market', pl:'Wczoraj kupiłem chleb na targu', strength:31, dueEn:'Today', duePl:'Dzisiaj', today:true}
+    ];
+    this.dictA2 = [
+      {es:'Ayer compré pan en el mercado', en:'Yesterday I bought bread at the market', pl:'Wczoraj kupiłem chleb na targu'},
+      {es:'Gira a la izquierda en la esquina', en:'Turn left at the corner', pl:'Skręć w lewo na rogu'},
+      {es:'Me despierto a las siete', en:'I wake up at seven', pl:'Budzę się o siódmej'},
+      {es:'¿Puedo pagar con tarjeta?', en:'Can I pay by card?', pl:'Czy mogę zapłacić kartą?'}
+    ];
+    this.dictB1 = [
+      {es:'Aunque llueva, saldré de todas formas', en:'Even if it rains, I\'ll go out anyway', pl:'Nawet jeśli będzie padać, i tak wyjdę'},
+      {es:'Me arrepiento de no haber estudiado más', en:'I regret not having studied more', pl:'Żałuję, że nie uczyłem się więcej'},
+      {es:'A largo plazo, esto será beneficioso', en:'In the long run, this will be beneficial', pl:'Na dłuższą metę to będzie korzystne'},
+      {es:'Cabe destacar que la situación ha cambiado', en:'It\'s worth noting that the situation has changed', pl:'Warto zaznaczyć, że sytuacja się zmieniła'}
+    ];
+    this.dictB2 = [
+      {es:'Sin lugar a dudas, esto marcará un antes y un después', en:'Without a doubt, this will be a turning point', pl:'Bez wątpienia to będzie punkt zwrotny'},
+      {es:'Cabría matizar que no todos están de acuerdo', en:'It would be worth noting that not everyone agrees', pl:'Warto by doprecyzować, że nie wszyscy się zgadzają'},
+      {es:'No obstante ello, seguimos adelante con el plan', en:'Nevertheless, we\'re moving forward with the plan', pl:'Niemniej jednak realizujemy plan dalej'}
+    ];
+  }
+
+  _say(text, code, rate){ try{ const synth=window.speechSynthesis; if(!synth) return; synth.cancel(); const go=()=>{ const u=new SpeechSynthesisUtterance(text); u.lang=code; u.rate=rate; const vs=synth.getVoices()||[]; const pre=code.slice(0,2).toLowerCase(); const sel=(this.state.voiceSel||{})[pre]; let v=sel&&vs.find(x=>x.voiceURI===sel); if(!v) v=vs.find(x=>x.lang&&x.lang.toLowerCase().replace('_','-')===code.toLowerCase())||vs.find(x=>x.lang&&x.lang.toLowerCase().startsWith(pre)); if(v) u.voice=v; synth.speak(u); }; setTimeout(go, 90); }catch(e){} }
+  _speak(text, code){ this._say(text, code||this._tcode||'es-ES', 0.9*(this.state.speakRate||1)); }
+  _speakSlow(text, code){ this._say(text, code||this._tcode||'es-ES', 0.55); }
+  _mix(a,b,t){ const p=(h)=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; const pa=p(a),pb=p(b); return '#'+pa.map((v,i)=>Math.round(v+(pb[i]-v)*t).toString(16).padStart(2,'0')).join(''); }
+  _setAccent(hex){ this.setState({accent:hex}); }
+  _toggleDark(){ this.setState(s=>({dark:!s.dark})); }
+  componentDidMount(){
+    try{
+      window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); this._deferred=e; this.setState({installReady:true}); });
+      if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
+      const sy=window.speechSynthesis; if(sy){ sy.getVoices(); sy.onvoiceschanged=()=>this.forceUpdate(); }
+      const dismissed = localStorage.getItem('hablo_install_dismissed');
+      const standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
+      if(!dismissed && !standalone){ setTimeout(()=>this.setState({showInstall:true}), 900); }
+    }catch(e){}
+    import('./words.js').then(m=>{
+      const map=(a)=>(a||[]).map(w=>({es:w[0], en:w[1], pl:w[2], exEs:w[3], exEn:w[4], exPl:w[5]}));
+      this._extra={A1:map(m.A1WORDS), A2:map(m.A2WORDS), B1:map(m.B1WORDS), B2:map(m.B2WORDS)};
+      this.forceUpdate();
+    }).catch(()=>{});
+    import('./phrases.js').then(m=>{
+      const cat=(c)=>({titleEn:c.titleEn, titlePl:c.titlePl, phrases:(c.phrases||[]).map(p=>({es:p[0], en:p[1], pl:p[2]}))});
+      this._extraP={A1:(m.A1PHRASES||[]).map(cat), A2:(m.A2PHRASES||[]).map(cat), B1:(m.B1PHRASES||[]).map(cat), B2:(m.B2PHRASES||[]).map(cat)};
+      this.forceUpdate();
+    }).catch(()=>{});
+  }
+  _deck(lv){ const base = lv==='A1'?this.deck : lv==='A2'?this.deckA2 : []; const ex = (this._extra&&this._extra[lv])?this._extra[lv]:[]; return base.concat(ex); }
+  _pron(lv){ return lv==='A1'?this.pron : lv==='A2'?this.pronA2 : lv==='B1'?this.pronB1 : this.pronB2; }
+  _builder(lv){ return lv==='A1'?this.builder : lv==='A2'?this.builderA2 : lv==='B1'?this.builderB1 : this.builderB2; }
+  _bank(lv){ return lv==='A1'?this.bank : lv==='A2'?this.bankA2 : lv==='B1'?this.bankB1 : this.bankB2; }
+  _dict(lv){ return lv==='A1'?this.dictA1 : lv==='A2'?this.dictA2 : lv==='B1'?this.dictB1 : this.dictB2; }
+  _startReview(){
+    const items=[];
+    this.srs.forEach(it=>{ if(it.today) items.push({kind:'vocab', it}); });
+    this.srsPhrases.forEach(it=>{ if(it.today) items.push({kind:'phrasebook', it}); });
+    this.srsPron.forEach(it=>{ if(it.today) items.push({kind:'pronounce', it}); });
+    this.srsDict.forEach(it=>{ if(it.today) items.push({kind:'listen', it}); });
+    this.srsBuilder.forEach(it=>{ if(it.today) items.push({kind:'builder', it}); });
+    if(!items.length) return;
+    this.setState({reviewQueue:items, reviewPos:0, screen:items[0].kind, reviewDone:false});
+  }
+  _reviewNext(grade){
+    const q=this.state.reviewQueue, pos=this.state.reviewPos;
+    if(pos<q.length){ this._applySRS(q[pos].it, grade||'good'); this._gainXp(10); }
+    const next=pos+1;
+    if(next<q.length){ this.setState({reviewPos:next, screen:q[next].kind}); }
+    else { this.setState({reviewQueue:[], reviewPos:0, screen:'srs', reviewDone:true}); setTimeout(()=>this.setState({reviewDone:false}),3500); }
+  }
+  _exitReview(){ this.setState({reviewQueue:[], reviewPos:0}); }
+  _gainXp(base){ this.setState(s=>({xp: s.xp + (s.xpBoost?base*2:base)})); }
+  _toggleBoost(){ this.setState(s=>({xpBoost:!s.xpBoost})); }
+  _useFreeze(){ this.setState(s=> s.streakFreezes>0 && !s.streakFreezeActive ? {streakFreezes:s.streakFreezes-1, streakFreezeActive:true} : s); }
+  _toggleChallenge(id){ this.setState(s=>{ const ch=s.challenges.map(c=>c.id===id?{...c,done:!c.done}:c); const item=s.challenges.find(c=>c.id===id); const delta=(item&&!item.done)?(item.xp*(s.xpBoost?2:1)):-(item?item.xp*(s.xpBoost?2:1):0); return {challenges:ch, xp:Math.max(0,s.xp+delta)}; }); }
+  _phrases(lv){ if(this._extraP && this._extraP[lv] && this._extraP[lv].length) return this._extraP[lv]; return lv==='A2'?this.phrasebookA2:this.phrasebook; }
+  _installApp(){ const d=this._deferred; if(d){ try{ d.prompt(); if(d.userChoice) d.userChoice.then(()=>{ this._deferred=null; this.setState({showInstall:false, installReady:false}); }); }catch(e){ this.setState({installShowHelp:true}); } } else { this.setState({installShowHelp:true}); } }
+  _dismissInstall(){ try{ localStorage.setItem('hablo_install_dismissed','1'); }catch(e){} this.setState({showInstall:false}); }
+  _go(k){ this.setState({screen:k}); }
+  _flip(){ this.setState(s=>({vFlip:!s.vFlip})); }
+  _applySRS(item, grade){
+    if(item.interval==null) item.interval=1;
+    if(grade==='again'){ item.interval=1; item.today=true; item.strength=Math.max(5,(item.strength||50)-20); item.dueEn='Today'; item.duePl='Dzisiaj'; return; }
+    const mult = grade==='hard'?1.2 : grade==='easy'?4 : 2.5;
+    const bump = grade==='hard'?6 : grade==='easy'?22 : 15;
+    item.interval=Math.max(1, Math.round((item.interval||1)*mult));
+    item.strength=Math.min(100,(item.strength||50)+bump);
+    item.today=false;
+    const d=item.interval;
+    item.dueEn = d===1?'Tomorrow':'in '+d+' days'; item.duePl = d===1?'Jutro':'za '+d+' dni';
+  }
+  _rate(grade){
+    const lv=this.state.level, deckA=this._deck(lv);
+    const c=deckA[Math.min(this.state.vIdx, deckA.length-1)];
+    if(c){ const match=this.srs.find(s=>s.es===c.es); if(match) this._applySRS(match, grade); }
+    this._gainXp(grade==='again'?5:grade==='hard'?8:grade==='easy'?15:10);
+    if(this.state.reviewQueue.length){ this._reviewNext(grade); return; }
+    const len=deckA.length; this.setState(s=>({vIdx:(s.vIdx+1)%len, vFlip:false, rec2:null}));
+  }
+  _pickLevel(code){ this.setState({level:code, vIdx:0, vFlip:false, slots:[], builderChecked:false, pWord:0, recording:false, recDone:false, rec2:null, dIdx:0, dInput:'', dChecked:false}); }
+  _setLevel(code){ this.setState({level:code, screen:'vocab', vIdx:0, vFlip:false, slots:[], builderChecked:false, pWord:0, recording:false, recDone:false, rec2:null, dIdx:0, dInput:'', dChecked:false}); }
+  _selectWord(i){ this.setState({pWord:i, recording:false, recDone:false}); }
+  _addSlot(id){ this.setState(s=> s.slots.includes(id)?s:({slots:[...s.slots,id], builderChecked:false, rec2:null})); }
+  _removeSlot(id){ this.setState(s=>({slots:s.slots.filter(x=>x!==id), builderChecked:false, rec2:null})); }
+  _clear(){ this.setState({slots:[], builderChecked:false, rec2:null}); }
+  _check(){ this.setState({builderChecked:true}); }
+  _startRec(){
+    this.setState({recording:true, recDone:false});
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SR){ try{ const r=new SR(); r.lang='es-ES'; r.interimResults=false; r.maxAlternatives=1;
+      r.onresult=(e)=>this._finishRec(e.results[0][0].transcript);
+      r.onerror=()=>this._finishRec(null);
+      r.start(); this._rec=r;
+      setTimeout(()=>{ try{r.stop();}catch(e){} }, 5000);
+      setTimeout(()=>{ if(this.state.recording) this._finishRec(null); }, 6500);
+      return;
+    }catch(e){} }
+    setTimeout(()=>{ if(this.state.recording) this._finishRec(null); }, 2000);
+  }
+  _finishRec(transcript){
+    const list=(this.state.level==='A2'?this.pronA2:this.pron);
+    const p=list[Math.min(this.state.pWord, list.length-1)];
+    const syl=p.syl.map((tx,i)=>{ const pct=p.scores[i]; const color=pct>=85?'var(--good)':pct>=70?'var(--warn)':'var(--accent-strong)'; return {text:tx, pct:pct+'%', width:pct+'%', color}; });
+    const score=Math.round(p.scores.reduce((a,b)=>a+b,0)/p.scores.length);
+    const clamp=(n)=>Math.max(55,Math.min(100,Math.round(n)));
+    const metrics=[{key:'accuracy',v:score},{key:'fluency',v:clamp(score-4)},{key:'completeness',v:96},{key:'intonation',v:clamp(score-2)}];
+    const tip=(this.state.lang==='pl'?p.tipPl:p.tipEn);
+    this.setState({recording:false, recDone:true, recScore:score, syllables:syl, transcript:transcript||p.es, heard:transcript||p.es, metrics, tip});
+  }
+  _syll(w){ const v='aeiouáéíóúü'; const out=[]; let cur=''; for(let i=0;i<w.length;i++){ const ch=w[i]; cur+=ch; const n=(w[i+1]||'').toLowerCase(), n2=(w[i+2]||'').toLowerCase(); if(v.includes(ch.toLowerCase()) && n && !v.includes(n) && v.includes(n2)){ out.push(cur); cur=''; } } if(cur) out.push(cur); return out.length?out:[w]; }
+  _startRec2(text, mode, ctx){
+    this.setState({rec2:{ctx, target:text, active:true, done:false}});
+    const finish=(tr)=>this._finishRec2(text,mode,ctx,tr);
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SR){ try{ const r=new SR(); r.lang=this._tcode||'es-ES'; r.interimResults=false; r.maxAlternatives=1;
+      r.onresult=(e)=>finish(e.results[0][0].transcript); r.onerror=()=>finish(null); r.start();
+      setTimeout(()=>{ try{r.stop();}catch(e){} }, 5000);
+      setTimeout(()=>{ const s=this.state.rec2; if(s&&s.active&&s.ctx===ctx) finish(null); }, 6500);
+      return;
+    }catch(e){} }
+    setTimeout(()=>{ const s=this.state.rec2; if(s&&s.active&&s.ctx===ctx) finish(null); }, 1800);
+  }
+  _finishRec2(text, mode, ctx, transcript){
+    const hash=(s)=>{ let h=0; for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return h; };
+    const tokens = mode==='sentence' ? text.split(/\s+/) : this._syll(text);
+    const toks = tokens.map(tk=>{ const pct=82+(hash(tk)%16); const color=pct>=85?'var(--good)':pct>=70?'var(--warn)':'var(--accent-strong)'; return {t:tk, pct:pct+'%', width:pct+'%', color, num:pct}; });
+    const score=Math.round(toks.reduce((a,b)=>a+b.num,0)/toks.length);
+    let wi=0; toks.forEach((x,i)=>{ if(x.num<toks[wi].num) wi=i; });
+    const tip = this.state.lang==='en' ? ('Focus on “'+toks[wi].t+'” — slow down and match the model audio.') : ('Skup się na „'+toks[wi].t+'" — zwolnij i naśladuj wzorcowe audio.');
+    this.setState({rec2:{ctx, target:text, active:false, done:true, score, tokens:toks, heard:transcript||text, tip}});
+  }
+
+  renderVals(){
+    const dir=this.state.dir||'es>en';
+    const target=dir.split('>')[0], base=dir.split('>')[1];
+    const uiLang = base==='pl' ? 'pl' : (base==='es' ? 'es' : 'en');
+    const lang=uiLang, sc=this.state.screen;
+    const t=this.strings[lang];
+    const fld=(o,c)=> !o?'' : (c==='es'?o.es : c==='en'?o.en : o.pl);
+    const exFld=(o,c)=> !o?'' : (c==='es'?o.exEs : c==='en'?o.exEn : o.exPl);
+    const scode={es:'es-ES',en:'en-US',pl:'pl-PL'};
+    this._tcode=scode[target];
+    const tr=(o)=> fld(o, base);
+    const dark=this.state.dark, accent=this.state.accent;
+    const strong=this._mix(accent,'#000000',0.18);
+    const asoft = dark? this._mix(accent,'#1A1815',0.82) : this._mix(accent,'#FFFFFF',0.88);
+    const asoft2= dark? this._mix(accent,'#1A1815',0.72) : this._mix(accent,'#FFFFFF',0.80);
+    const L={bg:'#F3F1EC',bgb:'rgba(243,241,236,.82)',surface:'#FFFFFF',panel:'#EFEBE3',psoft:'#F7F5F1',border:'#E9E5DE',border2:'#E0DCD3',ink:'#1C1B19',ink2:'#57544E',muted:'#7A776F',faint:'#9B988F',invert:'#1C1B19',good:'#2E9E6B',goodS:'#1E7A50',goodSoft:'#EAF3EE',warn:'#C98A2E',warnSoft:'#FBF3DE'};
+    const D={bg:'#1A1815',bgb:'rgba(26,24,21,.82)',surface:'#242019',panel:'#2C2823',psoft:'#211E19',border:'#38332C',border2:'#443E36',ink:'#F2EFE9',ink2:'#C8C3B9',muted:'#A29C93',faint:'#847F76',invert:'#000000',good:'#3FB77F',goodS:'#54C692',goodSoft:'#182A20',warn:'#D9A24A',warnSoft:'#2C2413'};
+    const TH=dark?D:L;
+    const rootStyle={display:'flex',height:'100vh',width:'100%',overflow:'hidden',background:'var(--bg)','--bg':TH.bg,'--bg-blur':TH.bgb,'--surface':TH.surface,'--panel':TH.panel,'--panel-soft':TH.psoft,'--border':TH.border,'--border-2':TH.border2,'--ink':TH.ink,'--ink-2':TH.ink2,'--muted':TH.muted,'--faint':TH.faint,'--invert-bg':TH.invert,'--accent':accent,'--accent-strong':strong,'--accent-soft':asoft,'--accent-soft2':asoft2,'--good':TH.good,'--good-strong':TH.goodS,'--good-soft':TH.goodSoft,'--warn':TH.warn,'--warn-soft':TH.warnSoft};
+    const accents=['#DE5B3B','#E0902A','#2F9E7A','#2F86C9','#6C5CE0','#D9527E'];
+    const nc=(k)=> sc===k?{bg:'var(--accent-soft)',fg:'var(--accent-strong)'}:{bg:'rgba(0,0,0,0)',fg:'var(--ink-2)'};
+    const lv=this.state.level, A2=lv==='A2';
+    const deck=A2?this.deckA2:this.deck, builder=this._builder(lv), bank=this._bank(lv), phrasebook=A2?this.phrasebookA2:this.phrasebook, pron=this._pron(lv);
+    const cp=pron[Math.min(this.state.pWord, pron.length-1)];
+    const rs=this.state.recScore, rsColor= rs>=90?'var(--good)':rs>=75?'var(--warn)':'var(--accent-strong)';
+    const wfH=[8,15,26,13,30,19,34,11,28,17,32,21,10,24,30,16,25,14,20,28,12,22,18,10];
+    const r2=this.state.rec2;
+    const pwColor = r2&&r2.done ? (r2.score>=90?'var(--good)':r2.score>=75?'var(--warn)':'var(--accent-strong)') : 'var(--good)';
+    const dict=this._dict(lv);
+    const di=dict[Math.min(this.state.dIdx, dict.length-1)];
+    const dnorm=(s)=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[¿?¡!.,;:]/g,'').replace(/\s+/g,' ').trim();
+    const dInWords=dnorm(this.state.dInput).split(' ').filter(Boolean);
+    const dCorrect=dnorm(this.state.dInput)===dnorm(fld(di,target));
+    const deckA=this._deck(lv);
+    const c=deckA[Math.min(this.state.vIdx, deckA.length-1)] || deck[0];
+    const placed=this.state.slots;
+    const byId=(id)=>bank.find(b=>b.id===id);
+    const correct = placed.map(id=>byId(id).es).join(' ')===builder.target.join(' ');
+    const pageTitles={home:t.home, levels:t.levels, vocab:t.vocab, phrasebook:t.phrases, listen:t.dictNav, builder:t.builder, pronounce:t.pronounce, srs:t.review, stats:t.statsNav};
+    const a1n=this._deck('A1').length, a2n=this._deck('A2').length;
+    const learned=214, weekXP=[120,180,90,240,160,300,240], maxXP=Math.max(...weekXP);
+    const weekDays=lang==='pl'?['P','W','Ś','C','P','S','N']:(lang==='es'?['L','M','X','J','V','S','D']:['M','T','W','T','F','S','S']);
+    const goalPct=60, circ=100.53;
+    const dueCount=this.srs.filter(s=>s.today).length+this.srsPhrases.filter(s=>s.today).length+this.srsPron.filter(s=>s.today).length+this.srsDict.filter(s=>s.today).length+this.srsBuilder.filter(s=>s.today).length;
+    const rq=this.state.reviewQueue;
+
+    return {
+      lang, t, isEn:lang==='en', isPl:lang==='pl',
+      dirValue:dir, onDirChange:(e)=>this.setState({dir:e.target.value}),
+      voiceOptions:(()=>{ try{ const vs=window.speechSynthesis?window.speechSynthesis.getVoices():[]; const list=vs.filter(v=>v.lang&&v.lang.toLowerCase().startsWith(target)); const cur=(this.state.voiceSel||{})[target]||''; return {has:list.length>0, value:cur, items:list.map(v=>({uri:v.voiceURI, label:v.name+(v.localService?'':' ☁')}))}; }catch(e){ return {has:false,value:'',items:[]}; } })(),
+      onVoiceChange:(e)=>{ const v=e.target.value; this.setState(s=>({voiceSel:Object.assign({}, s.voiceSel, {[target]:v})})); },
+      voiceLabel:{es:'Voz',en:'Voice',pl:'Głos'}[uiLang]||'Voice',
+      setEn:()=>this.setState({lang:'en'}), setPl:()=>this.setState({lang:'pl'}),
+      rootStyle, isDark:dark, isLight:!dark, onToggleDark:()=>this._toggleDark(),
+      speedOptions:[{label:'1×',v:1},{label:'¾',v:0.75},{label:'½',v:0.5},{label:'¼',v:0.25}].map(o=>({label:o.label, onClick:()=>this.setState({speakRate:o.v}), bg:this.state.speakRate===o.v?'var(--surface)':'rgba(0,0,0,0)', fg:this.state.speakRate===o.v?'var(--accent-strong)':'var(--faint)'})),
+      accentSwatches: accents.map(hex=>({hex, onClick:()=>this._setAccent(hex), ring: hex===accent?'2px solid var(--ink)':'2px solid var(--border)'})),
+      showInstall:this.state.showInstall, installShowHelp:this.state.installShowHelp,
+      onInstall:()=>this._installApp(), onDismissInstall:()=>this._dismissInstall(), stop:(e)=>{ if(e&&e.stopPropagation) e.stopPropagation(); },
+      level:lv, setA1:()=>this._pickLevel('A1'), setA2:()=>this._pickLevel('A2'), setB1:()=>this._pickLevel('B1'), setB2:()=>this._pickLevel('B2'),
+      a1Bg:lv==='A1'?'var(--surface)':'rgba(0,0,0,0)', a1Fg:lv==='A1'?'var(--accent-strong)':'var(--faint)', a2Bg:lv==='A2'?'var(--surface)':'rgba(0,0,0,0)', a2Fg:lv==='A2'?'var(--accent-strong)':'var(--faint)',
+      b1Bg:lv==='B1'?'var(--surface)':'rgba(0,0,0,0)', b1Fg:lv==='B1'?'var(--accent-strong)':'var(--faint)', b2Bg:lv==='B2'?'var(--surface)':'rgba(0,0,0,0)', b2Fg:lv==='B2'?'var(--accent-strong)':'var(--faint)',
+      deckTopic: lv+' · '+({A1:{en:'Basics',pl:'Podstawy',es:'Básico'},A2:{en:'Past tense & shopping',pl:'Przeszłość i zakupy',es:'Pasado y compras'},B1:{en:'Society & opinions',pl:'Społeczeństwo i opinie',es:'Sociedad y opiniones'},B2:{en:'Abstract & nuance',pl:'Abstrakcja i niuanse',es:'Abstracción y matices'}}[lv][lang]||''),
+      isHome:sc==='home', isLevels:sc==='levels', isVocab:sc==='vocab', isPhrasebook:sc==='phrasebook', isListen:sc==='listen', isBuilder:sc==='builder', isPronounce:sc==='pronounce', isSrs:sc==='srs', isStats:sc==='stats',
+      statLearned:String(learned), statTotal:String(a1n+a2n), statA1:String(a1n), statA2:String(a2n),
+      statA1pct:Math.round(Math.min(learned,a1n)/a1n*100)+'%', statA2pct:Math.round(Math.max(0,learned-a1n)/a2n*100)+'%',
+      statAccuracy:'87%', statMinutes:'340', statBestStreak:'21', statLessons:'46',
+      srsBreakdown: [this.srs.filter(s=>s.today).length+' '+t.vocab.toLowerCase(), this.srsPhrases.filter(s=>s.today).length+' '+t.phrases.toLowerCase(), this.srsPron.filter(s=>s.today).length+' '+t.pronounce.toLowerCase(), this.srsDict.filter(s=>s.today).length+' '+t.dictTitle.toLowerCase(), this.srsBuilder.filter(s=>s.today).length+' '+t.builder.toLowerCase()].join(' · '),
+      weekBars: weekXP.map((v,i)=>({h:Math.round(v/maxXP*100)+'%', xp:String(v), day:weekDays[i], today:i===5, barColor:i===5?'var(--accent)':'var(--accent-soft2)'})),
+      calDays: Array.from({length:28},(_,i)=>({ done:[0,1,2,4,5,6,7,8,10,11,12,13,15,17,18,19,20,22,23,24,25,26,27].includes(i), bg:[0,1,2,4,5,6,7,8,10,11,12,13,15,17,18,19,20,22,23,24,25,26,27].includes(i)?'var(--accent)':'var(--panel)' })),
+      badges:[{ic:'🔥',en:'21-day streak',pl:'21 dni z rzędu',es:'Racha de 21 días',got:true},{ic:'📚',en:'200 words',pl:'200 słów',es:'200 palabras',got:true},{ic:'🎯',en:'Perfect lesson',pl:'Idealna lekcja',es:'Lección perfecta',got:true},{ic:'🏆',en:'Gold League',pl:'Liga Złota',es:'Liga Oro',got:true},{ic:'🎤',en:'50 pronunciations',pl:'50 wymów',es:'50 pronunciaciones',got:false},{ic:'⭐',en:'A2 complete',pl:'A2 ukończone',es:'A2 completado',got:false},{ic:'📅',en:'Perfect week',pl:'Idealny tydzień',es:'Semana perfecta',got:true},{ic:'🌱',en:'7-day streak',pl:'7 dni z rzędu',es:'Racha de 7 días',got:true}].map(b=>({ic:b.ic, label:b[lang]||b.en, op:b.got?'1':'0.4', bg:b.got?'var(--warn-soft)':'var(--panel)'})),
+      onDictType:(e)=>this.setState({dInput:e.target.value}),
+      onDictCheck:()=>this.setState({dChecked:true}),
+      onDictReveal:()=>this.setState({dChecked:true, dInput:fld(di,target)}),
+      onDictNext:()=>this.setState(s=>({dIdx:(s.dIdx+1)%dict.length, dInput:'', dChecked:false})),
+      onDictReplay:()=>this._speak(fld(di,target)), onDictSlow:()=>this._speakSlow(fld(di,target)),
+      dInput:this.state.dInput, dictPos:(this.state.dIdx+1)+' / '+dict.length,
+      dictChecked:this.state.dChecked, dictCorrect:dCorrect, dictWrong:!dCorrect,
+      dictWords: fld(di,target).split(/\s+/).map(w=>({w, color: dInWords.includes(dnorm(w))?'var(--good)':'var(--accent-strong)'})),
+      dictTr: fld(di,base),
+      pageTitle:pageTitles[sc],
+      navHome:nc('home'), navLevels:nc('levels'), navVocab:nc('vocab'), navPhrases:nc('phrasebook'), navListen:nc('listen'), navBuilder:nc('builder'), navPron:nc('pronounce'), navReview:nc('srs'), navStats:nc('stats'),
+      goHome:()=>this._go('home'), goLevels:()=>this._go('levels'), goVocab:()=>this._go('vocab'), goPhrases:()=>this._go('phrasebook'), goListen:()=>this._go('listen'), goBuilder:()=>this._go('builder'), goPron:()=>this._go('pronounce'), goReview:()=>this._go('srs'), goStats:()=>this._go('stats'),
+      streak:'12', xpToday:String(this.state.xp), rankLabel:'#4', dailyDone:'3', dailyTotal:'5',
+      streakFreezeActive:this.state.streakFreezeActive, streakFreezesLeft:String(this.state.streakFreezes),
+      freezeBg: this.state.streakFreezeActive?'var(--accent-soft2)':'var(--panel)', freezeFg: this.state.streakFreezeActive?'var(--accent-strong)':'var(--muted)',
+      onUseFreeze:()=>this._useFreeze(),
+      boostBg: this.state.xpBoost?'#E0A030':'var(--panel)', boostFg: this.state.xpBoost?'#fff':'var(--muted)',
+      onToggleBoost:()=>this._toggleBoost(),
+      dailyChallenges: lang==='pl'?'Dzienne wyzwania':lang==='es'?'Retos diarios':'Daily challenges',
+      challengesDoneLabel: this.state.challenges.filter(c=>c.done).length+'/'+this.state.challenges.length,
+      challengeList: this.state.challenges.map(c=>({ label:c[lang]||c.en, xp:c.xp, done:c.done, onToggle:()=>this._toggleChallenge(c.id),
+        checkBg: c.done?'var(--good)':'transparent', checkBorder: c.done?'var(--good)':'var(--border-2)',
+        textColor: c.done?'var(--muted)':'var(--ink)', strike: c.done?'line-through':'none' })),
+      goalDash:(goalPct/100*circ).toFixed(1)+' '+circ.toFixed(1),
+      dueCount:String(dueCount),
+      // vocab
+      cardEs:fld(c,target), cardTr:fld(c,base), hasEx:!!exFld(c,target), cardExEs:exFld(c,target)||'', cardExTr:exFld(c,base)||'', cardPos:(this.state.vIdx+1)+' / '+deckA.length,
+      vFlip:this.state.vFlip, vFront:!this.state.vFlip,
+      onFlip:()=>this._flip(), onListenCard:(e)=>{ if(e&&e.stopPropagation)e.stopPropagation(); this._speak(fld(c,target)); },
+      onRateAgain:()=>this._rate('again'), onRateHard:()=>this._rate('hard'), onRateGood:()=>this._rate('good'), onRateEasy:()=>this._rate('easy'),
+      // builder
+      builderPrompt: lang==='pl'?builder.pl:builder.en,
+      slots: placed.map(id=>({id, es:byId(id).es, onClick:()=>this._removeSlot(id)})),
+      bank: bank.filter(b=>!placed.includes(b.id)).map(b=>({id:b.id, es:b.es, onClick:()=>this._addSlot(b.id)})),
+      hasSlots: placed.length>0,
+      onCheck:()=>this._check(), onClear:()=>this._clear(),
+      onListenSentence:()=>this._speak(builder.target.join(' '),'es-ES'),
+      showResult:this.state.builderChecked, isCorrect:correct, isWrong:!correct,
+      glossary: builder.glossary.map(g=>({es:g.es, tr:fld(g,base), onSpeak:()=>this._speak(g.es,'es-ES')})),
+      // phrasebook
+      phraseCats: this._phrases(lv).map(cat=>({ title: lang==='pl'?cat.titlePl:cat.titleEn, count:cat.phrases.length+'', phrases: cat.phrases.map(p=>({es:fld(p,target), tr:fld(p,base), onSpeak:()=>this._speak(fld(p,target))})) })),
+      // pronounce
+      pTarget:cp.es, pTr:fld(cp,base),
+      pronWords: pron.map((w,i)=>{ const on=i===this.state.pWord; return {es:w.es, onClick:()=>this._selectWord(i), bg:on?'var(--accent)':'#ffffff', fg:on?'#ffffff':'var(--ink-2)', bd:on?'var(--accent)':'var(--border-2)'}; }),
+      recording:this.state.recording, recDone:this.state.recDone, recIdle:!this.state.recording&&!this.state.recDone,
+      syllables:this.state.syllables, scoreLabel:this.state.recScore+'%', scoreColor:rsColor,
+      scoreVerdict: rs>=90?t.great:rs>=75?t.goodJob:t.keepPracticing, scoreVerdictColor:rsColor,
+      heardText:this.state.heard, tipText:this.state.tip,
+      metricsList:(this.state.metrics||[]).map(m=>({label:t[m.key], pct:m.v+'%', width:m.v+'%', color:m.v>=85?'var(--good)':m.v>=70?'var(--warn)':'var(--accent-strong)'})),
+      wfBars: wfH.map((h,i)=>({ h:h+'px', color:this.state.recording?'var(--accent)':(this.state.recDone?'var(--good)':'#DAD5CC'), anim:this.state.recording?('hb-eq '+(0.6+(i%5)*0.12).toFixed(2)+'s ease-in-out infinite '+((i%7)*0.05).toFixed(2)+'s'):'none' })),
+      onRecord:()=>this._startRec(), onListenTarget:()=>this._speak(cp.es,'es-ES'),
+      micBg:this.state.recording?'var(--accent-strong)':'var(--accent)', micAnim:this.state.recording?'hb-pulse 1.4s infinite':'none',
+      // inline pronunciation check (words + sentences)
+      onCheckWord:()=>this._startRec2(fld(c,target),'word','vocab'),
+      onCheckSentence:()=>this._startRec2(builder.target.join(' '),'sentence','builder'),
+      builderSentenceEs: builder.target.join(' '),
+      pwActive: !!(r2&&r2.active), pwDone: !!(r2&&r2.done),
+      showVocabResult: !!(r2&&r2.ctx==='vocab'&&r2.done),
+      showBuilderResult: !!(r2&&r2.ctx==='builder'&&r2.done),
+      pwScore: r2?(r2.score||0)+'%':'', pwScoreColor:pwColor,
+      pwTokens: r2&&r2.tokens?r2.tokens:[], pwHeard: r2?r2.heard:'', pwTip: r2?r2.tip:'',
+      pwMicBg:(r2&&r2.active)?'var(--accent-strong)':'var(--accent)', pwMicAnim:(r2&&r2.active)?'hb-pulse 1.4s infinite':'none',
+      pwHint:(r2&&r2.active)? t.listening : t.checkPronSub,
+      // srs
+      dueLabelCount:dueCount+' '+t.itemsDue,
+      srsPhraseList: this.srsPhrases.map(s=>({ es:fld(s,target), tr:fld(s,base), strengthPct:s.strength+'%', strength:s.strength+'', due: lang==='pl'?s.duePl:s.dueEn, today:s.today, dueBg:s.today?'var(--accent-soft)':'var(--panel)', dueFg:s.today?'var(--accent-strong)':'var(--muted)', barColor: s.strength>=75?'var(--good)':s.strength>=50?'var(--warn)':'var(--accent-strong)', onSpeak:()=>this._speak(fld(s,target)) })),
+      srsPronList: this.srsPron.map(s=>({ es:fld(s,target), tr:fld(s,base), strengthPct:s.strength+'%', strength:s.strength+'', due: lang==='pl'?s.duePl:s.dueEn, today:s.today, dueBg:s.today?'var(--accent-soft)':'var(--panel)', dueFg:s.today?'var(--accent-strong)':'var(--muted)', barColor: s.strength>=75?'var(--good)':s.strength>=50?'var(--warn)':'var(--accent-strong)', onPractice:()=>this._go('pronounce') })),
+      srsDictList: this.srsDict.map(s=>({ es:fld(s,target), tr:fld(s,base), strengthPct:s.strength+'%', strength:s.strength+'', due: lang==='pl'?s.duePl:s.dueEn, today:s.today, dueBg:s.today?'var(--accent-soft)':'var(--panel)', dueFg:s.today?'var(--accent-strong)':'var(--muted)', barColor: s.strength>=75?'var(--good)':s.strength>=50?'var(--warn)':'var(--accent-strong)', onPractice:()=>this._go('listen') })),
+      srsBuilderList: this.srsBuilder.map(s=>({ es:fld(s,target), tr:fld(s,base), strengthPct:s.strength+'%', strength:s.strength+'', due: lang==='pl'?s.duePl:s.dueEn, today:s.today, dueBg:s.today?'var(--accent-soft)':'var(--panel)', dueFg:s.today?'var(--accent-strong)':'var(--muted)', barColor: s.strength>=75?'var(--good)':s.strength>=50?'var(--warn)':'var(--accent-strong)', onPractice:()=>this._go('builder') })),
+      onStartReview:()=>this._startReview(), onReviewNext:()=>this._reviewNext(), onExitReview:()=>this._exitReview(),
+      reviewActive: rq.length>0, reviewPosLabel:String(this.state.reviewPos+1), reviewLenLabel:String(rq.length), reviewDone:this.state.reviewDone, notReviewDone:!this.state.reviewDone,
+      reviewNextLabel: lang==='pl'?'Dalej':lang==='es'?'Siguiente':'Next', reviewingLabel: lang==='pl'?'Powtórka':lang==='es'?'Repaso':'Reviewing', reviewDoneLabel: lang==='pl'?'Sesja ukończona! 🎉':lang==='es'?'¡Sesión completada! 🎉':'Session complete! 🎉',
+      srsList: this.srs.map(s=>({ es:fld(s,target), tr:fld(s,base), strengthPct:s.strength+'%', strength:s.strength+'', due: lang==='pl'?s.duePl:s.dueEn, today:s.today, dueBg:s.today?'var(--accent-soft)':'var(--panel)', dueFg:s.today?'var(--accent-strong)':'var(--muted)', barColor: s.strength>=75?'var(--good)':s.strength>=50?'var(--warn)':'var(--accent-strong)', onSpeak:()=>this._speak(s.es) })),
+      // levels
+      levelsList: this.levels.map(l=>{
+        const st=l.status; const map={active:{label:t.inProgress,bg:'var(--accent-soft)',fg:'var(--accent-strong)'}, available:{label:t.available,bg:'var(--good-soft)',fg:'var(--good)'}, locked:{label:t.locked,bg:'var(--panel)',fg:'var(--faint)'}};
+        return { code:l.code, name:tr(l), desc:lang==='pl'?l.dPl:l.dEn, statusLabel:map[st].label, badgeBg:map[st].bg, badgeFg:map[st].fg,
+          progressPct:l.progress+'%', progress:l.progress+'', unlocked:st!=='locked', locked:st==='locked', active:st==='active',
+          codeBg: st==='locked'?'var(--panel)':st==='active'?'var(--accent)':'var(--good)', codeFg: st==='locked'?'var(--faint)':'#FFFFFF',
+          onClick:()=> st!=='locked' ? this._setLevel(l.code) : null };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>
