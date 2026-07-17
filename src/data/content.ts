@@ -61,7 +61,7 @@ export const strings = {
   },
   en: {
     home: 'Home', levels: 'Levels', vocab: 'Vocabulary', phrases: 'Phrasebook', builder: 'Sentence Builder', pronounce: 'Pronunciation', review: 'Review',
-    greet: 'Buenos días, Alex', greetSub: 'You have 3 words due today. Ready for Spanish?',
+    greet: 'Good morning, Alex', greetSub: 'You have 3 words due today. Ready to continue?',
     continueSub: 'A1 · Basics · Greetings', start: 'Continue',
     streak: 'day streak', dailyGoal: 'Daily goal', league: 'Gold League', xpToday: 'XP today',
     quick: 'Jump back in', dueToday: 'due for review', reviewNow: 'Review now', keepGoing: 'Keep your streak alive',
@@ -74,7 +74,7 @@ export const strings = {
   },
   pl: {
     home: 'Start', levels: 'Poziomy', vocab: 'Słówka', phrases: 'Rozmówki', builder: 'Budowanie zdań', pronounce: 'Wymowa', review: 'Powtórki',
-    greet: 'Buenos días, Alex', greetSub: 'Masz dziś 3 słówka do powtórki. Zaczynamy?',
+    greet: 'Dzień dobry, Alex', greetSub: 'Masz dziś 3 słówka do powtórki. Zaczynamy?',
     continueSub: 'A1 · Podstawy · Powitania', start: 'Kontynuuj',
     streak: 'dni z rzędu', dailyGoal: 'Cel dzienny', league: 'Liga Złota', xpToday: 'XP dziś',
     quick: 'Wróć do nauki', dueToday: 'do powtórki', reviewNow: 'Powtórz teraz', keepGoing: 'Utrzymaj serię',
