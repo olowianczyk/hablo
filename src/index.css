@@ -65,3 +65,44 @@ select {
     transform: scaleY(1);
   }
 }
+
+.hb-bottomnav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .hb-sidebar {
+    display: none !important;
+  }
+  .hb-bottomnav {
+    display: flex !important;
+  }
+  .hb-main {
+    padding: 20px 16px 88px !important;
+  }
+  .hb-grid-3,
+  .hb-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .hb-grid-6 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  .hb-hero-row {
+    flex-direction: column !important;
+  }
+  .hb-hero-card {
+    min-width: 0 !important;
+  }
+  .hb-hero-stats {
+    width: 100% !important;
+  }
+  .hb-card-min {
+    min-width: 0 !important;
+  }
+  .hb-reviewbar {
+    bottom: 80px !important;
+    max-width: calc(100vw - 24px);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

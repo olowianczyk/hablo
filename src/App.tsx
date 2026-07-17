@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useHablo } from './store';
 import { themeVars } from './lib/colors';
 import { Sidebar } from './components/Sidebar';
+import { BottomNav } from './components/BottomNav';
 import { Header } from './components/Header';
 import { ReviewBar } from './components/ReviewBar';
 import { InstallPrompt } from './components/InstallPrompt';
@@ -49,12 +50,13 @@ function App() {
       <Sidebar />
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Header />
-        <main style={{ flex: 1, overflow: 'auto', padding: '32px 40px' }}>
+        <main className="hb-main" style={{ flex: 1, overflow: 'auto', padding: '32px 40px' }}>
           <div key={screen} style={{ maxWidth: 960, margin: '0 auto', animation: 'hb-rise .3s ease' }}>
             <Screen />
           </div>
         </main>
       </div>
+      <BottomNav />
       <ReviewBar />
       <InstallPrompt />
     </div>

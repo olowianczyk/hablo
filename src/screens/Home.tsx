@@ -25,8 +25,8 @@ export function Home() {
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 20, alignItems: 'stretch', flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 340, background: 'linear-gradient(135deg,var(--accent),var(--accent-strong))', borderRadius: 22, padding: '28px 30px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+      <div className="hb-hero-row" style={{ display: 'flex', gap: 20, alignItems: 'stretch', flexWrap: 'wrap' }}>
+        <div className="hb-hero-card" style={{ flex: 1, minWidth: 340, background: 'linear-gradient(135deg,var(--accent),var(--accent-strong))', borderRadius: 22, padding: '28px 30px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', right: -30, bottom: -30, width: 150, height: 150, borderRadius: '50%', background: 'rgba(255,255,255,.08)' }} />
           <div style={{ position: 'relative' }}>
             <div style={{ fontSize: 13, fontWeight: 600, opacity: 0.85 }}>{t.continueSub}</div>
@@ -41,7 +41,7 @@ export function Home() {
             </div>
           </div>
         </div>
-        <div style={{ flex: 'none', width: 230, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 22, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 14 }}>
+        <div className="hb-hero-stats" style={{ flex: 'none', width: 230, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 22, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ width: 44, height: 44, borderRadius: 13, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <div style={{ width: 14, height: 14, borderRadius: '50%', background: 'var(--accent)' }} />
@@ -109,7 +109,7 @@ export function Home() {
       </div>
 
       <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', margin: '26px 0 14px' }}>{t.quick}</div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
+      <div className="hb-grid-3" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
         <div onClick={() => go('vocab')} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20, cursor: 'pointer' }}>
           <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <IconVocab size={21} color="var(--accent)" />

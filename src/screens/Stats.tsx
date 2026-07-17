@@ -40,7 +40,7 @@ export function Stats() {
       <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-.02em' }}>{t.statsTitle}</div>
       <div style={{ fontSize: 14, color: 'var(--muted)', marginTop: 4 }}>{t.statsSub}</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginTop: 22 }}>
+      <div className="hb-grid-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14, marginTop: 22 }}>
         <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 18 }}>
           <div style={{ fontSize: 30, fontWeight: 800, color: 'var(--accent-strong)' }}>{LEARNED}</div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)', fontWeight: 600, marginTop: 2 }}>{t.wordsLearned}</div>
@@ -60,7 +60,7 @@ export function Stats() {
       </div>
 
       <div style={{ display: 'flex', gap: 16, marginTop: 16, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1, minWidth: 320, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20 }}>
+        <div className="hb-card-min" style={{ flex: 1, minWidth: 320, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20 }}>
           <div style={{ fontSize: 13, fontWeight: 800 }}>{t.weeklyXP}</div>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, height: 150, marginTop: 18 }}>
             {WEEK_XP.map((v, i) => (
@@ -72,7 +72,7 @@ export function Stats() {
             ))}
           </div>
         </div>
-        <div style={{ flex: 1, minWidth: 280, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20 }}>
+        <div className="hb-card-min" style={{ flex: 1, minWidth: 280, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20 }}>
           <div style={{ fontSize: 13, fontWeight: 800 }}>{t.activity}</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7,1fr)', gap: 7, marginTop: 18 }}>
             {Array.from({ length: 28 }, (_, i) => (
@@ -107,7 +107,7 @@ export function Stats() {
 
       <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20, marginTop: 16 }}>
         <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 14 }}>{t.achievements}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 12 }}>
+        <div className="hb-grid-6" style={{ display: 'grid', gridTemplateColumns: 'repeat(6,1fr)', gap: 12 }}>
           {badgesSeed.map((b, i) => (
             <div key={i} style={{ textAlign: 'center', background: b.got ? 'var(--warn-soft)' : 'var(--panel)', borderRadius: 14, padding: '16px 8px', opacity: b.got ? 1 : 0.4 }}>
               <div style={{ fontSize: 28 }}>{b.ic}</div>

@@ -15,6 +15,7 @@ export function ReviewBar() {
 
   return (
     <div
+      className="hb-reviewbar"
       style={{
         position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 90,
         background: 'var(--invert-bg)', color: '#fff', borderRadius: 16, padding: '14px 18px',

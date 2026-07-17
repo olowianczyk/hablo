@@ -21,6 +21,7 @@ export function Sidebar() {
 
   return (
     <aside
+      className="hb-sidebar"
       style={{
         flex: 'none', width: 252, background: 'var(--surface)', borderRight: '1px solid var(--border)',
         display: 'flex', flexDirection: 'column', padding: '20px 14px', overflowY: 'auto',
