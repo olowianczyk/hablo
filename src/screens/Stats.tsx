@@ -2,6 +2,7 @@ import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
 import { deckFor, badgesSeed } from '../data/content';
 import { isDueToday } from '../lib/date';
+import { Tap } from '../components/Tap';
 
 const WEEK_XP = [120, 180, 90, 240, 160, 300, 240];
 const MAX_XP = Math.max(...WEEK_XP);
@@ -118,7 +119,7 @@ export function Stats() {
         </div>
       </div>
 
-      <div onClick={startReview} style={{ marginTop: 16, background: 'var(--invert-bg)', color: '#fff', borderRadius: 18, padding: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 16 }}>
+      <Tap onClick={startReview} style={{ marginTop: 16, background: 'var(--invert-bg)', color: '#fff', borderRadius: 18, padding: 20, display: 'flex', alignItems: 'center', gap: 16, width: '100%', textAlign: 'left' }}>
         <div style={{ width: 46, height: 46, borderRadius: 13, background: 'rgba(255,255,255,.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
           <svg width={22} height={22} viewBox="0 0 24 24" fill="none" stroke="#E0A030" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 12a8 8 0 0113.7-5.6L20 8" />
@@ -130,7 +131,7 @@ export function Stats() {
           <div style={{ fontSize: 13, color: 'var(--faint)', marginTop: 2 }}>{srsBreakdown}</div>
         </div>
         <div style={{ fontSize: 26, fontWeight: 800, color: '#E0A030' }}>{dueCount}</div>
-      </div>
+      </Tap>
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { deckFor } from '../data/content';
 import { fld, exFld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud, IconMic } from '../components/Icons';
+import { Tap } from '../components/Tap';
+import { onActivateKey } from '../lib/a11y';
 
 const TOPIC: Record<string, Record<'en' | 'pl' | 'es', string>> = {
   A1: { en: 'Basics', pl: 'Podstawy', es: 'Básico' },
@@ -48,18 +50,23 @@ export function Vocabulary() {
 
       <div
         onClick={flip}
+        onKeyDown={onActivateKey(flip)}
+        role="button"
+        tabIndex={0}
+        aria-pressed={vFlip}
+        aria-label={t.flipHint}
         style={{ marginTop: 14, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: '44px 32px', minHeight: 280, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', cursor: 'pointer', boxShadow: '0 10px 30px rgba(0,0,0,.05)' }}
       >
         {!vFlip ? (
           <div>
             <div style={{ fontSize: 42, fontWeight: 800, letterSpacing: '-.02em' }}>{cardEs}</div>
-            <div
+            <Tap
               onClick={(e) => { e.stopPropagation(); speak(cardEs); }}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginTop: 22, background: 'var(--accent-soft)', color: 'var(--accent-strong)', fontWeight: 700, fontSize: 14, padding: '10px 18px', borderRadius: 12 }}
             >
               <IconSpeakerLoud />
               {t.listen}
-            </div>
+            </Tap>
             <div style={{ fontSize: 12.5, color: 'var(--faint)', marginTop: 26, fontWeight: 600 }}>{t.flipHint}</div>
           </div>
         ) : (
@@ -79,12 +86,13 @@ export function Vocabulary() {
 
       <div style={{ marginTop: 16, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-          <div
+          <Tap
             onClick={() => startRec2(cardEs, 'word', 'vocab')}
-            style={{ width: 48, height: 48, borderRadius: '50%', background: pwActive ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none', animation: pwActive ? 'hb-pulse 1.4s infinite' : 'none' }}
+            aria-label={t.checkPron}
+            style={{ width: 48, height: 48, borderRadius: '50%', background: pwActive ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', animation: pwActive ? 'hb-pulse 1.4s infinite' : 'none' }}
           >
             <IconMic />
-          </div>
+          </Tap>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 700, fontSize: 14.5 }}>{t.checkPron}</div>
             <div style={{ fontSize: 12.5, color: 'var(--faint)' }}>{pwActive ? t.listening : t.checkPronSub}</div>
@@ -115,10 +123,10 @@ export function Vocabulary() {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10, marginTop: 16 }}>
-        <div onClick={() => rate('again')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--surface)', border: '1px solid var(--border)', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', color: 'var(--accent-strong)' }}>{t.again}</div>
-        <div onClick={() => rate('hard')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--surface)', border: '1px solid var(--border)', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', color: 'var(--warn)' }}>{t.hard}</div>
-        <div onClick={() => rate('good')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--surface)', border: '1px solid var(--border)', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', color: 'var(--good)' }}>{t.good}</div>
-        <div onClick={() => rate('easy')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--invert-bg)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer' }}>{t.easy}</div>
+        <Tap onClick={() => rate('again')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--surface)', border: '1px solid var(--border)', fontWeight: 700, fontSize: 13.5, color: 'var(--accent-strong)' }}>{t.again}</Tap>
+        <Tap onClick={() => rate('hard')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--surface)', border: '1px solid var(--border)', fontWeight: 700, fontSize: 13.5, color: 'var(--warn)' }}>{t.hard}</Tap>
+        <Tap onClick={() => rate('good')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--surface)', border: '1px solid var(--border)', fontWeight: 700, fontSize: 13.5, color: 'var(--good)' }}>{t.good}</Tap>
+        <Tap onClick={() => rate('easy')} style={{ textAlign: 'center', padding: '12px 6px', borderRadius: 13, background: 'var(--invert-bg)', color: '#fff', fontWeight: 700, fontSize: 13.5 }}>{t.easy}</Tap>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import type { Lang } from '../lib/format';
 import type { UiLang } from '../data/content';
 import { isDueToday } from '../lib/date';
 import { IconSpeaker } from './Icons';
+import { Tap } from './Tap';
 
 export function SrsTable({
   title, memoryLabel, dueLabelHeader, items, target, base, lang, onSpeak, onPractice,
@@ -25,11 +26,12 @@ export function SrsTable({
       </div>
       {items.map((s, i) => {
         const es = fld(s, target);
+        const Row = onPractice ? Tap : 'div';
         return (
-          <div
+          <Row
             key={i}
             onClick={onPractice}
-            style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr auto', gap: 12, alignItems: 'center', padding: '14px 20px', borderTop: '1px solid var(--border)', cursor: onPractice ? 'pointer' : 'default' }}
+            style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr auto', gap: 12, alignItems: 'center', padding: '14px 20px', borderTop: '1px solid var(--border)', width: '100%', textAlign: 'left', cursor: onPractice ? 'pointer' : 'default' }}
           >
             <div>
               <div style={{ fontWeight: 700, fontSize: 15 }}>{es}</div>
@@ -46,13 +48,20 @@ export function SrsTable({
                 {dueLabel(s, lang)}
               </span>
             </div>
-            <div
-              onClick={(e) => { if (onSpeak) { e.stopPropagation(); onSpeak(es); } }}
-              style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: onSpeak ? 'pointer' : 'default' }}
-            >
-              <IconSpeaker size={15} color="var(--accent-strong)" />
-            </div>
-          </div>
+            {onSpeak ? (
+              <Tap
+                onClick={(e) => { e.stopPropagation(); onSpeak(es); }}
+                aria-label="Listen"
+                style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <IconSpeaker size={15} color="var(--accent-strong)" />
+              </Tap>
+            ) : (
+              <div style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <IconSpeaker size={15} color="var(--accent-strong)" />
+              </div>
+            )}
+          </Row>
         );
       })}
     </div>

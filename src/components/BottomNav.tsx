@@ -1,6 +1,7 @@
 import { useHablo, type Screen } from '../store';
 import { useUi } from '../lib/useUi';
 import { IconHome, IconVocab, IconPhrases, IconReview, IconStats } from './Icons';
+import { Tap } from './Tap';
 
 const TABS: { key: Screen; Icon: typeof IconHome; label: (t: ReturnType<typeof useUi>['t']) => string }[] = [
   { key: 'home', Icon: IconHome, label: (t) => t.home },
@@ -27,14 +28,15 @@ export function BottomNav() {
       {TABS.map(({ key, Icon, label }) => {
         const active = screen === key;
         return (
-          <div
+          <Tap
             key={key}
             onClick={() => go(key)}
-            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, cursor: 'pointer', color: active ? 'var(--accent-strong)' : 'var(--faint)' }}
+            aria-current={active ? 'page' : undefined}
+            style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3, color: active ? 'var(--accent-strong)' : 'var(--faint)' }}
           >
             <Icon size={20} color={active ? 'var(--accent-strong)' : 'var(--faint)'} />
             <div style={{ fontSize: 10.5, fontWeight: 700 }}>{label(t)}</div>
-          </div>
+          </Tap>
         );
       })}
     </nav>

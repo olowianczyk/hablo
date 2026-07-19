@@ -4,6 +4,7 @@ import { pronFor } from '../data/content';
 import { fld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud } from '../components/Icons';
+import { Tap } from '../components/Tap';
 
 const WF_HEIGHTS = [8, 15, 26, 13, 30, 19, 34, 11, 28, 17, 32, 21, 10, 24, 30, 16, 25, 14, 20, 28, 12, 22, 18, 10];
 
@@ -44,13 +45,14 @@ export function Pronunciation() {
         {words.map((w, i) => {
           const on = i === pWord;
           return (
-            <div
+            <Tap
               key={i}
               onClick={() => selectWord(i)}
-              style={{ fontWeight: 700, fontSize: 14, padding: '9px 15px', borderRadius: 11, cursor: 'pointer', background: on ? 'var(--accent)' : '#ffffff', color: on ? '#ffffff' : 'var(--ink-2)', border: `1px solid ${on ? 'var(--accent)' : 'var(--border-2)'}` }}
+              aria-pressed={on}
+              style={{ fontWeight: 700, fontSize: 14, padding: '9px 15px', borderRadius: 11, background: on ? 'var(--accent)' : '#ffffff', color: on ? '#ffffff' : 'var(--ink-2)', border: `1px solid ${on ? 'var(--accent)' : 'var(--border-2)'}` }}
             >
               {w.es}
-            </div>
+            </Tap>
           );
         })}
       </div>
@@ -58,10 +60,10 @@ export function Pronunciation() {
       <div style={{ marginTop: 18, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: '32px 28px', textAlign: 'center' }}>
         <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.02em' }}>{cp.es}</div>
         <div style={{ fontSize: 15, color: 'var(--muted)', marginTop: 6 }}>{fld(cp, base)}</div>
-        <div onClick={() => speak(cp.es, 'es-ES')} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 14, color: 'var(--accent-strong)', fontWeight: 700, fontSize: 13.5, cursor: 'pointer' }}>
+        <Tap onClick={() => speak(cp.es, 'es-ES')} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 14, color: 'var(--accent-strong)', fontWeight: 700, fontSize: 13.5 }}>
           <IconSpeakerLoud size={16} />
           {t.listen}
-        </div>
+        </Tap>
 
         <div style={{ height: 56, display: 'flex', alignItems: 'flex-end', justifyContent: 'center', gap: 3, margin: '22px 0 4px' }}>
           {WF_HEIGHTS.map((h, i) => (
@@ -76,16 +78,17 @@ export function Pronunciation() {
         </div>
 
         <div style={{ marginTop: 14, display: 'flex', justifyContent: 'center' }}>
-          <div
+          <Tap
             onClick={startRec}
-            style={{ width: 84, height: 84, borderRadius: '50%', background: recording ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', animation: recording ? 'hb-pulse 1.4s infinite' : 'none' }}
+            aria-label={recording ? t.listening : t.record}
+            style={{ width: 84, height: 84, borderRadius: '50%', background: recording ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: recording ? 'hb-pulse 1.4s infinite' : 'none' }}
           >
             <svg width={32} height={32} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
               <rect x="9" y="3" width="6" height="11" rx="3" />
               <path d="M5 11a7 7 0 0014 0" />
               <path d="M12 18v3" />
             </svg>
-          </div>
+          </Tap>
         </div>
         {recIdle && <div style={{ fontSize: 13.5, color: 'var(--faint)', fontWeight: 600, marginTop: 16 }}>{t.record}</div>}
         {recording && <div style={{ fontSize: 13.5, color: 'var(--accent)', fontWeight: 700, marginTop: 16 }}>{t.listening}</div>}
@@ -150,8 +153,8 @@ export function Pronunciation() {
           </div>
 
           <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-            <div onClick={startRec} style={{ flex: 1, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 14.5, padding: 13, borderRadius: 13, cursor: 'pointer' }}>{t.tryAgain} ↺</div>
-            <div onClick={() => goReview('srs')} style={{ flex: 1, textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 14.5, padding: 13, borderRadius: 13, cursor: 'pointer' }}>{t.saveReview}</div>
+            <Tap onClick={startRec} style={{ flex: 1, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 14.5, padding: 13, borderRadius: 13 }}>{t.tryAgain} ↺</Tap>
+            <Tap onClick={() => goReview('srs')} style={{ flex: 1, textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 14.5, padding: 13, borderRadius: 13 }}>{t.saveReview}</Tap>
           </div>
         </div>
       )}

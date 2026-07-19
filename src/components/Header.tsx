@@ -3,6 +3,7 @@ import { useHablo, displayStreak, displayDailyDone, DAILY_GOAL, type Screen, typ
 import { useUi } from '../lib/useUi';
 import { accentSwatches } from '../data/content';
 import { IconSun, IconMoon } from './Icons';
+import { Tap } from './Tap';
 
 const PAGE_TITLE_KEY: Record<Screen, keyof ReturnType<typeof useUi>['t']> = {
   home: 'home', levels: 'levels', vocab: 'vocab', phrasebook: 'phrases',
@@ -92,13 +93,15 @@ export function Header() {
 
       <div style={{ display: 'flex', alignItems: 'center', background: 'var(--panel)', borderRadius: 10, padding: 3 }} title="Audio speed">
         {SPEED_OPTIONS.map((sp) => (
-          <div
+          <Tap
             key={sp.label}
             onClick={() => setSpeedRate(sp.v)}
-            style={{ padding: '5px 9px', borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: 'pointer', background: speakRate === sp.v ? 'var(--surface)' : 'transparent', color: speakRate === sp.v ? 'var(--accent-strong)' : 'var(--faint)' }}
+            aria-pressed={speakRate === sp.v}
+            aria-label={`Audio speed ${sp.label}`}
+            style={{ padding: '5px 9px', borderRadius: 8, fontSize: 12.5, fontWeight: 700, background: speakRate === sp.v ? 'var(--surface)' : 'transparent', color: speakRate === sp.v ? 'var(--accent-strong)' : 'var(--faint)' }}
           >
             {sp.label}
-          </div>
+          </Tap>
         ))}
       </div>
 
@@ -106,6 +109,7 @@ export function Header() {
         <select
           value={dir}
           onChange={(e) => setDir(e.target.value as Direction)}
+          aria-label="Course direction"
           style={{ border: 'none', background: 'transparent', fontFamily: 'inherit', fontWeight: 700, fontSize: 12.5, color: 'var(--ink)', cursor: 'pointer', outline: 'none' }}
         >
           {DIR_OPTIONS.map((o) => (
@@ -119,6 +123,7 @@ export function Header() {
           <select
             value={voiceSel[target] || ''}
             onChange={(e) => setVoice(target, e.target.value)}
+            aria-label={voiceLabel}
             style={{ border: 'none', background: 'transparent', fontFamily: 'inherit', fontWeight: 700, fontSize: 12.5, color: 'var(--ink)', cursor: 'pointer', outline: 'none', maxWidth: 150 }}
           >
             <option value="">{voiceLabel}: auto</option>
@@ -129,25 +134,29 @@ export function Header() {
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }} role="group" aria-label="Accent color">
         {accentSwatches.map((hex) => (
-          <div
+          <Tap
             key={hex}
             onClick={() => setAccent(hex)}
-            style={{ width: 18, height: 18, borderRadius: '50%', background: hex, cursor: 'pointer', border: hex === accent ? '2px solid var(--ink)' : '2px solid var(--border)' }}
+            aria-label={`Accent ${hex}`}
+            aria-pressed={hex === accent}
+            style={{ width: 18, height: 18, borderRadius: '50%', background: hex, border: hex === accent ? '2px solid var(--ink)' : '2px solid var(--border)' }}
           />
         ))}
       </div>
 
-      <div
+      <Tap
         onClick={toggleDark}
-        style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--panel)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+        aria-pressed={dark}
+        aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}
+        style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--panel)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
         {dark ? <IconSun color="var(--ink)" /> : <IconMoon color="var(--ink)" />}
-      </div>
+      </Tap>
 
       <div
-        title={`${xp} XP`}
+        aria-label={`${xp} XP`}
         style={{ width: 38, height: 38, borderRadius: '50%', background: 'linear-gradient(145deg,#E0A030,var(--accent))', flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: 14 }}
       >
         A

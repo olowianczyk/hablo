@@ -2,6 +2,7 @@ import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
 import { isDueToday } from '../lib/date';
 import { SrsTable } from '../components/SrsTable';
+import { Tap } from '../components/Tap';
 
 export function Review() {
   const { t, lang, target, base } = useUi();
@@ -34,7 +35,7 @@ export function Review() {
               <div style={{ fontSize: 12.5, color: 'var(--faint)', fontWeight: 600 }}>{t.itemsDue}</div>
             </>
           )}
-          <div onClick={startReview} style={{ marginTop: 14, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 13.5, padding: 11, borderRadius: 11, cursor: 'pointer' }}>{t.startReview}</div>
+          <Tap onClick={startReview} style={{ marginTop: 14, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 13.5, padding: 11, borderRadius: 11, width: '100%' }}>{t.startReview}</Tap>
         </div>
       </div>
 

@@ -4,6 +4,7 @@ import { builderFor, bankFor } from '../data/content';
 import { fld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud, IconMic } from '../components/Icons';
+import { Tap } from '../components/Tap';
 
 export function Builder() {
   const { t, lang, base } = useUi();
@@ -43,30 +44,30 @@ export function Builder() {
           <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--faint)', textTransform: 'uppercase', letterSpacing: '.06em' }}>{t.build}</span>
           <div style={{ fontSize: 17, fontWeight: 700, marginTop: 3 }}>{prompt}</div>
         </div>
-        <div onClick={() => speak(sentenceEs, 'es-ES')} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}>
+        <Tap onClick={() => speak(sentenceEs, 'es-ES')} aria-label={t.listen} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
           <IconSpeakerLoud size={18} color="var(--accent-strong)" />
-        </div>
+        </Tap>
       </div>
 
       <div style={{ marginTop: 16, minHeight: 72, background: 'var(--panel-soft)', border: '2px dashed var(--border-2)', borderRadius: 16, padding: 16, display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', alignContent: 'center' }}>
         {slots.map((id) => (
-          <div key={id} onClick={() => removeSlot(id)} style={{ background: 'var(--invert-bg)', color: '#fff', fontWeight: 700, fontSize: 15, padding: '11px 16px', borderRadius: 12, cursor: 'pointer', boxShadow: '0 3px 8px rgba(0,0,0,.15)' }}>
+          <Tap key={id} onClick={() => removeSlot(id)} style={{ background: 'var(--invert-bg)', color: '#fff', fontWeight: 700, fontSize: 15, padding: '11px 16px', borderRadius: 12, boxShadow: '0 3px 8px rgba(0,0,0,.15)' }}>
             {byId(id).es}
-          </div>
+          </Tap>
         ))}
       </div>
 
       <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 10 }}>
         {bank.filter((b) => !slots.includes(b.id)).map((b) => (
-          <div key={b.id} onClick={() => addSlot(b.id)} style={{ background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 15, padding: '11px 16px', borderRadius: 12, cursor: 'pointer' }}>
+          <Tap key={b.id} onClick={() => addSlot(b.id)} style={{ background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 15, padding: '11px 16px', borderRadius: 12 }}>
             {b.es}
-          </div>
+          </Tap>
         ))}
       </div>
 
       <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-        <div onClick={checkBuilder} style={{ flex: 1, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14, cursor: 'pointer' }}>{t.check}</div>
-        <div onClick={clearSlots} style={{ textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--muted)', fontWeight: 700, fontSize: 15, padding: '14px 22px', borderRadius: 14, cursor: 'pointer' }}>{t.clear}</div>
+        <Tap onClick={checkBuilder} style={{ flex: 1, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14 }}>{t.check}</Tap>
+        <Tap onClick={clearSlots} style={{ textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--muted)', fontWeight: 700, fontSize: 15, padding: '14px 22px', borderRadius: 14 }}>{t.clear}</Tap>
       </div>
 
       {builderChecked && (
@@ -77,12 +78,13 @@ export function Builder() {
 
       <div style={{ marginTop: 20, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-          <div
+          <Tap
             onClick={() => startRec2(sentenceEs, 'sentence', 'builder')}
-            style={{ width: 48, height: 48, borderRadius: '50%', background: pwActive ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none', animation: pwActive ? 'hb-pulse 1.4s infinite' : 'none' }}
+            aria-label={t.checkSentencePron}
+            style={{ width: 48, height: 48, borderRadius: '50%', background: pwActive ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', animation: pwActive ? 'hb-pulse 1.4s infinite' : 'none' }}
           >
             <IconMic />
-          </div>
+          </Tap>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 700, fontSize: 14.5 }}>{t.checkSentencePron}</div>
             <div style={{ fontSize: 12.5, color: 'var(--faint)' }}>{pwActive ? t.listening : t.checkPronSub}</div>
@@ -118,9 +120,9 @@ export function Builder() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 12 }}>
           {sentence.glossary.map((g, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '9px 4px', borderTop: '1px solid var(--border)' }}>
-              <div onClick={() => speak(g.es, 'es-ES')} style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', cursor: 'pointer' }}>
+              <Tap onClick={() => speak(g.es, 'es-ES')} aria-label={t.listen} style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
                 <IconSpeakerLoud size={15} color="var(--accent-strong)" />
-              </div>
+              </Tap>
               <div style={{ fontWeight: 700, fontSize: 15, minWidth: 80 }}>{g.es}</div>
               <div style={{ fontSize: 14, color: 'var(--muted)' }}>{fld(g, base)}</div>
             </div>

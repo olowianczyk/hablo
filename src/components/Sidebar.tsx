@@ -1,6 +1,7 @@
 import { useHablo, displayStreak, type Screen } from '../store';
 import { useUi } from '../lib/useUi';
 import { IconHome, IconLevels, IconVocab, IconPhrases, IconListen, IconBuilder, IconPron, IconReview, IconStats } from './Icons';
+import { Tap } from './Tap';
 
 const NAV: { key: Screen; Icon: typeof IconHome; label: (t: ReturnType<typeof useUi>['t']) => string }[] = [
   { key: 'home', Icon: IconHome, label: (t) => t.home },
@@ -45,23 +46,24 @@ export function Sidebar() {
         </div>
       </div>
 
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: 3 }} aria-label="Main">
         {NAV.map(({ key, Icon, label }) => {
           const active = screen === key;
           return (
-            <div
+            <Tap
               key={key}
               onClick={() => go(key)}
+              aria-current={active ? 'page' : undefined}
               style={{
                 display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 11,
-                fontSize: 14.5, fontWeight: 600, cursor: 'pointer',
+                fontSize: 14.5, fontWeight: 600, width: '100%', textAlign: 'left',
                 background: active ? 'var(--accent-soft)' : 'transparent',
                 color: active ? 'var(--accent-strong)' : 'var(--ink-2)',
               }}
             >
               <Icon size={20} />
               {label(t)}
-            </div>
+            </Tap>
           );
         })}
       </nav>

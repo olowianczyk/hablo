@@ -4,6 +4,7 @@ import { phrasebookFor } from '../data/content';
 import { fld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeaker } from '../components/Icons';
+import { Tap } from '../components/Tap';
 
 export function Phrasebook() {
   const { t, lang, target, base } = useUi();
@@ -30,9 +31,9 @@ export function Phrasebook() {
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
               {cat.phrases.map((p, pi) => (
                 <div key={pi} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '15px 18px', borderTop: pi ? '1px solid var(--panel)' : 'none' }}>
-                  <div onClick={() => speak(fld(p, target))} style={{ width: 38, height: 38, borderRadius: 11, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', cursor: 'pointer' }}>
+                  <Tap onClick={() => speak(fld(p, target))} aria-label={t.listen} style={{ width: 38, height: 38, borderRadius: 11, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
                     <IconSpeaker size={17} color="var(--accent-strong)" />
-                  </div>
+                  </Tap>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 15.5 }}>{fld(p, target)}</div>
                     <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 2 }}>{fld(p, base)}</div>

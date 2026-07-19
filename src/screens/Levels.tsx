@@ -2,6 +2,7 @@ import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
 import { levels } from '../data/content';
 import { IconLock } from '../components/Icons';
+import { Tap } from '../components/Tap';
 
 export function Levels() {
   const { t, lang } = useUi();
@@ -24,10 +25,11 @@ export function Levels() {
           const codeFg = locked ? 'var(--faint)' : '#FFFFFF';
           const name = lang === 'pl' ? l.pl : lang === 'es' ? l.code : l.en;
           return (
-            <div
+            <Tap
               key={l.code}
+              disabled={locked}
               onClick={() => !locked && setLevel(l.code as 'A1' | 'A2' | 'B1' | 'B2')}
-              style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: '20px 22px', display: 'flex', alignItems: 'center', gap: 20, cursor: locked ? 'default' : 'pointer' }}
+              style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: '20px 22px', display: 'flex', alignItems: 'center', gap: 20, width: '100%', textAlign: 'left', cursor: locked ? 'default' : 'pointer' }}
             >
               <div style={{ width: 56, height: 56, borderRadius: 16, flex: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 18, background: codeBg, color: codeFg, position: 'relative' }}>
                 {l.code}
@@ -52,7 +54,7 @@ export function Levels() {
                   </div>
                 )}
               </div>
-            </div>
+            </Tap>
           );
         })}
       </div>

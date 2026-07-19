@@ -4,6 +4,7 @@ import { dictFor } from '../data/content';
 import { fld, normalize } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconPlay, IconSpeaker } from '../components/Icons';
+import { Tap } from '../components/Tap';
 
 export function Dictation() {
   const { t, target, base } = useUi();
@@ -36,25 +37,26 @@ export function Dictation() {
       <div style={{ marginTop: 18, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: 28 }}>
         <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 700, color: 'var(--muted)', fontFamily: "'JetBrains Mono',monospace" }}>{t.card} {dIdx + 1} / {dict.length}</div>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 16 }}>
-          <div onClick={dictReplay} style={{ display: 'flex', alignItems: 'center', gap: 9, background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14, cursor: 'pointer' }}>
+          <Tap onClick={dictReplay} style={{ display: 'flex', alignItems: 'center', gap: 9, background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: '14px 24px', borderRadius: 14 }}>
             <IconPlay />
             {t.dictReplay}
-          </div>
-          <div onClick={dictSlow} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 14, padding: '14px 18px', borderRadius: 14, cursor: 'pointer' }}>
+          </Tap>
+          <Tap onClick={dictSlow} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 14, padding: '14px 18px', borderRadius: 14 }}>
             <IconSpeaker size={17} />
             {t.dictSlow}
-          </div>
+          </Tap>
         </div>
-        <div style={{ fontSize: 12.5, color: 'var(--faint)', marginTop: 18, textAlign: 'center' }}>{t.dictType}</div>
+        <label style={{ fontSize: 12.5, color: 'var(--faint)', marginTop: 18, textAlign: 'center', display: 'block' }} htmlFor="dict-input">{t.dictType}</label>
         <input
+          id="dict-input"
           value={dInput}
           onChange={(e) => dictType(e.target.value)}
           placeholder={t.dictPlaceholder}
           style={{ width: '100%', marginTop: 10, padding: '14px 16px', border: '1px solid var(--border-2)', borderRadius: 13, fontSize: 16, fontFamily: 'inherit', color: 'var(--ink)', outline: 'none', boxSizing: 'border-box' }}
         />
         <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
-          <div onClick={dictCheck} style={{ flex: 1, textAlign: 'center', background: 'var(--invert-bg)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14, cursor: 'pointer' }}>{t.dictCheck}</div>
-          <div onClick={dictReveal} style={{ textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--muted)', fontWeight: 700, fontSize: 14, padding: '14px 20px', borderRadius: 14, cursor: 'pointer' }}>{t.dictReveal}</div>
+          <Tap onClick={dictCheck} style={{ flex: 1, textAlign: 'center', background: 'var(--invert-bg)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14 }}>{t.dictCheck}</Tap>
+          <Tap onClick={dictReveal} style={{ textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--muted)', fontWeight: 700, fontSize: 14, padding: '14px 20px', borderRadius: 14 }}>{t.dictReveal}</Tap>
         </div>
 
         {dChecked && (
@@ -71,7 +73,7 @@ export function Dictation() {
               ))}
             </div>
             <div style={{ fontSize: 14, color: 'var(--muted)', marginTop: 8 }}>{fld(di, base)}</div>
-            <div onClick={dictNext} style={{ textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14, cursor: 'pointer', marginTop: 18 }}>{t.dictNext} →</div>
+            <Tap onClick={dictNext} style={{ textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14, marginTop: 18, width: '100%' }}>{t.dictNext} →</Tap>
           </div>
         )}
       </div>
