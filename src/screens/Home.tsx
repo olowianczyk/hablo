@@ -1,7 +1,7 @@
 import { useHablo, displayStreak } from '../store';
 import { useUi } from '../lib/useUi';
 import { isDueToday } from '../lib/date';
-import { IconVocab, IconBuilder, IconPron, IconReview, IconArrowRight, IconCheckmark } from '../components/Icons';
+import { IconVocab, IconBuilder, IconPron, IconReview, IconArrowRight, IconCheckmark, IconLevels, IconListen } from '../components/Icons';
 import { Tap } from '../components/Tap';
 
 export function Home() {
@@ -137,6 +137,20 @@ export function Home() {
           </div>
           <div style={{ fontWeight: 800, fontSize: 15, marginTop: 14 }}>{t.pronounce}</div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.4 }}>Speech recognition</div>
+        </Tap>
+        <Tap onClick={() => go('levels')} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20, textAlign: 'left' }}>
+          <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--panel)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <IconLevels size={21} color="var(--ink-2)" />
+          </div>
+          <div style={{ fontWeight: 800, fontSize: 15, marginTop: 14 }}>{t.levels}</div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.4 }}>A1 → C2</div>
+        </Tap>
+        <Tap onClick={() => go('listen')} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: 20, textAlign: 'left' }}>
+          <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--panel)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <IconListen size={21} color="var(--ink-2)" />
+          </div>
+          <div style={{ fontWeight: 800, fontSize: 15, marginTop: 14 }}>{t.dictNav}</div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.4 }}>{t.dictSub}</div>
         </Tap>
       </div>
     </div>
