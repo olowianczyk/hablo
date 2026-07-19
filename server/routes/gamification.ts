@@ -45,7 +45,7 @@ export async function recordServerActivity(db: Db, userId: string, xpGained: num
 }
 
 // POST /api/gamification/freeze — consume a streak-freeze (mirrors store.ts's useFreeze)
-export async function useStreakFreeze(db: Db, userId: string) {
+export async function consumeStreakFreeze(db: Db, userId: string) {
   const current = await getGamification(db, userId);
   if (current.streak_freezes <= 0 || current.streak_freeze_active) return current;
   await db.query(
@@ -66,7 +66,7 @@ export async function handleGamificationRequest(req: Request, db: Db, userId: st
     return Response.json(await recordServerActivity(db, userId, xpGained));
   }
   if (req.method === 'POST' && url.pathname === '/api/gamification/freeze') {
-    return Response.json(await useStreakFreeze(db, userId));
+    return Response.json(await consumeStreakFreeze(db, userId));
   }
 
   return new Response('Not found', { status: 404 });
