@@ -7,6 +7,7 @@ import {
 } from './data/content';
 import { fld } from './lib/format';
 import { say, langCode, recognizeOnce, scoreTokens, syllabify, type ScoredToken } from './lib/speech';
+import { todayISO, addDays, isDueToday } from './lib/date';
 
 export type Screen = 'home' | 'levels' | 'vocab' | 'phrasebook' | 'listen' | 'builder' | 'pronounce' | 'srs' | 'stats';
 export type Direction = 'es>en' | 'es>pl' | 'en>es' | 'en>pl' | 'pl>es' | 'pl>en';
@@ -128,28 +129,20 @@ function targetOf(dir: Direction): 'es' | 'en' | 'pl' {
 
 export const DAILY_GOAL = 5;
 
-function dateKey(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-function todayKey(): string {
-  return dateKey(new Date());
-}
 function yesterdayKey(today: string): string {
-  const [y, m, d] = today.split('-').map(Number);
-  return dateKey(new Date(y, m - 1, d - 1));
+  return addDays(today, -1);
 }
+const todayKey = todayISO;
 
 function applySRS(item: SrsItem, grade: Grade): SrsItem {
   const interval = item.interval ?? 1;
   if (grade === 'again') {
-    return { ...item, interval: 1, today: true, strength: Math.max(5, item.strength - 20), dueEn: 'Today', duePl: 'Dzisiaj' };
+    return { ...item, interval: 1, strength: Math.max(5, item.strength - 20), dueAt: todayISO() };
   }
   const mult = grade === 'hard' ? 1.2 : grade === 'easy' ? 4 : 2.5;
   const bump = grade === 'hard' ? 6 : grade === 'easy' ? 22 : 15;
   const newInterval = Math.max(1, Math.round(interval * mult));
-  const dueEn = newInterval === 1 ? 'Tomorrow' : 'in ' + newInterval + ' days';
-  const duePl = newInterval === 1 ? 'Jutro' : 'za ' + newInterval + ' dni';
-  return { ...item, interval: newInterval, strength: Math.min(100, item.strength + bump), today: false, dueEn, duePl };
+  return { ...item, interval: newInterval, strength: Math.min(100, item.strength + bump), dueAt: addDays(todayISO(), newInterval) };
 }
 
 function replaceInList(list: SrsItem[], es: string, grade: Grade): SrsItem[] {
@@ -311,11 +304,11 @@ export const useHablo = create<HabloState>()(
       startReview: () => {
         const s = get();
         const items: { kind: ReviewKind; item: SrsItem }[] = [];
-        s.srs.forEach((it) => it.today && items.push({ kind: 'vocab', item: it }));
-        s.srsPhrases.forEach((it) => it.today && items.push({ kind: 'phrasebook', item: it }));
-        s.srsPron.forEach((it) => it.today && items.push({ kind: 'pronounce', item: it }));
-        s.srsDict.forEach((it) => it.today && items.push({ kind: 'listen', item: it }));
-        s.srsBuilder.forEach((it) => it.today && items.push({ kind: 'builder', item: it }));
+        s.srs.forEach((it) => isDueToday(it.dueAt) && items.push({ kind: 'vocab', item: it }));
+        s.srsPhrases.forEach((it) => isDueToday(it.dueAt) && items.push({ kind: 'phrasebook', item: it }));
+        s.srsPron.forEach((it) => isDueToday(it.dueAt) && items.push({ kind: 'pronounce', item: it }));
+        s.srsDict.forEach((it) => isDueToday(it.dueAt) && items.push({ kind: 'listen', item: it }));
+        s.srsBuilder.forEach((it) => isDueToday(it.dueAt) && items.push({ kind: 'builder', item: it }));
         if (!items.length) return;
         set({ reviewQueue: items, reviewPos: 0, screen: items[0].kind, reviewDone: false });
       },

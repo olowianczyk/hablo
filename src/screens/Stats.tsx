@@ -1,6 +1,7 @@
 import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
 import { deckFor, badgesSeed } from '../data/content';
+import { isDueToday } from '../lib/date';
 
 const WEEK_XP = [120, 180, 90, 240, 160, 300, 240];
 const MAX_XP = Math.max(...WEEK_XP);
@@ -26,13 +27,13 @@ export function Stats() {
   const a2n = deckFor('A2', extraWords.A2).length;
   const a1pct = Math.round(Math.min(LEARNED, a1n) / a1n * 100);
   const a2pct = Math.round(Math.max(0, LEARNED - a1n) / a2n * 100);
-  const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => i.today).length, 0);
+  const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => isDueToday(i.dueAt)).length, 0);
   const srsBreakdown = [
-    `${srs.filter((s) => s.today).length} ${t.vocab.toLowerCase()}`,
-    `${srsPhrases.filter((s) => s.today).length} ${t.phrases.toLowerCase()}`,
-    `${srsPron.filter((s) => s.today).length} ${t.pronounce.toLowerCase()}`,
-    `${srsDict.filter((s) => s.today).length} ${t.dictNav.toLowerCase()}`,
-    `${srsBuilder.filter((s) => s.today).length} ${t.builder.toLowerCase()}`,
+    `${srs.filter((s) => isDueToday(s.dueAt)).length} ${t.vocab.toLowerCase()}`,
+    `${srsPhrases.filter((s) => isDueToday(s.dueAt)).length} ${t.phrases.toLowerCase()}`,
+    `${srsPron.filter((s) => isDueToday(s.dueAt)).length} ${t.pronounce.toLowerCase()}`,
+    `${srsDict.filter((s) => isDueToday(s.dueAt)).length} ${t.dictNav.toLowerCase()}`,
+    `${srsBuilder.filter((s) => isDueToday(s.dueAt)).length} ${t.builder.toLowerCase()}`,
   ].join(' · ');
 
   return (

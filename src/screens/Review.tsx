@@ -1,5 +1,6 @@
 import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
+import { isDueToday } from '../lib/date';
 import { SrsTable } from '../components/SrsTable';
 
 export function Review() {
@@ -14,7 +15,7 @@ export function Review() {
   const speak = useHablo((s) => s.speak);
   const go = useHablo((s) => s.go);
 
-  const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => i.today).length, 0);
+  const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => isDueToday(i.dueAt)).length, 0);
   const reviewDoneLabel = { pl: 'Sesja ukończona! 🎉', es: '¡Sesión completada! 🎉', en: 'Session complete! 🎉' }[lang];
 
   return (

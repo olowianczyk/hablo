@@ -2,6 +2,7 @@ import type { SrsItem } from '../data/content';
 import { fld, dueLabel, strengthColor } from '../lib/format';
 import type { Lang } from '../lib/format';
 import type { UiLang } from '../data/content';
+import { isDueToday } from '../lib/date';
 import { IconSpeaker } from './Icons';
 
 export function SrsTable({
@@ -41,7 +42,7 @@ export function SrsTable({
               <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)' }}>{s.strength}</span>
             </div>
             <div>
-              <span style={{ fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 20, background: s.today ? 'var(--accent-soft)' : 'var(--panel)', color: s.today ? 'var(--accent-strong)' : 'var(--muted)' }}>
+              <span style={{ fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 20, background: isDueToday(s.dueAt) ? 'var(--accent-soft)' : 'var(--panel)', color: isDueToday(s.dueAt) ? 'var(--accent-strong)' : 'var(--muted)' }}>
                 {dueLabel(s, lang)}
               </span>
             </div>

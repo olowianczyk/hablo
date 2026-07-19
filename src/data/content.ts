@@ -1,3 +1,5 @@
+import { todayISO, addDays } from '../lib/date';
+
 export type Word = {
   es: string;
   en: string;
@@ -28,9 +30,7 @@ export type SrsItem = {
   en: string;
   pl: string;
   strength: number;
-  dueEn: string;
-  duePl: string;
-  today: boolean;
+  dueAt: string;
   interval?: number;
 };
 export type LevelDef = {
@@ -333,37 +333,40 @@ export const levels: LevelDef[] = [
   { code: 'C2', en: 'Mastery', pl: 'Biegłość', dEn: 'Near-native command across any subject or register.', dPl: 'Biegłość bliska rodzimej w każdym temacie i rejestrze.', status: 'locked', progress: 0 },
 ];
 
+const today = todayISO();
+const due = (n: number) => addDays(today, n);
+
 export const srsSeed: SrsItem[] = [
-  { es: 'gracias', en: 'thank you', pl: 'dziękuję', strength: 82, dueEn: 'in 3 days', duePl: 'za 3 dni', today: false },
-  { es: 'comer', en: 'to eat', pl: 'jeść', strength: 45, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: 'casa', en: 'house', pl: 'dom', strength: 68, dueEn: 'Tomorrow', duePl: 'Jutro', today: false },
-  { es: 'amigo', en: 'friend', pl: 'przyjaciel', strength: 31, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: 'hoy', en: 'today', pl: 'dzisiaj', strength: 91, dueEn: 'in 6 days', duePl: 'za 6 dni', today: false },
-  { es: 'agua', en: 'water', pl: 'woda', strength: 54, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
+  { es: 'gracias', en: 'thank you', pl: 'dziękuję', strength: 82, dueAt: due(3) },
+  { es: 'comer', en: 'to eat', pl: 'jeść', strength: 45, dueAt: due(0) },
+  { es: 'casa', en: 'house', pl: 'dom', strength: 68, dueAt: due(1) },
+  { es: 'amigo', en: 'friend', pl: 'przyjaciel', strength: 31, dueAt: due(0) },
+  { es: 'hoy', en: 'today', pl: 'dzisiaj', strength: 91, dueAt: due(6) },
+  { es: 'agua', en: 'water', pl: 'woda', strength: 54, dueAt: due(0) },
 ];
 export const srsPhrasesSeed: SrsItem[] = [
-  { es: '¿Dónde está el baño?', en: 'Where is the bathroom?', pl: 'Gdzie jest toaleta?', strength: 76, dueEn: 'in 2 days', duePl: 'za 2 dni', today: false },
-  { es: 'La cuenta, por favor', en: 'The check, please', pl: 'Poproszę rachunek', strength: 38, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: '¿Cuánto cuesta?', en: 'How much is it?', pl: 'Ile to kosztuje?', strength: 63, dueEn: 'Tomorrow', duePl: 'Jutro', today: false },
-  { es: 'Necesito ayuda urgente', en: 'I need urgent help', pl: 'Potrzebuję pilnej pomocy', strength: 29, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: 'Mucho gusto', en: 'Nice to meet you', pl: 'Miło mi', strength: 88, dueEn: 'in 5 days', duePl: 'za 5 dni', today: false },
+  { es: '¿Dónde está el baño?', en: 'Where is the bathroom?', pl: 'Gdzie jest toaleta?', strength: 76, dueAt: due(2) },
+  { es: 'La cuenta, por favor', en: 'The check, please', pl: 'Poproszę rachunek', strength: 38, dueAt: due(0) },
+  { es: '¿Cuánto cuesta?', en: 'How much is it?', pl: 'Ile to kosztuje?', strength: 63, dueAt: due(1) },
+  { es: 'Necesito ayuda urgente', en: 'I need urgent help', pl: 'Potrzebuję pilnej pomocy', strength: 29, dueAt: due(0) },
+  { es: 'Mucho gusto', en: 'Nice to meet you', pl: 'Miło mi', strength: 88, dueAt: due(5) },
 ];
 export const srsPronSeed: SrsItem[] = [
-  { es: 'Buenos días', en: 'Good morning', pl: 'Dzień dobry', strength: 80, dueEn: 'in 3 days', duePl: 'za 3 dni', today: false },
-  { es: 'gracias', en: 'thank you', pl: 'dziękuję', strength: 42, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: 'la izquierda', en: 'the left', pl: 'w lewo', strength: 57, dueEn: 'Tomorrow', duePl: 'Jutro', today: false },
-  { es: 'sin embargo', en: 'however', pl: 'jednak', strength: 33, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: 'a todas luces', en: 'clearly', pl: 'ewidentnie', strength: 71, dueEn: 'in 4 days', duePl: 'za 4 dni', today: false },
+  { es: 'Buenos días', en: 'Good morning', pl: 'Dzień dobry', strength: 80, dueAt: due(3) },
+  { es: 'gracias', en: 'thank you', pl: 'dziękuję', strength: 42, dueAt: due(0) },
+  { es: 'la izquierda', en: 'the left', pl: 'w lewo', strength: 57, dueAt: due(1) },
+  { es: 'sin embargo', en: 'however', pl: 'jednak', strength: 33, dueAt: due(0) },
+  { es: 'a todas luces', en: 'clearly', pl: 'ewidentnie', strength: 71, dueAt: due(4) },
 ];
 export const srsDictSeed: SrsItem[] = [
-  { es: 'Hola, ¿cómo estás?', en: 'Hello, how are you?', pl: 'Cześć, jak się masz?', strength: 69, dueEn: 'in 2 days', duePl: 'za 2 dni', today: false },
-  { es: 'Me llamo Ana', en: 'My name is Ana', pl: 'Nazywam się Ana', strength: 35, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
-  { es: 'Tengo dos hermanos', en: 'I have two brothers', pl: 'Mam dwóch braci', strength: 48, dueEn: 'Tomorrow', duePl: 'Jutro', today: false },
-  { es: 'La casa es muy grande', en: 'The house is very big', pl: 'Dom jest bardzo duży', strength: 27, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
+  { es: 'Hola, ¿cómo estás?', en: 'Hello, how are you?', pl: 'Cześć, jak się masz?', strength: 69, dueAt: due(2) },
+  { es: 'Me llamo Ana', en: 'My name is Ana', pl: 'Nazywam się Ana', strength: 35, dueAt: due(0) },
+  { es: 'Tengo dos hermanos', en: 'I have two brothers', pl: 'Mam dwóch braci', strength: 48, dueAt: due(1) },
+  { es: 'La casa es muy grande', en: 'The house is very big', pl: 'Dom jest bardzo duży', strength: 27, dueAt: due(0) },
 ];
 export const srsBuilderSeed: SrsItem[] = [
-  { es: 'Yo quiero un café con leche', en: 'I want a coffee with milk', pl: 'Chcę kawę z mlekiem', strength: 73, dueEn: 'in 3 days', duePl: 'za 3 dni', today: false },
-  { es: 'Ayer compré pan en el mercado', en: 'Yesterday I bought bread at the market', pl: 'Wczoraj kupiłem chleb na targu', strength: 31, dueEn: 'Today', duePl: 'Dzisiaj', today: true },
+  { es: 'Yo quiero un café con leche', en: 'I want a coffee with milk', pl: 'Chcę kawę z mlekiem', strength: 73, dueAt: due(3) },
+  { es: 'Ayer compré pan en el mercado', en: 'Yesterday I bought bread at the market', pl: 'Wczoraj kupiłem chleb na targu', strength: 31, dueAt: due(0) },
 ];
 
 export const challengesSeed: Challenge[] = [

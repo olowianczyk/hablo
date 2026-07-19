@@ -1,5 +1,6 @@
 import { useHablo, displayStreak } from '../store';
 import { useUi } from '../lib/useUi';
+import { isDueToday } from '../lib/date';
 import { IconVocab, IconBuilder, IconPron, IconReview, IconArrowRight, IconCheckmark } from '../components/Icons';
 
 export function Home() {
@@ -20,7 +21,7 @@ export function Home() {
   const srsDict = useHablo((s) => s.srsDict);
   const srsBuilder = useHablo((s) => s.srsBuilder);
 
-  const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => i.today).length, 0);
+  const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => isDueToday(i.dueAt)).length, 0);
   const dailyChallenges = { pl: 'Dzienne wyzwania', es: 'Retos diarios', en: 'Daily challenges' }[lang];
   const doneCount = challenges.filter((c) => c.done).length;
 
