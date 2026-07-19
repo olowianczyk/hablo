@@ -37,6 +37,10 @@ interface HabloState {
   streakFreezes: number;
   streakFreezeActive: boolean;
   challenges: Challenge[];
+  streak: number;
+  lastActiveDate: string | null;
+  dailyDone: number;
+  dailyDate: string | null;
 
   vIdx: number;
   vFlip: boolean;
@@ -122,6 +126,19 @@ function targetOf(dir: Direction): 'es' | 'en' | 'pl' {
   return dir.split('>')[0] as 'es' | 'en' | 'pl';
 }
 
+export const DAILY_GOAL = 5;
+
+function dateKey(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function todayKey(): string {
+  return dateKey(new Date());
+}
+function yesterdayKey(today: string): string {
+  const [y, m, d] = today.split('-').map(Number);
+  return dateKey(new Date(y, m - 1, d - 1));
+}
+
 function applySRS(item: SrsItem, grade: Grade): SrsItem {
   const interval = item.interval ?? 1;
   if (grade === 'again') {
@@ -145,6 +162,7 @@ export const useHablo = create<HabloState>()(
       screen: 'home', level: 'A1', dir: 'es>en', dark: false, accent: '#DE5B3B', speakRate: 1, voiceSel: {},
 
       xp: 240, xpBoost: false, streakFreezes: 2, streakFreezeActive: false, challenges: challengesSeed,
+      streak: 0, lastActiveDate: null, dailyDone: 0, dailyDate: null,
 
       vIdx: 0, vFlip: false,
       slots: [], builderChecked: false,
@@ -275,7 +293,20 @@ export const useHablo = create<HabloState>()(
             xp: Math.max(0, s.xp + delta),
           };
         }),
-      gainXp: (base) => set((s) => ({ xp: s.xp + (s.xpBoost ? base * 2 : base) })),
+      gainXp: (base) =>
+        set((s) => {
+          const today = todayKey();
+          const xp = s.xp + (s.xpBoost ? base * 2 : base);
+          if (s.lastActiveDate === today) return { xp, dailyDone: s.dailyDone + 1 };
+          const isFirstEver = s.lastActiveDate === null;
+          const isConsecutive = s.lastActiveDate === yesterdayKey(today);
+          const savedByFreeze = !isFirstEver && !isConsecutive && s.streakFreezeActive;
+          const streak = isFirstEver ? 1 : isConsecutive || savedByFreeze ? s.streak + 1 : 1;
+          return {
+            xp, streak, lastActiveDate: today, dailyDone: 1, dailyDate: today,
+            streakFreezeActive: savedByFreeze ? false : s.streakFreezeActive,
+          };
+        }),
 
       startReview: () => {
         const s = get();
@@ -330,10 +361,22 @@ export const useHablo = create<HabloState>()(
       partialize: (s) => ({
         level: s.level, dir: s.dir, dark: s.dark, accent: s.accent, speakRate: s.speakRate, voiceSel: s.voiceSel,
         xp: s.xp, xpBoost: s.xpBoost, streakFreezes: s.streakFreezes, streakFreezeActive: s.streakFreezeActive, challenges: s.challenges,
+        streak: s.streak, lastActiveDate: s.lastActiveDate, dailyDone: s.dailyDone, dailyDate: s.dailyDate,
         srs: s.srs, srsPhrases: s.srsPhrases, srsPron: s.srsPron, srsDict: s.srsDict, srsBuilder: s.srsBuilder,
       }),
     },
   ),
 );
+
+export function displayStreak(s: HabloState): number {
+  if (!s.lastActiveDate) return 0;
+  const today = todayKey();
+  if (s.lastActiveDate === today || s.lastActiveDate === yesterdayKey(today)) return s.streak;
+  return s.streakFreezeActive ? s.streak : 0;
+}
+
+export function displayDailyDone(s: HabloState): number {
+  return s.dailyDate === todayKey() ? Math.min(s.dailyDone, DAILY_GOAL) : 0;
+}
 
 export { targetOf };

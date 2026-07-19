@@ -1,4 +1,4 @@
-import { useHablo, type Screen } from '../store';
+import { useHablo, displayStreak, type Screen } from '../store';
 import { useUi } from '../lib/useUi';
 import { IconHome, IconLevels, IconVocab, IconPhrases, IconListen, IconBuilder, IconPron, IconReview, IconStats } from './Icons';
 
@@ -18,6 +18,7 @@ export function Sidebar() {
   const { t } = useUi();
   const screen = useHablo((s) => s.screen);
   const go = useHablo((s) => s.go);
+  const streak = useHablo(displayStreak);
 
   return (
     <aside
@@ -65,14 +66,15 @@ export function Sidebar() {
         })}
       </nav>
 
+      {/* ponytail: leagues need real accounts/opponents (backend, punkt 7) —
+          showing a fabricated rank would be a lie. Real streak instead. */}
       <div style={{ marginTop: 'auto', background: 'var(--invert-bg)', color: '#fff', borderRadius: 16, padding: 16 }}>
-        <div style={{ fontSize: 12, color: 'var(--faint)', fontWeight: 600 }}>{t.league}</div>
+        <div style={{ fontSize: 12, color: 'var(--faint)', fontWeight: 600 }}>{t.streak}</div>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 6 }}>
-          <div style={{ fontSize: 26, fontWeight: 800, color: '#E0A030' }}>#4</div>
-          <div style={{ fontSize: 12, color: 'var(--faint)' }}>/ 30</div>
+          <div style={{ fontSize: 26, fontWeight: 800, color: '#E0A030' }}>{streak}</div>
         </div>
         <div style={{ marginTop: 12, height: 6, background: '#33312D', borderRadius: 6, overflow: 'hidden' }}>
-          <div style={{ width: '72%', height: '100%', background: 'linear-gradient(90deg,#E0A030,var(--accent))' }} />
+          <div style={{ width: `${Math.min(100, (streak / 7) * 100)}%`, height: '100%', background: 'linear-gradient(90deg,#E0A030,var(--accent))' }} />
         </div>
         <div style={{ fontSize: 11.5, color: 'var(--faint)', marginTop: 8 }}>{t.keepGoing}</div>
       </div>

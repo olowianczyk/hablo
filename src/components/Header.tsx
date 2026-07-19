@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useHablo, type Screen, type Direction } from '../store';
+import { useHablo, displayStreak, displayDailyDone, DAILY_GOAL, type Screen, type Direction } from '../store';
 import { useUi } from '../lib/useUi';
 import { accentSwatches } from '../data/content';
 import { IconSun, IconMoon } from './Icons';
@@ -26,7 +26,6 @@ const SPEED_OPTIONS = [
 ];
 
 const CIRC = 100.53;
-const GOAL_PCT = 60;
 
 function useVoices() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
@@ -57,6 +56,8 @@ export function Header() {
   const accent = useHablo((s) => s.accent);
   const setAccent = useHablo((s) => s.setAccent);
   const xp = useHablo((s) => s.xp);
+  const streak = useHablo(displayStreak);
+  const dailyDone = useHablo(displayDailyDone);
 
   const voices = useVoices();
   const voiceList = voices.filter((v) => v.lang && v.lang.toLowerCase().startsWith(target));
@@ -75,16 +76,16 @@ export function Header() {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '6px 12px', fontWeight: 700, fontSize: 13.5 }}>
         <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--accent)' }} />
-        12 <span style={{ color: 'var(--muted)', fontWeight: 600 }}>{t.streak}</span>
+        {streak} <span style={{ color: 'var(--muted)', fontWeight: 600 }}>{t.streak}</span>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: '5px 12px 5px 8px' }}>
         <svg width={34} height={34} viewBox="0 0 40 40">
           <circle cx={20} cy={20} r={16} fill="none" stroke="var(--panel)" strokeWidth={5} />
-          <circle cx={20} cy={20} r={16} fill="none" style={{ stroke: 'var(--accent)' }} strokeWidth={5} strokeLinecap="round" strokeDasharray={`${(GOAL_PCT / 100) * CIRC} ${CIRC}`} transform="rotate(-90 20 20)" />
+          <circle cx={20} cy={20} r={16} fill="none" style={{ stroke: 'var(--accent)' }} strokeWidth={5} strokeLinecap="round" strokeDasharray={`${(Math.min(dailyDone, DAILY_GOAL) / DAILY_GOAL) * CIRC} ${CIRC}`} transform="rotate(-90 20 20)" />
         </svg>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 800 }}>3/5</div>
+          <div style={{ fontSize: 13, fontWeight: 800 }}>{dailyDone}/{DAILY_GOAL}</div>
           <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>{t.dailyGoal}</div>
         </div>
       </div>

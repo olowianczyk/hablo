@@ -1,4 +1,4 @@
-import { useHablo } from '../store';
+import { useHablo, displayStreak } from '../store';
 import { useUi } from '../lib/useUi';
 import { IconVocab, IconBuilder, IconPron, IconReview, IconArrowRight, IconCheckmark } from '../components/Icons';
 
@@ -6,6 +6,7 @@ export function Home() {
   const { t, lang } = useUi();
   const go = useHablo((s) => s.go);
   const xp = useHablo((s) => s.xp);
+  const streak = useHablo(displayStreak);
   const streakFreezes = useHablo((s) => s.streakFreezes);
   const streakFreezeActive = useHablo((s) => s.streakFreezeActive);
   const useFreeze = useHablo((s) => s.useFreeze);
@@ -48,7 +49,7 @@ export function Home() {
               {streakFreezeActive && <div style={{ position: 'absolute', top: -4, right: -4, fontSize: 13 }}>🧊</div>}
             </div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 24, fontWeight: 800, lineHeight: 1 }}>12</div>
+              <div style={{ fontSize: 24, fontWeight: 800, lineHeight: 1 }}>{streak}</div>
               <div style={{ fontSize: 12.5, color: 'var(--muted)', fontWeight: 600 }}>{t.streak}</div>
             </div>
             <div
