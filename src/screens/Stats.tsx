@@ -1,8 +1,25 @@
+import { useEffect } from 'react';
 import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
-import { deckFor, badgesSeed } from '../data/content';
+import { deckFor, badgesSeed, type Word } from '../data/content';
 import { isDueToday } from '../lib/date';
 import { Tap } from '../components/Tap';
+
+// ponytail: level-progress bars always show A1+A2 regardless of which level
+// the user is currently studying, so those two are the one exception to
+// "only load the active level" — loaded here on demand instead of always,
+// same lazy principle applied one screen later.
+function useA1A2WordsForStats() {
+  const extraWords = useHablo((s) => s.extraWords);
+  const loadExtraWords = useHablo((s) => s.loadExtraWords);
+  useEffect(() => {
+    if (!extraWords.A1) import('../data/words.a1.js').then((m: any) => loadExtraWords('A1', mapWords(m.A1WORDS)));
+    if (!extraWords.A2) import('../data/words.a2.js').then((m: any) => loadExtraWords('A2', mapWords(m.A2WORDS)));
+  }, [extraWords.A1, extraWords.A2, loadExtraWords]);
+}
+function mapWords(a: any[]): Word[] {
+  return (a || []).map((w) => ({ es: w[0], en: w[1], pl: w[2], exEs: w[3], exEn: w[4], exPl: w[5] }));
+}
 
 const WEEK_XP = [120, 180, 90, 240, 160, 300, 240];
 const MAX_XP = Math.max(...WEEK_XP);
@@ -16,6 +33,7 @@ const LEARNED = 214;
 
 export function Stats() {
   const { t, lang } = useUi();
+  useA1A2WordsForStats();
   const extraWords = useHablo((s) => s.extraWords);
   const srs = useHablo((s) => s.srs);
   const srsPhrases = useHablo((s) => s.srsPhrases);
