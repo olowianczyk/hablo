@@ -1,4 +1,4 @@
-import { todayISO, addDays } from '../lib/date';
+import { todayISO, addDays } from '../lib/date.ts';
 
 export const DAILY_GOAL = 5;
 

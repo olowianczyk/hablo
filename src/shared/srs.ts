@@ -1,4 +1,4 @@
-import { todayISO, addDays } from '../lib/date';
+import { todayISO, addDays } from '../lib/date.ts';
 
 export type Grade = 'again' | 'hard' | 'good' | 'easy';
 export type SrsProgress = { strength: number; interval?: number; dueAt: string };
