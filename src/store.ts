@@ -8,10 +8,12 @@ import {
 import { fld } from './lib/format';
 import { say, langCode, recognizeOnce, scoreTokens, syllabify, type ScoredToken } from './lib/speech';
 import { todayISO, addDays, isDueToday } from './lib/date';
+import { applySRS, xpForGrade, type Grade } from './shared/srs';
+import { recordActivity, DAILY_GOAL } from './shared/gamification';
 
 export type Screen = 'home' | 'levels' | 'vocab' | 'phrasebook' | 'listen' | 'builder' | 'pronounce' | 'srs' | 'stats';
 export type Direction = 'es>en' | 'es>pl' | 'en>es' | 'en>pl' | 'pl>es' | 'pl>en';
-export type Grade = 'again' | 'hard' | 'good' | 'easy';
+export type { Grade };
 export type ReviewKind = 'vocab' | 'phrasebook' | 'pronounce' | 'listen' | 'builder';
 export type Rec2 = {
   ctx: 'vocab' | 'builder';
@@ -127,26 +129,10 @@ function targetOf(dir: Direction): 'es' | 'en' | 'pl' {
   return dir.split('>')[0] as 'es' | 'en' | 'pl';
 }
 
-export const DAILY_GOAL = 5;
-
-function yesterdayKey(today: string): string {
-  return addDays(today, -1);
-}
-const todayKey = todayISO;
-
-function applySRS(item: SrsItem, grade: Grade): SrsItem {
-  const interval = item.interval ?? 1;
-  if (grade === 'again') {
-    return { ...item, interval: 1, strength: Math.max(5, item.strength - 20), dueAt: todayISO() };
-  }
-  const mult = grade === 'hard' ? 1.2 : grade === 'easy' ? 4 : 2.5;
-  const bump = grade === 'hard' ? 6 : grade === 'easy' ? 22 : 15;
-  const newInterval = Math.max(1, Math.round(interval * mult));
-  return { ...item, interval: newInterval, strength: Math.min(100, item.strength + bump), dueAt: addDays(todayISO(), newInterval) };
-}
+export { DAILY_GOAL };
 
 function replaceInList(list: SrsItem[], es: string, grade: Grade): SrsItem[] {
-  return list.map((it) => (it.es === es ? applySRS(it, grade) : it));
+  return list.map((it) => (it.es === es ? { ...it, ...applySRS(it, grade) } : it));
 }
 
 export const useHablo = create<HabloState>()(
@@ -179,9 +165,8 @@ export const useHablo = create<HabloState>()(
         const target = targetOf(s.dir);
         const deckA = deckFor(s.level, s.extraWords[s.level]);
         const c = deckA[Math.min(s.vIdx, deckA.length - 1)];
-        const xpGain = grade === 'again' ? 5 : grade === 'hard' ? 8 : grade === 'easy' ? 15 : 10;
         set({ srs: c ? replaceInList(s.srs, fld(c, 'es'), grade) : s.srs });
-        get().gainXp(xpGain);
+        get().gainXp(xpForGrade(grade));
         if (get().reviewQueue.length) {
           get().reviewNext(grade);
           return;
@@ -287,19 +272,7 @@ export const useHablo = create<HabloState>()(
           };
         }),
       gainXp: (base) =>
-        set((s) => {
-          const today = todayKey();
-          const xp = s.xp + (s.xpBoost ? base * 2 : base);
-          if (s.lastActiveDate === today) return { xp, dailyDone: s.dailyDone + 1 };
-          const isFirstEver = s.lastActiveDate === null;
-          const isConsecutive = s.lastActiveDate === yesterdayKey(today);
-          const savedByFreeze = !isFirstEver && !isConsecutive && s.streakFreezeActive;
-          const streak = isFirstEver ? 1 : isConsecutive || savedByFreeze ? s.streak + 1 : 1;
-          return {
-            xp, streak, lastActiveDate: today, dailyDone: 1, dailyDate: today,
-            streakFreezeActive: savedByFreeze ? false : s.streakFreezeActive,
-          };
-        }),
+        set((s) => ({ xp: s.xp + (s.xpBoost ? base * 2 : base), ...recordActivity(s) })),
 
       startReview: () => {
         const s = get();
@@ -363,13 +336,13 @@ export const useHablo = create<HabloState>()(
 
 export function displayStreak(s: HabloState): number {
   if (!s.lastActiveDate) return 0;
-  const today = todayKey();
-  if (s.lastActiveDate === today || s.lastActiveDate === yesterdayKey(today)) return s.streak;
+  const today = todayISO();
+  if (s.lastActiveDate === today || s.lastActiveDate === addDays(today, -1)) return s.streak;
   return s.streakFreezeActive ? s.streak : 0;
 }
 
 export function displayDailyDone(s: HabloState): number {
-  return s.dailyDate === todayKey() ? Math.min(s.dailyDone, DAILY_GOAL) : 0;
+  return s.dailyDate === todayISO() ? Math.min(s.dailyDone, DAILY_GOAL) : 0;
 }
 
 export { targetOf };
