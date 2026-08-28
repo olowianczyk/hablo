@@ -5,6 +5,7 @@ import { fld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud } from '../components/Icons';
 import { Tap } from '../components/Tap';
+import { ChromeNote } from '../components/ChromeNote';
 
 const WF_HEIGHTS = [8, 15, 26, 13, 30, 19, 34, 11, 28, 17, 32, 21, 10, 24, 30, 16, 25, 14, 20, 28, 12, 22, 18, 10];
 
@@ -18,6 +19,7 @@ export function Pronunciation() {
   const recScore = useHablo((s) => s.recScore);
   const syllables = useHablo((s) => s.syllables);
   const heard = useHablo((s) => s.heard);
+  const recError = useHablo((s) => s.recError);
   const metrics = useHablo((s) => s.metrics);
   const tip = useHablo((s) => s.tip);
   const startRec = useHablo((s) => s.startRec);
@@ -91,10 +93,15 @@ export function Pronunciation() {
           </Tap>
         </div>
         {recIdle && <div style={{ fontSize: 13.5, color: 'var(--faint)', fontWeight: 600, marginTop: 16 }}>{t.record}</div>}
+        <ChromeNote />
         {recording && <div style={{ fontSize: 13.5, color: 'var(--accent)', fontWeight: 700, marginTop: 16 }}>{t.listening}</div>}
       </div>
 
-      {recDone && (
+      {recDone && recError && (
+        <div role="alert" style={{ marginTop: 16, background: 'var(--warn-soft)', color: 'var(--warn)', fontWeight: 700, fontSize: 14, padding: '14px 18px', borderRadius: 14 }}>{tip}</div>
+      )}
+
+      {recDone && !recError && (
         <div style={{ marginTop: 16, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 22, padding: '26px 28px', animation: 'hb-rise .3s ease' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 22 }}>
             <div style={{ textAlign: 'center', flex: 'none' }}>

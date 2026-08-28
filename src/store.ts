@@ -3,10 +3,10 @@ import { persist } from 'zustand/middleware';
 import {
   type Level, type Challenge, type SrsItem, type Word, type PhraseCategory,
   challengesSeed, srsSeed, srsPhrasesSeed, srsPronSeed, srsDictSeed, srsBuilderSeed,
-  deckFor, pronFor, dictFor,
+  deckFor, pronFor, dictFor, strings,
 } from './data/content';
 import { fld } from './lib/format';
-import { say, langCode, recognizeOnce, scoreTokens, syllabify, type ScoredToken } from './lib/speech';
+import { say, langCode, recognizeOnce, scoreSpeech, similarity, syllabify, type ScoredToken, type RecError } from './lib/speech';
 import { todayISO, addDays, isDueToday } from './lib/date';
 import { applySRS, xpForGrade, type Grade } from './shared/srs';
 import { recordActivity, DAILY_GOAL } from './shared/gamification';
@@ -24,6 +24,7 @@ export type Rec2 = {
   tokens?: ScoredToken[];
   heard?: string;
   tip?: string;
+  error?: RecError;
 };
 
 interface HabloState {
@@ -61,6 +62,7 @@ interface HabloState {
   recScore: number;
   syllables: { text: string; pct: string; width: string; color: string }[];
   heard: string;
+  recError: RecError;
   metrics: { key: string; v: number }[];
   tip: string;
   rec2: Rec2 | null;
@@ -135,6 +137,11 @@ function replaceInList(list: SrsItem[], es: string, grade: Grade): SrsItem[] {
   return list.map((it) => (it.es === es ? { ...it, ...applySRS(it, grade) } : it));
 }
 
+function recErrorTip(error: RecError, base: 'es' | 'en' | 'pl'): string {
+  const key = ({ unsupported: 'recUnsupported', 'not-allowed': 'recDenied', 'no-speech': 'recNoSpeech' } as const)[error as 'unsupported'] || 'recFailed';
+  return strings[base][key];
+}
+
 export const useHablo = create<HabloState>()(
   persist(
     (set, get) => ({
@@ -146,7 +153,7 @@ export const useHablo = create<HabloState>()(
       vIdx: 0, vFlip: false,
       slots: [], builderChecked: false,
       dIdx: 0, dInput: '', dChecked: false,
-      pWord: 0, recording: false, recDone: false, recScore: 0, syllables: [], heard: '', metrics: [], tip: '', rec2: null,
+      pWord: 0, recording: false, recDone: false, recScore: 0, syllables: [], heard: '', recError: null, metrics: [], tip: '', rec2: null,
 
       reviewQueue: [], reviewPos: 0, reviewDone: false,
 
@@ -211,45 +218,45 @@ export const useHablo = create<HabloState>()(
 
       selectWord: (i) => set({ pWord: i, recording: false, recDone: false }),
       startRec: () => {
-        set({ recording: true, recDone: false });
+        set({ recording: true, recDone: false, recError: null });
         const s = get();
         const list = pronFor(s.level);
         const p = list[Math.min(s.pWord, list.length - 1)];
-        recognizeOnce('es-ES', ({ transcript }) => {
+        const base = s.dir.split('>')[1] as 'es' | 'en' | 'pl';
+        recognizeOnce('es-ES', ({ transcript, error }) => {
           if (!get().recording) return;
-          const syl = p.syl.map((tx, i) => {
-            const pct = p.scores[i];
-            const color = pct >= 85 ? 'var(--good)' : pct >= 70 ? 'var(--warn)' : 'var(--accent-strong)';
-            return { text: tx, pct: pct + '%', width: pct + '%', color };
+          const toks = scoreSpeech(p.syl, transcript, 'word');
+          const syl = toks.map((k) => ({ text: k.t, pct: k.pct, width: k.width, color: k.color }));
+          const score = transcript ? similarity(p.es, transcript) : 0;
+          const coverage = Math.round(toks.reduce((a, b) => a + b.num, 0) / toks.length);
+          set({
+            recording: false,
+            recDone: true,
+            recError: error,
+            recScore: score,
+            syllables: syl,
+            heard: transcript || '',
+            metrics: error ? [] : [{ key: 'accuracy', v: score }, { key: 'completeness', v: coverage }],
+            tip: error ? recErrorTip(error, base) : base === 'pl' ? p.tipPl : p.tipEn,
           });
-          const score = Math.round(p.scores.reduce((a, b) => a + b, 0) / p.scores.length);
-          const clamp = (n: number) => Math.max(55, Math.min(100, Math.round(n)));
-          const metrics = [
-            { key: 'accuracy', v: score },
-            { key: 'fluency', v: clamp(score - 4) },
-            { key: 'completeness', v: 96 },
-            { key: 'intonation', v: clamp(score - 2) },
-          ];
-          const base = s.dir.split('>')[1];
-          const tip = base === 'pl' ? p.tipPl : p.tipEn;
-          set({ recording: false, recDone: true, recScore: score, syllables: syl, heard: transcript || p.es, metrics, tip });
         });
       },
       startRec2: (text, mode, ctx) => {
         set({ rec2: { ctx, target: text, active: true, done: false } });
-        recognizeOnce('es-ES', ({ transcript }) => {
+        const base = get().dir.split('>')[1] as 'es' | 'en' | 'pl';
+        recognizeOnce('es-ES', ({ transcript, error }) => {
           const cur = get().rec2;
           if (!cur || cur.target !== text || !cur.active) return;
-          const toks = scoreTokens(text, mode);
-          const score = Math.round(toks.reduce((a, b) => a + b.num, 0) / toks.length);
+          const tokens = mode === 'sentence' ? text.trim().split(/\s+/) : syllabify(text);
+          const toks = scoreSpeech(tokens, transcript, mode);
+          const score = transcript ? similarity(text, transcript) : 0;
           let wi = 0;
           toks.forEach((x, i) => {
             if (x.num < toks[wi].num) wi = i;
           });
-          const tip = `Focus on "${toks[wi].t}" — slow down and match the model audio.`;
-          set({ rec2: { ctx, target: text, active: false, done: true, score, tokens: toks, heard: transcript || text, tip } });
+          const tip = error ? recErrorTip(error, base) : `Focus on "${toks[wi].t}" — slow down and match the model audio.`;
+          set({ rec2: { ctx, target: text, active: false, done: true, score, tokens: toks, heard: transcript || '', tip, error } });
         });
-        void syllabify;
       },
 
       toggleDark: () => set((s) => ({ dark: !s.dark })),

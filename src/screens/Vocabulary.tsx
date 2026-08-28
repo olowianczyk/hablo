@@ -5,6 +5,7 @@ import { fld, exFld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud, IconMic } from '../components/Icons';
 import { Tap } from '../components/Tap';
+import { ChromeNote } from '../components/ChromeNote';
 import { onActivateKey } from '../lib/a11y';
 
 const TOPIC: Record<string, Record<'en' | 'pl' | 'es', string>> = {
@@ -33,7 +34,8 @@ export function Vocabulary() {
   const cardEs = fld(c, target);
   const cardTr = fld(c, base);
   const hasEx = !!exFld(c, target);
-  const showResult = !!(rec2 && rec2.ctx === 'vocab' && rec2.done);
+  const showResult = !!(rec2 && rec2.ctx === 'vocab' && rec2.done && !rec2.error);
+  const showRecError = !!(rec2 && rec2.ctx === 'vocab' && rec2.done && rec2.error);
   const pwActive = !!(rec2 && rec2.active);
   const pwScore = rec2 ? (rec2.score || 0) : 0;
   const pwColor = showResult ? (pwScore >= 90 ? 'var(--good)' : pwScore >= 75 ? 'var(--warn)' : 'var(--accent-strong)') : 'var(--good)';
@@ -98,6 +100,10 @@ export function Vocabulary() {
             <div style={{ fontSize: 12.5, color: 'var(--faint)' }}>{pwActive ? t.listening : t.checkPronSub}</div>
           </div>
         </div>
+        <ChromeNote />
+        {showRecError && rec2 && (
+          <div role="alert" style={{ marginTop: 12, background: 'var(--warn-soft)', color: 'var(--warn)', fontWeight: 700, fontSize: 12.5, padding: '10px 13px', borderRadius: 12 }}>{rec2.tip}</div>
+        )}
         {showResult && rec2 && (
           <div style={{ marginTop: 14, borderTop: '1px solid var(--panel)', paddingTop: 14 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

@@ -3,6 +3,7 @@ import { useUi } from '../lib/useUi';
 import { isDueToday } from '../lib/date';
 import { IconVocab, IconBuilder, IconPron, IconReview, IconArrowRight, IconCheckmark, IconLevels, IconListen } from '../components/Icons';
 import { Tap } from '../components/Tap';
+import { ChromeNote } from '../components/ChromeNote';
 
 export function Home() {
   const { t, lang } = useUi();
@@ -28,6 +29,7 @@ export function Home() {
 
   return (
     <div>
+      <ChromeNote />
       <div className="hb-hero-row" style={{ display: 'flex', gap: 20, alignItems: 'stretch', flexWrap: 'wrap' }}>
         <div className="hb-hero-card" style={{ flex: 1, minWidth: 340, background: 'linear-gradient(135deg,var(--accent),var(--accent-strong))', borderRadius: 22, padding: '28px 30px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', right: -30, bottom: -30, width: 150, height: 150, borderRadius: '50%', background: 'rgba(255,255,255,.08)' }} />
