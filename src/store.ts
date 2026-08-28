@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import {
   type Level, type Challenge, type SrsItem, type Word, type PhraseCategory,
   challengesSeed, srsSeed, srsPhrasesSeed, srsPronSeed, srsDictSeed, srsBuilderSeed,
-  deckFor, pronFor, dictFor, strings,
+  deckFor, pronFor, dictFor, buildersFor, strings,
 } from './data/content';
 import { fld } from './lib/format';
 import { say, langCode, recognizeOnce, scoreSpeech, similarity, syllabify, type ScoredToken, type RecError } from './lib/speech';
@@ -51,6 +51,7 @@ interface HabloState {
 
   slots: number[];
   builderChecked: boolean;
+  bIdx: number;
 
   dIdx: number;
   dInput: string;
@@ -92,6 +93,7 @@ interface HabloState {
   removeSlot: (id: number) => void;
   clearSlots: () => void;
   checkBuilder: () => void;
+  builderNext: () => void;
 
   dictType: (v: string) => void;
   dictCheck: () => void;
@@ -151,7 +153,7 @@ export const useHablo = create<HabloState>()(
       streak: 0, lastActiveDate: null, dailyDone: 0, dailyDate: null,
 
       vIdx: 0, vFlip: false,
-      slots: [], builderChecked: false,
+      slots: [], builderChecked: false, bIdx: 0,
       dIdx: 0, dInput: '', dChecked: false,
       pWord: 0, recording: false, recDone: false, recScore: 0, syllables: [], heard: '', recError: null, metrics: [], tip: '', rec2: null,
 
@@ -163,8 +165,8 @@ export const useHablo = create<HabloState>()(
       showInstall: false,
 
       go: (screen) => set({ screen }),
-      pickLevel: (level) => set({ level, vIdx: 0, vFlip: false, slots: [], builderChecked: false, pWord: 0, recording: false, recDone: false, rec2: null, dIdx: 0, dInput: '', dChecked: false }),
-      setLevel: (level) => set({ level, screen: 'vocab', vIdx: 0, vFlip: false, slots: [], builderChecked: false, pWord: 0, recording: false, recDone: false, rec2: null, dIdx: 0, dInput: '', dChecked: false }),
+      pickLevel: (level) => set({ level, vIdx: 0, vFlip: false, slots: [], builderChecked: false, bIdx: 0, pWord: 0, recording: false, recDone: false, rec2: null, dIdx: 0, dInput: '', dChecked: false }),
+      setLevel: (level) => set({ level, screen: 'vocab', vIdx: 0, vFlip: false, slots: [], builderChecked: false, bIdx: 0, pWord: 0, recording: false, recDone: false, rec2: null, dIdx: 0, dInput: '', dChecked: false }),
       flip: () => set((s) => ({ vFlip: !s.vFlip })),
 
       rate: (grade) => {
@@ -187,6 +189,10 @@ export const useHablo = create<HabloState>()(
       removeSlot: (id) => set((s) => ({ slots: s.slots.filter((x) => x !== id), builderChecked: false, rec2: null })),
       clearSlots: () => set({ slots: [], builderChecked: false, rec2: null }),
       checkBuilder: () => set({ builderChecked: true }),
+      builderNext: () => {
+        const list = buildersFor(get().level);
+        set((s) => ({ bIdx: (s.bIdx + 1) % list.length, slots: [], builderChecked: false, rec2: null }));
+      },
 
       dictType: (v) => set({ dInput: v }),
       dictCheck: () => set({ dChecked: true }),
@@ -237,7 +243,7 @@ export const useHablo = create<HabloState>()(
             syllables: syl,
             heard: transcript || '',
             metrics: error ? [] : [{ key: 'accuracy', v: score }, { key: 'completeness', v: coverage }],
-            tip: error ? recErrorTip(error, base) : base === 'pl' ? p.tipPl : p.tipEn,
+            tip: error ? recErrorTip(error, base) : base === 'pl' ? p.tipPl : base === 'es' ? p.tipEs : p.tipEn,
           });
         });
       },

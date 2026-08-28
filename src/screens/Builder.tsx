@@ -1,6 +1,6 @@
 import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
-import { builderFor, bankFor } from '../data/content';
+import { builderFor, bankFor, buildersFor } from '../data/content';
 import { fld } from '../lib/format';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud, IconMic } from '../components/Icons';
@@ -12,6 +12,8 @@ export function Builder() {
   const level = useHablo((s) => s.level);
   const slots = useHablo((s) => s.slots);
   const builderChecked = useHablo((s) => s.builderChecked);
+  const bIdx = useHablo((s) => s.bIdx);
+  const builderNext = useHablo((s) => s.builderNext);
   const addSlot = useHablo((s) => s.addSlot);
   const removeSlot = useHablo((s) => s.removeSlot);
   const clearSlots = useHablo((s) => s.clearSlots);
@@ -20,8 +22,9 @@ export function Builder() {
   const rec2 = useHablo((s) => s.rec2);
   const startRec2 = useHablo((s) => s.startRec2);
 
-  const sentence = builderFor(level);
-  const bank = bankFor(level);
+  const sentences = buildersFor(level);
+  const sentence = builderFor(level, bIdx);
+  const bank = bankFor(level, bIdx);
   const byId = (id: number) => bank.find((b) => b.id === id)!;
   const correct = slots.map((id) => byId(id).es).join(' ') === sentence.target.join(' ');
   const sentenceEs = sentence.target.join(' ');
@@ -44,6 +47,7 @@ export function Builder() {
       <div style={{ marginTop: 20, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: '18px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
         <div style={{ flex: 1 }}>
           <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--faint)', textTransform: 'uppercase', letterSpacing: '.06em' }}>{t.build}</span>
+          <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--faint)', marginLeft: 8, fontFamily: "'JetBrains Mono',monospace" }}>{Math.min(bIdx, sentences.length - 1) + 1} / {sentences.length}</span>
           <div style={{ fontSize: 17, fontWeight: 700, marginTop: 3 }}>{prompt}</div>
         </div>
         <Tap onClick={() => speak(sentenceEs, 'es-ES')} aria-label={t.listen} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
@@ -70,6 +74,7 @@ export function Builder() {
       <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
         <Tap onClick={checkBuilder} style={{ flex: 1, textAlign: 'center', background: 'var(--accent)', color: '#fff', fontWeight: 800, fontSize: 15, padding: 14, borderRadius: 14 }}>{t.check}</Tap>
         <Tap onClick={clearSlots} style={{ textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--muted)', fontWeight: 700, fontSize: 15, padding: '14px 22px', borderRadius: 14 }}>{t.clear}</Tap>
+        <Tap onClick={builderNext} style={{ textAlign: 'center', background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 15, padding: '14px 22px', borderRadius: 14 }}>{t.nextSentence}</Tap>
       </div>
 
       {builderChecked && (
