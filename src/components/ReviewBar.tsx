@@ -11,8 +11,8 @@ export function ReviewBar() {
 
   if (!reviewQueue.length) return null;
 
-  const reviewingLabel = { pl: 'Powtórka', es: 'Repaso', en: 'Reviewing' }[lang];
-  const nextLabel = { pl: 'Dalej', es: 'Siguiente', en: 'Next' }[lang];
+  const reviewingLabel = { pl: 'Powtórka', es: 'Repaso', en: 'Reviewing', de: 'Wiederholung' }[lang];
+  const nextLabel = { pl: 'Dalej', es: 'Siguiente', en: 'Next', de: 'Weiter' }[lang];
 
   return (
     <div

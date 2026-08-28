@@ -8,11 +8,11 @@ import { Tap } from '../components/Tap';
 import { ChromeNote } from '../components/ChromeNote';
 import { onActivateKey } from '../lib/a11y';
 
-const TOPIC: Record<string, Record<'en' | 'pl' | 'es', string>> = {
-  A1: { en: 'Basics', pl: 'Podstawy', es: 'Básico' },
-  A2: { en: 'Past tense & shopping', pl: 'Przeszłość i zakupy', es: 'Pasado y compras' },
-  B1: { en: 'Society & opinions', pl: 'Społeczeństwo i opinie', es: 'Sociedad y opiniones' },
-  B2: { en: 'Abstract & nuance', pl: 'Abstrakcja i niuanse', es: 'Abstracción y matices' },
+const TOPIC: Record<string, Record<'en' | 'pl' | 'es' | 'de', string>> = {
+  A1: { en: 'Basics', pl: 'Podstawy', es: 'Básico', de: 'Grundlagen' },
+  A2: { en: 'Past tense & shopping', pl: 'Przeszłość i zakupy', es: 'Pasado y compras', de: 'Vergangenheit & Einkaufen' },
+  B1: { en: 'Society & opinions', pl: 'Społeczeństwo i opinie', es: 'Sociedad y opiniones', de: 'Gesellschaft & Meinungen' },
+  B2: { en: 'Abstract & nuance', pl: 'Abstrakcja i niuanse', es: 'Abstracción y matices', de: 'Abstraktion & Nuancen' },
 };
 
 export function Vocabulary() {

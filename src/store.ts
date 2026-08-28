@@ -5,14 +5,18 @@ import {
   challengesSeed, srsSeed, srsPhrasesSeed, srsPronSeed, srsDictSeed, srsBuilderSeed,
   deckFor, pronFor, dictFor, buildersFor, strings,
 } from './data/content';
-import { fld } from './lib/format';
+import { fld, type Lang } from './lib/format';
 import { say, langCode, recognizeOnce, scoreSpeech, similarity, syllabify, type ScoredToken, type RecError } from './lib/speech';
 import { todayISO, addDays, isDueToday } from './lib/date';
 import { applySRS, xpForGrade, type Grade } from './shared/srs';
 import { recordActivity, DAILY_GOAL } from './shared/gamification';
 
 export type Screen = 'home' | 'levels' | 'vocab' | 'phrasebook' | 'listen' | 'builder' | 'pronounce' | 'srs' | 'stats';
-export type Direction = 'es>en' | 'es>pl' | 'en>es' | 'en>pl' | 'pl>es' | 'pl>en';
+export type Direction =
+  | 'es>en' | 'es>pl' | 'es>de'
+  | 'en>es' | 'en>pl' | 'en>de'
+  | 'pl>es' | 'pl>en' | 'pl>de'
+  | 'de>es' | 'de>en' | 'de>pl';
 export type { Grade };
 export type ReviewKind = 'vocab' | 'phrasebook' | 'pronounce' | 'listen' | 'builder';
 export type Rec2 = {
@@ -129,8 +133,11 @@ interface HabloState {
   speakSlow: (text: string, code?: string) => void;
 }
 
-function targetOf(dir: Direction): 'es' | 'en' | 'pl' {
-  return dir.split('>')[0] as 'es' | 'en' | 'pl';
+function targetOf(dir: Direction): Lang {
+  return dir.split('>')[0] as Lang;
+}
+function baseOf(dir: Direction): Lang {
+  return dir.split('>')[1] as Lang;
 }
 
 export { DAILY_GOAL };
@@ -139,7 +146,7 @@ function replaceInList(list: SrsItem[], es: string, grade: Grade): SrsItem[] {
   return list.map((it) => (it.es === es ? { ...it, ...applySRS(it, grade) } : it));
 }
 
-function recErrorTip(error: RecError, base: 'es' | 'en' | 'pl'): string {
+function recErrorTip(error: RecError, base: Lang): string {
   const key = ({ unsupported: 'recUnsupported', 'not-allowed': 'recDenied', 'no-speech': 'recNoSpeech' } as const)[error as 'unsupported'] || 'recFailed';
   return strings[base][key];
 }
@@ -190,7 +197,7 @@ export const useHablo = create<HabloState>()(
       clearSlots: () => set({ slots: [], builderChecked: false, rec2: null }),
       checkBuilder: () => set({ builderChecked: true }),
       builderNext: () => {
-        const list = buildersFor(get().level);
+        const list = buildersFor(get().level, targetOf(get().dir));
         set((s) => ({ bIdx: (s.bIdx + 1) % list.length, slots: [], builderChecked: false, rec2: null }));
       },
 
@@ -226,14 +233,16 @@ export const useHablo = create<HabloState>()(
       startRec: () => {
         set({ recording: true, recDone: false, recError: null });
         const s = get();
-        const list = pronFor(s.level);
+        const target = targetOf(s.dir);
+        const list = pronFor(s.level, target);
         const p = list[Math.min(s.pWord, list.length - 1)];
-        const base = s.dir.split('>')[1] as 'es' | 'en' | 'pl';
-        recognizeOnce('es-ES', ({ transcript, error }) => {
+        const word = fld(p, target);
+        const base = baseOf(s.dir);
+        recognizeOnce(langCode(target), ({ transcript, error }) => {
           if (!get().recording) return;
           const toks = scoreSpeech(p.syl, transcript, 'word');
           const syl = toks.map((k) => ({ text: k.t, pct: k.pct, width: k.width, color: k.color }));
-          const score = transcript ? similarity(p.es, transcript) : 0;
+          const score = transcript ? similarity(word, transcript) : 0;
           const coverage = Math.round(toks.reduce((a, b) => a + b.num, 0) / toks.length);
           set({
             recording: false,
@@ -243,14 +252,14 @@ export const useHablo = create<HabloState>()(
             syllables: syl,
             heard: transcript || '',
             metrics: error ? [] : [{ key: 'accuracy', v: score }, { key: 'completeness', v: coverage }],
-            tip: error ? recErrorTip(error, base) : base === 'pl' ? p.tipPl : base === 'es' ? p.tipEs : p.tipEn,
+            tip: error ? recErrorTip(error, base) : base === 'pl' ? p.tipPl : base === 'es' ? p.tipEs : base === 'de' ? p.tipDe || p.tipEn : p.tipEn,
           });
         });
       },
       startRec2: (text, mode, ctx) => {
         set({ rec2: { ctx, target: text, active: true, done: false } });
-        const base = get().dir.split('>')[1] as 'es' | 'en' | 'pl';
-        recognizeOnce('es-ES', ({ transcript, error }) => {
+        const base = baseOf(get().dir);
+        recognizeOnce(langCode(targetOf(get().dir)), ({ transcript, error }) => {
           const cur = get().rec2;
           if (!cur || cur.target !== text || !cur.active) return;
           const tokens = mode === 'sentence' ? text.trim().split(/\s+/) : syllabify(text);
@@ -358,4 +367,4 @@ export function displayDailyDone(s: HabloState): number {
   return s.dailyDate === todayISO() ? Math.min(s.dailyDone, DAILY_GOAL) : 0;
 }
 
-export { targetOf };
+export { targetOf, baseOf };

@@ -17,7 +17,7 @@ export function Review() {
   const go = useHablo((s) => s.go);
 
   const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => isDueToday(i.dueAt)).length, 0);
-  const reviewDoneLabel = { pl: 'Sesja ukończona! 🎉', es: '¡Sesión completada! 🎉', en: 'Session complete! 🎉' }[lang];
+  const reviewDoneLabel = { pl: 'Sesja ukończona! 🎉', es: '¡Sesión completada! 🎉', en: 'Session complete! 🎉', de: 'Sitzung abgeschlossen! 🎉' }[lang];
 
   return (
     <div>

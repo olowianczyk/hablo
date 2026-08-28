@@ -56,8 +56,8 @@ export function say(text: string, lang: string, rate: number, voiceURI?: string)
   }
 }
 
-export function langCode(target: 'es' | 'en' | 'pl'): string {
-  return { es: 'es-ES', en: 'en-US', pl: 'pl-PL' }[target];
+export function langCode(target: 'es' | 'en' | 'pl' | 'de'): string {
+  return { es: 'es-ES', en: 'en-US', pl: 'pl-PL', de: 'de-DE' }[target];
 }
 
 export type RecError = 'unsupported' | 'not-allowed' | 'no-speech' | 'error' | null;

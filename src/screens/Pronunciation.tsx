@@ -2,6 +2,7 @@ import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
 import { pronFor } from '../data/content';
 import { fld } from '../lib/format';
+import { langCode } from '../lib/speech';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud } from '../components/Icons';
 import { Tap } from '../components/Tap';
@@ -10,7 +11,7 @@ import { ChromeNote } from '../components/ChromeNote';
 const WF_HEIGHTS = [8, 15, 26, 13, 30, 19, 34, 11, 28, 17, 32, 21, 10, 24, 30, 16, 25, 14, 20, 28, 12, 22, 18, 10];
 
 export function Pronunciation() {
-  const { t, base } = useUi();
+  const { t, base, target } = useUi();
   const level = useHablo((s) => s.level);
   const pWord = useHablo((s) => s.pWord);
   const selectWord = useHablo((s) => s.selectWord);
@@ -26,7 +27,7 @@ export function Pronunciation() {
   const speak = useHablo((s) => s.speak);
   const goReview = useHablo((s) => s.go);
 
-  const words = pronFor(level);
+  const words = pronFor(level, target);
   const cp = words[Math.min(pWord, words.length - 1)];
   const scoreColor = recScore >= 90 ? 'var(--good)' : recScore >= 75 ? 'var(--warn)' : 'var(--accent-strong)';
   const verdict = recScore >= 90 ? t.great : recScore >= 75 ? t.goodJob : t.keepPracticing;
@@ -53,16 +54,16 @@ export function Pronunciation() {
               aria-pressed={on}
               style={{ fontWeight: 700, fontSize: 14, padding: '9px 15px', borderRadius: 11, background: on ? 'var(--accent)' : '#ffffff', color: on ? '#ffffff' : 'var(--ink-2)', border: `1px solid ${on ? 'var(--accent)' : 'var(--border-2)'}` }}
             >
-              {w.es}
+              {fld(w, target)}
             </Tap>
           );
         })}
       </div>
 
       <div style={{ marginTop: 18, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 24, padding: '32px 28px', textAlign: 'center' }}>
-        <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.02em' }}>{cp.es}</div>
+        <div style={{ fontSize: 40, fontWeight: 800, letterSpacing: '-.02em' }}>{fld(cp, target)}</div>
         <div style={{ fontSize: 15, color: 'var(--muted)', marginTop: 6 }}>{fld(cp, base)}</div>
-        <Tap onClick={() => speak(cp.es, 'es-ES')} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 14, color: 'var(--accent-strong)', fontWeight: 700, fontSize: 13.5 }}>
+        <Tap onClick={() => speak(fld(cp, target), langCode(target))} style={{ display: 'inline-flex', alignItems: 'center', gap: 7, marginTop: 14, color: 'var(--accent-strong)', fontWeight: 700, fontSize: 13.5 }}>
           <IconSpeakerLoud size={16} />
           {t.listen}
         </Tap>
@@ -130,7 +131,7 @@ export function Pronunciation() {
           <div style={{ display: 'flex', gap: 12, marginTop: 20 }}>
             <div style={{ flex: 1, background: 'var(--panel-soft)', borderRadius: 13, padding: '13px 15px' }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--faint)', textTransform: 'uppercase', letterSpacing: '.05em' }}>{t.targetLabel}</div>
-              <div style={{ fontSize: 16, fontWeight: 700, marginTop: 3 }}>{cp.es}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, marginTop: 3 }}>{fld(cp, target)}</div>
             </div>
             <div style={{ flex: 1, background: 'var(--good-soft)', borderRadius: 13, padding: '13px 15px' }}>
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--good)', textTransform: 'uppercase', letterSpacing: '.05em' }}>{t.weHeard}</div>

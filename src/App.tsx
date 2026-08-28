@@ -15,7 +15,7 @@ import { Builder } from './screens/Builder';
 import { Pronunciation } from './screens/Pronunciation';
 import { Review } from './screens/Review';
 import { Stats } from './screens/Stats';
-import type { Word, PhraseCategory } from './data/content';
+import { loadWords, loadPhrases } from './data/load';
 
 const SCREENS: Record<string, () => React.ReactElement | null> = {
   home: Home, levels: Levels, vocab: Vocabulary, phrasebook: Phrasebook,
@@ -34,20 +34,12 @@ function useLevelContent() {
 
   useEffect(() => {
     if (hasWords) return;
-    const lv = level.toLowerCase();
-    import(`./data/words.${lv}.js`).then((m: any) => {
-      const map = (a: any[]) => (a || []).map((w) => ({ es: w[0], en: w[1], pl: w[2], exEs: w[3], exEn: w[4], exPl: w[5] } as Word));
-      loadExtraWords(level, map(m[`${level}WORDS`]));
-    });
+    loadWords(level).then((words) => loadExtraWords(level, words));
   }, [level, hasWords, loadExtraWords]);
 
   useEffect(() => {
     if (hasPhrases) return;
-    const lv = level.toLowerCase();
-    import(`./data/phrases.${lv}.js`).then((m: any) => {
-      const cat = (c: any): PhraseCategory => ({ titleEn: c.titleEn, titlePl: c.titlePl, phrases: (c.phrases || []).map((p: any) => ({ es: p[0], en: p[1], pl: p[2] })) });
-      loadExtraPhrases(level, (m[`${level}PHRASES`] || []).map(cat));
-    });
+    loadPhrases(level).then((cats) => loadExtraPhrases(level, cats));
   }, [level, hasPhrases, loadExtraPhrases]);
 }
 

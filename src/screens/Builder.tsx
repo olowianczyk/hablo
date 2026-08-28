@@ -2,13 +2,14 @@ import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
 import { builderFor, bankFor, buildersFor } from '../data/content';
 import { fld } from '../lib/format';
+import { langCode } from '../lib/speech';
 import { LevelToggle } from '../components/LevelToggle';
 import { IconSpeakerLoud, IconMic } from '../components/Icons';
 import { Tap } from '../components/Tap';
 import { ChromeNote } from '../components/ChromeNote';
 
 export function Builder() {
-  const { t, lang, base } = useUi();
+  const { t, base, target } = useUi();
   const level = useHablo((s) => s.level);
   const slots = useHablo((s) => s.slots);
   const builderChecked = useHablo((s) => s.builderChecked);
@@ -22,13 +23,13 @@ export function Builder() {
   const rec2 = useHablo((s) => s.rec2);
   const startRec2 = useHablo((s) => s.startRec2);
 
-  const sentences = buildersFor(level);
-  const sentence = builderFor(level, bIdx);
-  const bank = bankFor(level, bIdx);
+  const sentences = buildersFor(level, target);
+  const sentence = builderFor(level, bIdx, target);
+  const bank = bankFor(level, bIdx, target);
   const byId = (id: number) => bank.find((b) => b.id === id)!;
-  const correct = slots.map((id) => byId(id).es).join(' ') === sentence.target.join(' ');
-  const sentenceEs = sentence.target.join(' ');
-  const prompt = lang === 'pl' ? sentence.pl : sentence.en;
+  const correct = slots.map((id) => byId(id).w).join(' ') === sentence.target.join(' ');
+  const full = sentence.target.join(' ');
+  const prompt = fld(sentence, base);
 
   const showResult = !!(rec2 && rec2.ctx === 'builder' && rec2.done && !rec2.error);
   const showRecError = !!(rec2 && rec2.ctx === 'builder' && rec2.done && rec2.error);
@@ -50,7 +51,7 @@ export function Builder() {
           <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--faint)', marginLeft: 8, fontFamily: "'JetBrains Mono',monospace" }}>{Math.min(bIdx, sentences.length - 1) + 1} / {sentences.length}</span>
           <div style={{ fontSize: 17, fontWeight: 700, marginTop: 3 }}>{prompt}</div>
         </div>
-        <Tap onClick={() => speak(sentenceEs, 'es-ES')} aria-label={t.listen} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+        <Tap onClick={() => speak(full, langCode(target))} aria-label={t.listen} style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
           <IconSpeakerLoud size={18} color="var(--accent-strong)" />
         </Tap>
       </div>
@@ -58,7 +59,7 @@ export function Builder() {
       <div style={{ marginTop: 16, minHeight: 72, background: 'var(--panel-soft)', border: '2px dashed var(--border-2)', borderRadius: 16, padding: 16, display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', alignContent: 'center' }}>
         {slots.map((id) => (
           <Tap key={id} onClick={() => removeSlot(id)} style={{ background: 'var(--invert-bg)', color: '#fff', fontWeight: 700, fontSize: 15, padding: '11px 16px', borderRadius: 12, boxShadow: '0 3px 8px rgba(0,0,0,.15)' }}>
-            {byId(id).es}
+            {byId(id).w}
           </Tap>
         ))}
       </div>
@@ -66,7 +67,7 @@ export function Builder() {
       <div style={{ marginTop: 16, display: 'flex', flexWrap: 'wrap', gap: 10 }}>
         {bank.filter((b) => !slots.includes(b.id)).map((b) => (
           <Tap key={b.id} onClick={() => addSlot(b.id)} style={{ background: 'var(--surface)', border: '1px solid var(--border-2)', color: 'var(--ink)', fontWeight: 700, fontSize: 15, padding: '11px 16px', borderRadius: 12 }}>
-            {b.es}
+            {b.w}
           </Tap>
         ))}
       </div>
@@ -86,7 +87,7 @@ export function Builder() {
       <div style={{ marginTop: 20, background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
           <Tap
-            onClick={() => startRec2(sentenceEs, 'sentence', 'builder')}
+            onClick={() => startRec2(full, 'sentence', 'builder')}
             aria-label={t.checkSentencePron}
             style={{ width: 48, height: 48, borderRadius: '50%', background: pwActive ? 'var(--accent-strong)' : 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none', animation: pwActive ? 'hb-pulse 1.4s infinite' : 'none' }}
           >
@@ -131,10 +132,10 @@ export function Builder() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginTop: 12 }}>
           {sentence.glossary.map((g, i) => (
             <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '9px 4px', borderTop: '1px solid var(--border)' }}>
-              <Tap onClick={() => speak(g.es, 'es-ES')} aria-label={t.listen} style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
+              <Tap onClick={() => speak(fld(g, target), langCode(target))} aria-label={t.listen} style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', flex: 'none' }}>
                 <IconSpeakerLoud size={15} color="var(--accent-strong)" />
               </Tap>
-              <div style={{ fontWeight: 700, fontSize: 15, minWidth: 80 }}>{g.es}</div>
+              <div style={{ fontWeight: 700, fontSize: 15, minWidth: 80 }}>{fld(g, target)}</div>
               <div style={{ fontSize: 14, color: 'var(--muted)' }}>{fld(g, base)}</div>
             </div>
           ))}

@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { useHablo } from '../store';
 import { useUi } from '../lib/useUi';
-import { deckFor, badgesSeed, type Word } from '../data/content';
+import { deckFor, badgesSeed } from '../data/content';
+import { loadWords } from '../data/load';
 import { isDueToday } from '../lib/date';
 import { Tap } from '../components/Tap';
 
@@ -13,20 +14,18 @@ function useA1A2WordsForStats() {
   const extraWords = useHablo((s) => s.extraWords);
   const loadExtraWords = useHablo((s) => s.loadExtraWords);
   useEffect(() => {
-    if (!extraWords.A1) import('../data/words.a1.js').then((m: any) => loadExtraWords('A1', mapWords(m.A1WORDS)));
-    if (!extraWords.A2) import('../data/words.a2.js').then((m: any) => loadExtraWords('A2', mapWords(m.A2WORDS)));
+    if (!extraWords.A1) loadWords('A1').then((w) => loadExtraWords('A1', w));
+    if (!extraWords.A2) loadWords('A2').then((w) => loadExtraWords('A2', w));
   }, [extraWords.A1, extraWords.A2, loadExtraWords]);
-}
-function mapWords(a: any[]): Word[] {
-  return (a || []).map((w) => ({ es: w[0], en: w[1], pl: w[2], exEs: w[3], exEn: w[4], exPl: w[5] }));
 }
 
 const WEEK_XP = [120, 180, 90, 240, 160, 300, 240];
 const MAX_XP = Math.max(...WEEK_XP);
-const WEEK_DAYS: Record<'es' | 'en' | 'pl', string[]> = {
+const WEEK_DAYS: Record<'es' | 'en' | 'pl' | 'de', string[]> = {
   pl: ['P', 'W', 'Ś', 'C', 'P', 'S', 'N'],
   es: ['L', 'M', 'X', 'J', 'V', 'S', 'D'],
   en: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+  de: ['M', 'D', 'M', 'D', 'F', 'S', 'S'],
 };
 const CAL_DONE = [0, 1, 2, 4, 5, 6, 7, 8, 10, 11, 12, 13, 15, 17, 18, 19, 20, 22, 23, 24, 25, 26, 27];
 const LEARNED = 214;

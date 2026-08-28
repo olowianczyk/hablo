@@ -25,7 +25,7 @@ export function Phrasebook() {
         {cats.map((cat, ci) => (
           <div key={ci}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-              <div style={{ fontSize: 15, fontWeight: 800 }}>{lang === 'pl' ? cat.titlePl : cat.titleEn}</div>
+              <div style={{ fontSize: 15, fontWeight: 800 }}>{lang === 'pl' ? cat.titlePl : lang === 'de' ? cat.titleDe || cat.titleEn : cat.titleEn}</div>
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--faint)', background: 'var(--panel)', padding: '2px 8px', borderRadius: 20 }}>{cat.phrases.length}</div>
             </div>
             <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>

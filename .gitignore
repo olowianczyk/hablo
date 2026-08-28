@@ -24,3 +24,5 @@ Spanish learning app design.zip
 *.njsproj
 *.sln
 *.sw?
+
+__wp_preview/

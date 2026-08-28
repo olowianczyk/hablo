@@ -24,7 +24,7 @@ export function Home() {
   const srsBuilder = useHablo((s) => s.srsBuilder);
 
   const dueCount = [srs, srsPhrases, srsPron, srsDict, srsBuilder].reduce((sum, list) => sum + list.filter((i) => isDueToday(i.dueAt)).length, 0);
-  const dailyChallenges = { pl: 'Dzienne wyzwania', es: 'Retos diarios', en: 'Daily challenges' }[lang];
+  const dailyChallenges = { pl: 'Dzienne wyzwania', es: 'Retos diarios', en: 'Daily challenges', de: 'Tagesaufgaben' }[lang];
   const doneCount = challenges.filter((c) => c.done).length;
 
   return (

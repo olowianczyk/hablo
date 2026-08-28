@@ -13,10 +13,16 @@ const PAGE_TITLE_KEY: Record<Screen, keyof ReturnType<typeof useUi>['t']> = {
 const DIR_OPTIONS: { value: Direction; label: string }[] = [
   { value: 'es>en', label: 'Learn Spanish · from English' },
   { value: 'es>pl', label: 'Ucz się hiszpańskiego · po polsku' },
+  { value: 'es>de', label: 'Spanisch lernen · auf Deutsch' },
   { value: 'en>es', label: 'Aprende inglés · desde español' },
   { value: 'en>pl', label: 'Ucz się angielskiego · po polsku' },
+  { value: 'en>de', label: 'Englisch lernen · auf Deutsch' },
   { value: 'pl>es', label: 'Aprende polaco · desde español' },
   { value: 'pl>en', label: 'Learn Polish · from English' },
+  { value: 'pl>de', label: 'Polnisch lernen · auf Deutsch' },
+  { value: 'de>es', label: 'Aprende alemán · desde español' },
+  { value: 'de>en', label: 'Learn German · from English' },
+  { value: 'de>pl', label: 'Ucz się niemieckiego · po polsku' },
 ];
 
 const SPEED_OPTIONS = [
@@ -62,7 +68,7 @@ export function Header() {
 
   const voices = useVoices();
   const voiceList = voices.filter((v) => v.lang && v.lang.toLowerCase().startsWith(target));
-  const voiceLabel = ({ es: 'Voz', en: 'Voice', pl: 'Głos' } as const)[target];
+  const voiceLabel = ({ es: 'Voz', en: 'Voice', pl: 'Głos', de: 'Stimme' } as const)[target];
 
   return (
     <header
